@@ -1,0 +1,7 @@
+Name:Afterburn
+ManaCost:R
+Types:Instant
+A:SP$ Charm | Cost$ R | CharmNum$ 1 | Choices$ DBPump,DBPump2
+SVar:DBPump:DB$ Pump | ValidTgts$ Creature | TgtPrompt$ Select target creature | KW$ Haste & First Strike | SpellDescription$ Target creature gets Haste and gains first strike until end of turn.
+SVar:DBPump2:DB$ RemoveFromCombat | ValidTgts$ Creature | TgtPrompt$ Select target creature | Defined$ ChosenCard  | SpellDescription$ Remove target creature from combat.
+Oracle:Choose one —\n• Target crature gains haste and first strike until end of turn.\n• Remove target crature from combat.

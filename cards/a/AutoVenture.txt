@@ -1,0 +1,19 @@
+Name:AutoVenture
+ManaCost:no cost
+Types:Enchantment
+K:CARDNAME can't be countered.
+K:Hexproof
+K:Indestructible
+K:Protection from everything
+
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ FetchAutoVenture1 | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game.
+SVar:FetchAutoVenture1:DB$ ChangeZone | Defined$ Self | Origin$ Library | Destination$ Battlefield | SpellDescription$ Put CARDNAME onto the battlefield.
+
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ FetchAutoVenture2 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If you start the game with CARDNAME in your opening hand, exile it and go through the prompts. Hope you enjoy the game.
+SVar:FetchAutoVenture2:DB$ ChangeZone | Defined$ Self | Origin$ Hand | Destination$ Battlefield | SpellDescription$ Put CARDNAME onto the battlefield.
+
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Command,Battlefield | Optional$ True | OptionalDecider$ You | Execute$ TrigVenture | TriggerDescription$ At the beginning of your upkeep you may venture into the dungeon. (Enter the first room or advance to the next room.)
+SVar:TrigVenture:DB$ Venture
+#SVar:X:PlayerCountPropertyYou$DungeonCompletedNamed_allThreeDungeons
+
+Oracle:At the beginning of your upkeep you may venture into the dungeon. (Enter the first room or advance to the next room.)

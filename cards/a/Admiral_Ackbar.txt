@@ -1,0 +1,14 @@
+Name:Admiral Ackbar
+ManaCost:4 U U
+Types:Legendary Creature Calamari Rebel
+PT:2/3
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigToken | TriggerDescription$ When CARDNAME enters the battlefield, create two 2/3 blue Rebel Starship artifact creature tokens with spaceflight named B-Wing.
+SVar:TrigToken:DB$ Token | TokenAmount$ 2 | TokenScript$ u_2_3_b_wing | TokenOwner$ You | LegacyImage$ u 2 3 b wing stwtg
+DeckHints:Type$Starship
+S:Mode$ Continuous | Affected$ Creature.Starship+YouCtrl | AddHiddenKeyword$ CARDNAME untaps during each other player's untap step. | Description$ Untap all Starships you control during each other player's untap step.
+SVar:UntapsEachOtherPlayerTurn:Starship
+T:Mode$ AttackersDeclared | Execute$ TrigDraw | CheckSVar$ OverwhelmInstinct | SVarCompare$ GE2 | NoResolvingCheck$ True | TriggerZones$ Battlefield | AttackingPlayer$ You | TriggerDescription$ Whenever you attack with two or more Starship creatures, draw a card.
+SVar:TrigDraw:DB$ Draw | NumCards$ 1
+SVar:PlayMain1:TRUE
+SVar:OverwhelmInstinct:Count$Valid Starship.attacking+YouCtrl
+Oracle:When you cast Admiral Ackbar, create two 2/3 blue Rebel Ship creature tokens with spaceflight named B-Wing.\nAt the beginning of each each upkeep, untap all Starships you control\nWhenever two or more Starship creatures you control attack, draw a card.

@@ -1,0 +1,10 @@
+Name:A-Wing
+ManaCost:2 R
+Types:Artifact Creature Rebel Starship
+PT:2/2
+K:Haste
+K:Shadow
+A:AB$ RemoveFromCombat | Cost$ 1 | ValidCard$ Card.Self | SubAbility$ DBDelayCombat | SpellDescription$ Remove CARDNAME from combat. CARDNAME must attack your next combat if able.
+SVar:DBDelayCombat:DB$ DelayedTrigger | Mode$ Phase | PreCombatMain$ True | ValidPlayer$ You | ValidCard$ Card.Self | Execute$ DBPump | SpellDescription$ At the beginning of combat, CARDNAME must attack if able.
+SVar:DBPump:DB$ Pump | ValidCard$ Card.Self | KW$ HIDDEN CARDNAME attacks each combat if able. | Duration$ UntilTheEndOfYourNextTurn | IsCurse$ True | UntilTheEndOfYourNextTurn$ True
+Oracle:Haste\nSpaceflight (This creature can only block or be blocked by creatures with spaceflight.)\n{1}:Remove A-Wing from combat. It must attack on your next combat if able.

@@ -1,0 +1,12 @@
+Name:Asajj Ventress
+ManaCost:1 U B R
+Types:Legendary Creature Dathomirian Sith
+PT:3/2
+K:Double strike
+T:Mode$ AttackerBlocked | ValidCard$ Card.Self | TriggerZones$ Battlefield | Execute$ TrigPump | TriggerDescription$ Whenever CARDNAME becomes blocked, it gets +1/+1 until end of turn for each creature blocking it.
+SVar:TrigPump:DB$ Pump | Defined$ TriggeredAttacker | NumAtt$ +X | NumDef$ +X | References$ X
+SVar:X:TriggerCount$NumBlockers
+T:Mode$ Attacks | ValidCard$ Card.Self | CheckSVar$ Y | References$ Y | Execute$ DBHate | Combat$ False | TriggerDescription$ Whenever CARDNAME attacks, if an opponent lost life from a source other than combat damage this turn, target creature blocks this turn if able.
+SVar:DBHate:DB$ MustBlock | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature to block this creature | SpellDescription$ Target creature blocks CARDNAME this turn if able.
+SVar:Y:Count$LifeOppsLostThisTurn
+Oracle:Doube Strike\nWhenever Asajj Ventress becomes blocked, she gets +1/+1 for each creature blocking her.\nHate - Whenever Asajj Ventress attacks, if an opponent lost life from a source other than combat damage this turn, target creature blocks this turn if able.

@@ -1,0 +1,13 @@
+Name:Astromech Droid
+ManaCost:W
+Types:Artifact Creature Droid
+PT:0/1
+A:AB$ Pump | Cost$ T | ValidTgts$ Creature.Starship | TgtPrompt$ Select target starship creature | NumAtt$ 1 | NumDef$ 1 | KW$ Vigilance | SpellDescription$ Target starship creature you control gets +1/+1 and gains vigilance until end of turn.
+# Repaair 4
+T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Battlefield | Destination$ Graveyard | Execute$ TrigExile | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies, exile it with four repair counters on it and it gains suspend.
+SVar:TrigExile:DB$ ChangeZone | Defined$ TriggeredNewCardLKICopy | Origin$ Graveyard | Destination$ Exile | SubAbility$ DBPutCounter | RememberChanged$ True
+SVar:DBPutCounter:DB$ PutCounter | Defined$ Remembered | CounterType$ REPAIR | CounterNum$ 4
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Exile | IsPresent$ Card.Self+counters_GE1_REPAIR | PresentZone$ Exile | Execute$ DBRemoveCounter | TriggerDescription$ At the beginning of your upkeep, if CARDNAME is exiled with an repair counter on it, remove an repair counter from it. Then if CARDNAME has no repair counters on it, return it to the battlefield.
+SVar:DBRemoveCounter:DB$ RemoveCounter | Defined$ Self | CounterType$ REPAIR | CounterNum$ 1 | SubAbility$ DBReturn
+SVar:DBReturn:DB$ Play | MayPlay$ True | Defined$ Self | Origin$ Exile | Destination$ Battlefield | Optional$ True | OptionalDecider$ You | ConditionDefined$ Self | ConditionPresent$ Card.counters_EQ0_REPAIR
+Oracle:{T}: Target starship creature you control gets +1/+1 and gains vigilance until end of turn.\nRepair 4 (When this creature dies, put four repair counters on it. At the Beginning of your upkeep, remove a repair counter. Whenever the last is removed, you may cast it from your graveyard until end of turn.)
