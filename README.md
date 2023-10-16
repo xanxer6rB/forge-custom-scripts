@@ -1,2 +1,2 @@
 # forge-custom-scripts
-Custom scripts to run different types of formats and custom sets
+Custom forge scripts to run different types of card formats and custom sets
