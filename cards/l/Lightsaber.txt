@@ -1,0 +1,7 @@
+Name:Lightsaber
+ManaCost:1
+Types:Artifact Equipment
+K:Equip:3
+S:Mode$ Continuous | Affected$ Creature.EquippedBy | AddPower$ 1 | AddKeyword$ First Strike | Description$ Equipped creature gets +1/+0 and has first strike.
+S:Mode$ ReduceCost | ValidTarget$ Creature.Jedi,Creature.Sith | ValidSpell$ Activated.Equip | Amount$ 2 | ValidCard$ Card.Self | Description$ CARDNAME's equip ability costs {2} less to activate if it targets a Jedi or Sith creature.
+Oracle:WIP\nEquipped creature gets +1/+0 and has first strike.\nEquip {3}\nLightsaber's equip costs cost {1} less.

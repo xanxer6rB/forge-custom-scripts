@@ -1,0 +1,7 @@
+Name:Massiff Swarm
+ManaCost:2 G
+Types:Creature Crocodile Beast
+PT:3/3
+K:Monstrosity:3:6 G
+SVar:BuffedBy:Crocodile
+Oracle:{6}{G}: Monstrosity 3.(If this creature isn't monstrous, put three +1/+1 counters on it and it becomes monstrous.)\nCreatures with power less than Aura Gnarlid's power can't block it.\nAura Gnarlid gets +1/+1 for each Aura on the battlefield.

@@ -1,0 +1,10 @@
+Name:Jedi Battle Healer
+ManaCost:2 W
+Types:Creature Mirialan Jedi
+PT:2/3
+K:Lifelink
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigGainLife | TriggerDescription$ When CARDNAME enters the battlefield, you gain 3 life.
+SVar:TrigGainLife:DB$ GainLife | LifeAmount$ 3
+A:AB$ ChangeZone | Cost$ 1 W | Origin$ Battlefield | Destination$ Hand | SorcerySpeed$ True | SpellDescription$ Meditate (return CARDNAME to its owner's hand. Meditate only as a sorcery.)
+Oracle:Lifelink\nWhen Jedi Battle Healer enters the battlefield, you gain 3 life.\nMeditate {1}{W} (Return this creature to its owner's hand. Meditate only as a sorcery.)
+

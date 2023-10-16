@@ -1,0 +1,13 @@
+Name:Neck Tangle
+ManaCost:no cost
+Types:Sorcery
+
+#A:SP$ Tap | Cost$ 0 | TargetMin$ 1 | TargetMax$ 2 | TgtPrompt$ Choose target creature | ValidTgts$ Creature.Head+YouCtrl | IsPresent$ Creature.Head+YouCtrl | PresentCompare$ GE5 | PresentZone$ Battlefield | SubAbility$ TrigPump | SpellDescription$ Tap up to two target creatures. Those creatures don't untap during their controller's next untap step.
+#SVar:TrigPump:DB$ Pump | Defined$ Targeted | KW$ This card doesn't untap during your next untap step. | Duration$ Permanent | SubAbility$ DBDamageAll
+
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigGainLife | IsPresent$ Creature.Head+YouCtrl | PresentCompare$ GE5 | PresentZone$ Battlefield | TriggerDescription$ When CARDNAME enters the battlefield, if there are three or more creature cards in your graveyard, you gain 5 life.
+SVar:TrigGainLife:DB$ GainLife | Defined$ You | LifeAmount$ 5
+SVar:PlayMain1:Random
+
+
+Oracle:TESTING\nIf there are five or more Heads on the battlefield, tap two of them and they don't untap during the Hydra's next untap step. Otherwise, reveal the top card of the Hydra's library and the Hydra casts that card.

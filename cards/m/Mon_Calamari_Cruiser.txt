@@ -1,0 +1,8 @@
+Name:Mon Calamari Cruiser
+ManaCost:3 U U
+Types:Artifact Creature Starship
+PT:4/4
+K:Shadow
+T:Mode$ DamageDone | ValidSource$ Card.Self | ValidTarget$ Player | CombatDamage$ True | TriggerZones$ Battlefield | Execute$ TrigDraw | OptionalDecider$ You | TriggerDescription$ Whenever CARDNAME deals combat damage to a player, you may draw a card.
+SVar:TrigDraw:DB$ Draw | Defined$ You | NumCards$ 1
+Oracle:Whenever Mon Calamari Cruiser deals combat damage to a player, you may draw a card.

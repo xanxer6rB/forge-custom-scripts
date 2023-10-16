@@ -1,0 +1,11 @@
+Name:Kalevan Star Yacht
+ManaCost:3 B
+Types:Artifact Creature Starship
+PT:2/3
+#Using "Shadow" ability for "Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)"##
+K:Shadow
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigDraw | TriggerDescription$ When CARDNAME enters the battlefield, you draw a card and you lose 1 life, and put a bounty counter on up to one target creature.
+SVar:TrigDraw:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBLoseLife
+SVar:DBLoseLife:DB$ LoseLife | LifeAmount$ 1 | SubAbility$ TrigPut
+SVar:TrigPut:DB$ PutCounter | ValidTgts$ Creature | TgtPrompt$ Select target creature | CounterType$ BOUNTY | CounterNum$ 1
+Oracle:Spaceflight (This creature can block or be blocked by creatures with spaceflight.) When Kalevan Star Yacht enters the battlefield, you draw a card and you lose 1 life, and put a bounty counter on up to one target creature.

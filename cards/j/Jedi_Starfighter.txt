@@ -1,0 +1,11 @@
+Name:Jedi Starfighter
+ManaCost:2 W W
+Types:Artifact Creature Jedi Starship
+PT:2/2
+K:Shadow
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigPump | TriggerDescription$ When CARDNAME enters the battlefield, up to two target Jedi creatures you control gain spaceflight until end of turn.
+SVar:TrigPump:DB$ Pump | TargetMin$ 0 | TargetMax$ 2 | ValidTgts$ Creature.YouCtrl | TgtPrompt$ Select target creature you control | KW$ Shadow
+
+A:AB$ ChangeZone | Cost$ 1 W | Origin$ Battlefield | Destination$ Hand | SorcerySpeed$ True | SpellDescription$ Meditate (return CARDNAME to its owner's hand. Meditate only as a sorcery.)
+
+Oracle:Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)\n{1}:Remove A-Wing from combat. It must attack on your next combat if able.\nWhen Jedi Starfighter enters the battlefield, up to two target Jedi creatures you control gain spaceflight until end of turn.\nMeditate {1}{W} (return this creature to its owner's hand. Meditate only as a sorcery.)

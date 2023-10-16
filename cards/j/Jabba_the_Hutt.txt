@@ -1,0 +1,13 @@
+Name:Jabba the Hutt
+ManaCost:3 B R G
+Types:Legendary Creature Hutt Rogue
+PT:6/6
+K:Defender
+A:AB$ PutCounter | Cost$ T | ValidTgts$ Creature | TgtPrompt$ Select target creature | CounterType$ BOUNTY | CounterNum$ 1 | IsCurse$ True | SpellDescription$ Put a bounty counter on target creature.
+# TODO: Token still needs to enter and fight target creature
+A:AB$ Token | Cost$ R T | TokenAmount$ 1 | TokenOwner$ You | TokenScript$ r_4_4_hunter | LegacyImage$ r 4 4 hunter stwtg | AddSVars$ TrigFight,TrigChange | SorcerySpeed$ True | SpellDescription$ Create a 4/4 red Hunter creature token.
+SVar:TrigChange:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Creature.Self | Execute$ TrigFight | TriggerDescription$ When CARDNAME enters the battlefield, it fights up to one target creature you don't control. (Each deals damage equal to its power to the other.)
+SVar:TrigFight:DB$ Fight | Defined$ TriggeredCardLKICopy | ValidTgts$ Creature.YouDontCtrl+counters_GE1_BOUNTY | TgtPrompt$ Choose target creature you don't control with a bounty counter on it | TargetMin$ 0 | TargetMax$ 1
+DeckHas:Ability$Token
+
+Oracle:Defender\n{T}: Put a bounty counter on target creature.\n{R}{T}: Create a tapped 4/4 red Hunter creature token. It fights target creature an opponent controls with a bounty counter on it. Activate this only anytime you could cast a sorcery.

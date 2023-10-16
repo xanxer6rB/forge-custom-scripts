@@ -1,0 +1,9 @@
+Name:Jedi Temple
+ManaCost:no cost
+Types:Land
+K:CARDNAME enters the battlefield tapped.
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigMana | TriggerDescription$ When CARDNAME enters the battlefield, add {U}.
+SVar:TrigMana:DB$Mana | Produced$ W | Amount$ 1
+A:AB$ Mana | Cost$ T | Produced$ G | SpellDescription$ Add {G}.
+A:AB$ Mana | Cost$ T | Produced$ U | SpellDescription$ Add {U}.
+Oracle:Jedi Temple enters the battlefield tapped.\nWhen Droid Foundry enters the battlefield, add {W} to your mana pool.\n{T}: Add {G} or {U} to your mana pool.

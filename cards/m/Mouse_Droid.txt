@@ -1,0 +1,15 @@
+Name:Mouse Droid
+ManaCost:1 U
+Types:Artifact Creature Droid
+PT:0/1
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Card.Self | Execute$ TrigDraw | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies, draw a card.
+SVar:TrigDraw:DB$ Draw | NumCards$ 1 | Defined$ TriggeredCardController
+SVar:SacMe:1
+# Repair 3
+T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Battlefield | Destination$ Graveyard | Execute$ TrigExile | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies, exile it with three repair counters on it and it gains suspend.
+SVar:TrigExile:DB$ ChangeZone | Defined$ TriggeredNewCardLKICopy | Origin$ Graveyard | Destination$ Exile | SubAbility$ DBPutCounter | RememberChanged$ True
+SVar:DBPutCounter:DB$ PutCounter | Defined$ Remembered | CounterType$ REPAIR | CounterNum$ 3
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Exile | IsPresent$ Card.Self+counters_GE1_REPAIR | PresentZone$ Exile | Execute$ DBRemoveCounter | TriggerDescription$ At the beginning of your upkeep, if CARDNAME is exiled with an repair counter on it, remove an repair counter from it. Then if CARDNAME has no repair counters on it, return it to the battlefield.
+SVar:DBRemoveCounter:DB$ RemoveCounter | Defined$ Self | CounterType$ REPAIR | CounterNum$ 1 | SubAbility$ DBReturn
+SVar:DBReturn:DB$ Play | MayPlay$ True | Defined$ Self | Origin$ Exile | Destination$ Battlefield | Optional$ True | OptionalDecider$ You | ConditionDefined$ Self | ConditionPresent$ Card.counters_EQ0_REPAIR
+Oracle:When Mouse Droid dies, draw a card.\nRepair 3 (When this creature dies, put three repair counters on it. At the beginning of your upkeep, remove a repair counter. When the last is removed, you may cast it from your graveyard until the end of turn.)

@@ -1,0 +1,8 @@
+Name:Nerf Herder
+ManaCost:2 G
+Types:Creature Human
+PT:2/3
+S:Mode$ ReduceCost | ValidCard$ Creature.YouCtrl | Type$ Ability.Monstrosity | Amount$ 1 | MinMana$ 1 | AffectedZone$ Battlefield | Description$ Monstrosity abilities of creatures you control cost {1} less to activate. This effect can't reduce the mana in that cost to less than one mana.
+S:Mode$ Continuous | Affected$ Creature.YouCtrl+counters_GE1_P1P1 | AddKeyword$ Trample | Description$ Each creature you control with a +1/+1 counter on it has trample.
+DeckHas:Ability$Counters
+Oracle:Monstrosity abilities you activate cost {1} less to cast.\nEach creature you control with a +1/+1 counter on it has trample.

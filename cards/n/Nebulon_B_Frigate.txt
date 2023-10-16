@@ -1,0 +1,9 @@
+Name:Nebulon-B Frigate
+ManaCost:3 W W
+Types:Artifact Creature Starship
+PT:4/2
+K:Shadow
+T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Any | Destination$ Battlefield | Execute$ TrigPumpAll | TriggerDescription$ When CARDNAME enters the battlefield, creatures you control gain vigilance until end of turn.
+SVar:TrigPumpAll:DB$ PumpAll | ValidCards$ Creature.YouCtrl | KW$ Vigilance
+SVar:PlayMain1:TRUE
+Oracle:Spaceflight\nWhen Angel of the Dawn enters the battlefield, creatures you control gain vigilance until end of turn.

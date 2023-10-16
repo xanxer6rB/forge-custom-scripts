@@ -1,0 +1,10 @@
+Name:Millennium Falcon
+ManaCost:3 G G
+Types:Legendary Artifact Creature Starship
+PT:5/4
+K:Flash
+K:Shadow
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigPumpAll | TriggerDescription$ When CARDNAME enters the battlefield, other creatures you control gain hexproof until end of turn.
+SVar:TrigPumpAll:DB$ PumpAll | ValidCards$ Creature.YouCtrl | KW$ Hexproof
+SVar:PlayMain1:TRUE
+Oracle:Trample\nWhen Millennium Falcon enters the battlefield, other creatures you control gain hexproof until end of turn.
