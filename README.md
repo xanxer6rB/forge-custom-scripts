@@ -12,3 +12,5 @@ I have also been trying to script some already existing custom sets like:
 - StarWars the Gathering
 - Zelda
 - Pokemon
+
+To use files just add them to your custom folder
