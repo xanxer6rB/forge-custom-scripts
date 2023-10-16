@@ -19,4 +19,4 @@ I have also been trying to script some already existing custom sets like:
 
 To use files just add them to your custom folder
 
-I welcome any contributions to the scripts or suggestions to help improve/optimize them to help make them rn smoother and more playable for the Ai or even adding features to the format(s).
+I welcome any contributions to the scripts or suggestions to help improve/optimize them to help make them run smoother and more playable for the Ai or even adding features to the format(s).
