@@ -1,0 +1,8 @@
+Name:Chewbacca, the Beast
+ManaCost:1 G G
+Types:Legendary Creature Wookiee Warrior
+PT:3/3
+K:Partner:Han Solo, Scrumrat
+T:Mode$ Attacks | ValidCard$ Card.Self | TriggerZones$ Battlefield | Execute$ TrigPump | TriggerDescription$ Whenever CARDNAME attacks, another target creature you control gains indestructible until end of turn.
+SVar:TrigPump:DB$ Pump | ValidTgts$ Creature.Other+attacking | TgtPrompt$ Select another target attacking creature | KW$ Indestructible
+Oracle:Partner with Han Solo, Scrumrat (When this creature enters the battlefield, target player may put Han Solo, Scrumrat into their hand from their library, then shuffle.)\nWhenever Chewbacca, the Beast attacks, another target attacking creature you control gains indestructible until end of turn.

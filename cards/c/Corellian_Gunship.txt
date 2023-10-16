@@ -1,0 +1,9 @@
+Name:Corellian Gunship
+ManaCost:R
+Types:Artifact Creature Starship
+PT:1/1
+#Using "Shadow" ability for "Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)"##
+K:Shadow
+T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Any | Destination$ Battlefield | Execute$ TrigDealDamage | TriggerDescription$ When CARDNAME enters the battlefield, it deals 1 damage to target player or planeswalker.
+SVar:TrigDealDamage:DB$ DealDamage | NumDmg$ 1 | ValidTgts$ Player,Planeswalker | TgtPrompt$ Select target player or planeswalker
+Oracle:Shadow (This creature can block or be blocked by creatures with spaceflight.)\nWhen Corellian Gunship enters the battlefield, it deals 1 damage to target player or planeswalker.

@@ -1,0 +1,9 @@
+Name:Ewok Village
+ManaCost:no cost
+Types:Land
+K:CARDNAME enters the battlefield tapped.
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigMana | TriggerDescription$ When CARDNAME enters the battlefield, add {U}.
+SVar:TrigMana:DB$Mana | Produced$ G | Amount$ 1
+A:AB$ Mana | Cost$ T | Produced$ R | SpellDescription$ Add {R}.
+A:AB$ Mana | Cost$ T | Produced$ W | SpellDescription$ Add {W}.
+Oracle:Droid Foundry enters the battlefield tapped.\nWhen Droid Foundry enters the battlefield, add {G} to your mana pool.\n{T}: Add {R} or {W} to your mana pool.

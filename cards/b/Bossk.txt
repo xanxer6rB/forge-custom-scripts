@@ -1,0 +1,10 @@
+Name:Bossk
+ManaCost:1 G G
+Types:Legendary Creature Trandoshan Hunter
+PT:3/3
+K:Deathtouch
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Land.YouCtrl | TriggerZones$ Battlefield | IsPresent$ Land.YouCtrl | PresentCompare$ GE5 | Execute$ TrigPutCounter | TriggerDescription$ Whenever a land enters the battlefield under your control, if you control five or more lands, put a bounty counter on target creature an opponent controls.
+SVar:TrigPutCounter:DB$PutCounter | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature an opponent controls | CounterType$ Bounty | CounterNum$ 1
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.OppCtrl+counters_GE1_BOUNTY | Execute$ TrigChange | OptionalDecider$ TriggeredCardController | TriggerController$ You | TriggerDescription$ Whenever a creature an opponent controls with a bounty counter on it dies, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle your library.
+SVar:TrigChange:DB$ChangeZone | Origin$ Library | Destination$ Hand | Optional$ True | OptionalDecider$ You | ChangeType$ Land.Basic | ChangeNum$ 1 | Shuffle$ True
+Oracle:Deathtouch\nWhenever a land enters the battlefield your control, if you control five or more lands, put a bounty counter on target creature an opponent controls.\nBounty - Whenever a creature an opponent controls with a bounty counter on it dies, you may search your library for a land card, reveal it, and put it into your hand, shuffle your library.

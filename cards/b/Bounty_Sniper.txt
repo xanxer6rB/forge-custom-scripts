@@ -1,0 +1,8 @@
+Name:Bounty Sniper
+ManaCost:2 R
+Types:Creature Gand Hunter
+PT:1/3
+A:AB$ DealDamage | Cost$ T | ValidTgts$ Creature | TgtPrompt$ Select target creature | NumDmg$ 1 | SpellDescription$ CARDNAME deals 1 damage to target creature.
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.OppCtrl+counters_GE1_BOUNTY | Execute$ TrigUntap | OptionalDecider$ TriggeredCardController | TriggerController$ You | TriggerDescription$ Whenever a creature an opponent controls with a bounty counter on it dies, untap CARDNAME.
+SVar:TrigUntap:DB$Untap | Defined$ Self
+Oracle:{T}: deal 1 damage to target creature.\nBounty - Whenever a creature an opponent controls with a bounty counter on it dies, untap Bounty Sniper.

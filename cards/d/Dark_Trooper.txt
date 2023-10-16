@@ -1,0 +1,12 @@
+Name:Dark Trooper
+ManaCost:3
+Types:Artifact Creature Droid Trooper
+PT:2/2
+# Repair 2
+T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Battlefield | Destination$ Graveyard | Execute$ TrigExile | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies, exile it with four repair counters on it and it gains suspend.
+SVar:TrigExile:DB$ ChangeZone | Defined$ TriggeredNewCardLKICopy | Origin$ Graveyard | Destination$ Exile | SubAbility$ DBPutCounter | RememberChanged$ True
+SVar:DBPutCounter:DB$ PutCounter | Defined$ Remembered | CounterType$ REPAIR | CounterNum$ 2
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Exile | IsPresent$ Card.Self+counters_GE1_REPAIR | PresentZone$ Exile | Execute$ DBRemoveCounter | TriggerDescription$ At the beginning of your upkeep, if CARDNAME is exiled with an repair counter on it, remove an repair counter from it. Then if CARDNAME has no repair counters on it, return it to the battlefield.
+SVar:DBRemoveCounter:DB$ RemoveCounter | Defined$ Self | CounterType$ REPAIR | CounterNum$ 1 | SubAbility$ DBReturn
+SVar:DBReturn:DB$ Play | MayPlay$ True | Defined$ Self | Origin$ Exile | Destination$ Battlefield | Optional$ True | OptionalDecider$ You | ConditionDefined$ Self | ConditionPresent$ Card.counters_EQ0_REPAIR
+Oracle:Repair 2 (Whenever a repair counter is removed from a creature card in your graveyard, you may pay {WB}. If you do, target player loses 1 life and you gain 1 life.\nRepair 4 (When this creature dies, put four repair counter on it. At the beginning of each of your upkeep, remove a repair counter. Whenever the last is removed, you may cast it from your graveyard until end of turn.)

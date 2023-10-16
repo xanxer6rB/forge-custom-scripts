@@ -1,0 +1,17 @@
+Name:Distract the Hydra
+ManaCost:0
+Types:Sorcery
+A:SP$ Sacrifice | Cost$ 0 | SacValid$ Creature | Defined$ Player | RememberSacrificed$ True | Optional$ True | SubAbility$ DBRepeat | SpellDescription$ Each player may sacrifice a creature. Then each player who didn't sacrifice a creature this way loses 3 life.
+SVar:DBRepeat:DB$ RepeatEach | RepeatPlayers$ Player | RepeatSubAbility$ DBLoseLife | SubAbility$ DBCleanup
+SVar:DBLoseLife:DB$ LoseLife | LifeAmount$ 3 | ConditionCheckSVar$ X | ConditionSVarCompare$ EQ0 | Defined$ Player.IsRemembered | References$ X
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:X:Remembered$Valid Creature.RememberedPlayerCtrl
+
+#A:SP$ Sacrifice | Mode$ TgtChoose | Amount$ 1 | SacValid$ Creature | Defined$ Player | RememberSacrificed$ True | Optional$ True | SubAbility$ DBRepeat | SpellDescription$ Each player may sacrifice an artifact or enchantment. CARDNAME deals 3 damage to each player who didn't sacrifice a permanent this way.
+#SVar:DBRepeat:DB$ RepeatEach | RepeatPlayers$ Player | RepeatSubAbility$ DBLoseLife | SubAbility$ DBCleanup
+#SVar:DBLoseLife:DB$ DealDamage | NumDmg$ 3 | ConditionCheckSVar$ X | ConditionSVarCompare$ EQ0 | Defined$ Player.IsRemembered | References$ X
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#SVar:X:Remembered$Valid Creature.RememberedPlayerCtrl
+
+
+Oracle:Each player may sacrifice a creature. Each player who sacrificed a creature this way chooses a Head and taps it. Each player who didn't sacrifice a creature loses 3 life.

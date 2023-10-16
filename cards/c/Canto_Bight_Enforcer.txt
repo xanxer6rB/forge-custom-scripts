@@ -1,0 +1,13 @@
+Name:Canto Bight Enforcer
+ManaCost:1 B
+Types:Creature Human Hunter
+PT:2/2
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | OptionalDecider$ You | Execute$ TrigChooseCreature | TriggerDescription$ Whenever CARDNAME enters the battlefield under your control, you may put a Bounty counter on target creature.
+SVar:TrigChooseCreature:DB$ ChooseCard | Choices$ Card.Creature | RememberChosen$ True | SubAbility$ DBPutCounter | AILogic$ Bounty
+SVar:DBPutCounter:DB$ PutCounter | CounterType$ BOUNTY | CounterNum$ 1 | Defined$ Remembered | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.OppCtrl+counters_GE1_BOUNTY | TriggerZones$ Battlefield | Execute$ TrigPutCounter | TriggerController$ TriggeredCardController | TriggerDescription$ Bounty - Whenever a creature an opponent control dies, if it had a Bounty counter on it, put a +1/+1 counter on CARDNAME.
+SVar:TrigPutCounter:DB$ PutCounter | Defined$ Self | CounterType$ P1P1 | CounterNum$ 1 | ConditionPresent$ Card.StrictlySelf
+SVar:PlayMain1:TRUE
+DeckHints:Ability$Counters
+Oracle:When Canto Bight Enforcer enters the battlefield, you may put a bounty counter on target creature.\nBounty - Whenever a creature an opponent controls with a bounty counter on it dies, out a +1/+1 counter on Canto Bight Enforcer.

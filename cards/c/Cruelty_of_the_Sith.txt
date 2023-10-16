@@ -1,0 +1,16 @@
+Name:Cruelty of the Sith
+ManaCost:U B R
+Types:Instant
+A:SP$ Charm | Cost$U B R | CharmNum$ 1 | Choices$ DBCounter,SacCreature,DBDealDamage
+
+#SVar:DBPump:DB$ Pump | ValidTgts$ Creature | TgtPrompt$ Select target creature | KW$ Haste & First Strike | SpellDescription$ Target creature gets Haste and gains first strike until end of turn.
+#SVar:DBPump2:DB$ RemoveFromCombat | ValidTgts$ Creature | TgtPrompt$ Select target creature | Defined$ ChosenCard  | SpellDescription$ Remove target creature from combat.
+
+SVar:DBCounter:DB$ Counter | TargetType$ Spell | TgtPrompt$ Select target nonCreature spell | ValidTgts$ Card.nonCreature | SpellDescription$ Counter target noncreature spell.
+SVar:SacCreature:DB$ Sacrifice | ValidTgts$ Player | SacValid$ Creature | Amount$ 1 | SpellDescription$ Target player sacrifices a creature.
+SVar:DBDealDamage:DB$ DealDamage | ValidTgts$ Player | NumDmg$ 3 | SubAbility$ DBDiscard | SpellDescription$ CARDNAME deals 3 damage to target player. That player discards two cards.
+SVar:DBDiscard:DB$Discard | Defined$ TargetedPlayer | NumCards$ 2 | Mode$ TgtChoose
+
+
+
+Oracle:Choose one —\n• Counter target noncreature spell\n• Target player sacrifices a creature\n•Cruelty of the Sith deals 3 damage to target player. That player discards two cards.

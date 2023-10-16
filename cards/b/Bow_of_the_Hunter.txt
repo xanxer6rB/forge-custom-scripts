@@ -1,0 +1,10 @@
+Name:Bow of the Hunter
+ManaCost:0
+Types:Artifact Equipment
+K:Equip:2
+
+S:Mode$ Continuous | Affected$ Creature.EquippedBy | AddAbility$ TorchDamage | Description$ Equipped creature has "{T}, Bow of the Hunter deals 2 damage to any target."
+SVar:TorchDamage:AB$ DealDamage | Cost$ T | ValidTgts$ Creature,Player,Planeswalker | TgtPrompt$ Select any target | NumDmg$ 2 | DamageSource$ Sacrificed | SpellDescription$ Bow of the Hunter deals 2 damage to any target.
+SVar:NonStackingAttachEffect:True
+
+Oracle:Equipped creature has "T:This creature deals 2 damage3 to target creature or player".\nEquip {2}

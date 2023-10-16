@@ -1,0 +1,6 @@
+Name:EMP Blast
+ManaCost:2 W
+Types:Instant
+A:SP$ ChangeZone | Cost$ 2 W | ValidTgts$ Artifact | TgtPrompt$ Select target artifact | Origin$ Battlefield | Destination$ Exile | SubAbility$ DBTapAll | SpellDescription$ Exile target artifact. Tap all other artifacts.
+SVar:DBTapAll:DB$ TapAll | ValidCard$ Card.Artifact | ValidPlayer$ Player
+Oracle:Exile target artifact. Tap all other artifacts.

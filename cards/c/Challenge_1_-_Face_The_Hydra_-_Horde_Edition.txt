@@ -1,0 +1,207 @@
+Name:Challenge 1 - Face The Hydra - Horde Edition
+ManaCost:no cost
+Types:Enchantment
+
+K:CARDNAME can't be countered.
+
+#####################################################################################################################
+#
+#	TODO: How Many Heads? Hydra Horde By: Namu342 #
+
+#		Preface:
+#	The most important thing to keep in mind with these rules is that they are not concrete rules.
+#	Please adjust based on playgroup or strength of decks used against the horde deck.
+
+#		Rules
+
+#		Setup:
+#CHK	1. Each Survivor contributes 20 life(To be determined based on more testing, but with ~5 damage
+#		a turn from just hydra heads seems like it will be painful enough).
+#CHK	2. Hydra horde begins with 5 Hydra heads in play chosen at random.
+
+#		Gameplay:
+#TESTING	1. The Survivors always go first, and take the first three turns before the Horde gets a turn.
+#		The Survivors do not get to draw on their first turn.
+#	2. Due to the nature of the hydra heads dealing damage for being untapped, they will be the only
+#		creatures to not to attack each turn, but instead will always block. If hydra heads are tapped
+#		due to an effect and no creatures are available to block all incoming damage is directed to a
+#		hydra based on a players choice.
+#CHK	3. All creatures have haste. The Horde has infinite mana, and will pay all costs for cards such
+#		as Propaganda or Rhystic Study. Also hyrdras with an activated ability will use it once a turn per
+#		hydra(to be adjusted based on testing/difficulty)
+#TESTING	4. Whenever a hydra head is destroyed the hydra horde deck reveals the top 5 cards of its library
+#		and any heads/hydras(x=to number of hydra turns) that are revealed will be put into play all
+#		other cards will placed into the graveyard.
+#CHK	6. Each hydra head deals 1 damage to each opponent and each elite hydra head deals 2 to damage to each opponent.
+
+#		Winning the Game (all conditions must be met):
+#CHK	1. The Horde must have no cards in its library.
+#CHK	2. The Horde must have no cards in hand.
+#CHK	3. The Horde must have no creatures in play.
+
+#		Additional Rules Notes:
+#	1. If a card is returned to the Horde's hand, it is cast during their next main phase.
+#CHKish	2. The Horde is supposed to be mindless, so whenever possible, make choices
+#		randomly.
+#TESTING	3. If a Hydra Head is exiled instead it is placed in the graveyard instead.(Heads need to regrow :)).
+
+#		Deck-Specific Rules
+#	1. The horde's turn proceeds in this manner:
+#	a) Upkeep -The hydra deck reveals the top 5(tbd) card of its library and plays all spells revealed this way
+#		in a random order. Also every upkeep the hydra horde gains X+1 for its hydra creature
+#		spells(due to limiting the use of infinite mana to cast the hydra creatures)
+#	b) First main phase - The hydra player will cast any card that has been returned to its hand, cast in a random order.
+#		Cards with flashback may also be played at this point.
+#	c) Combat phase - All non hydra head creatures will attack(creatures have haste).
+#	d) Second main phase - Any cards drawn or returned to hand during the first main phase are now cast.
+#	2. If the Horde would gain life, it puts one card per life gained from the bottom of its graveyard on the bottom of
+#		its library in a random order.
+#	3. If the Horde would ever discard a card, it is done at random.
+#
+#       My Own Added Rules
+#CHK   1. Hydra spells the Hydra casts cost 4 less
+#   2. Whenever Hydra casts a spell with {X} in its mana cost, The Hydra creates a 0/0 Hydra token, then put X +1/+1 counters on it.
+#CHK   3. Heads the Hydra controls have {T}: Add {1} mana of any one color.
+######################################################################################################################
+
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library,Hand | Execute$ hydraHorde | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library,Hand | Execute$ hydraHorde | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If CARDNAME is in the Hydras opening hand, it puts CARDNAME onto the battlefield and go through the prompts. Hope you enjoy the game.
+SVar:hydraHorde:DB$ ChangeZone | Defined$ Self | Origin$ Library,Hand | Destination$ Battlefield | SubAbility$ TrigExile | SpellDescription$ Put CARDNAME onto the battlefield.
+SVar:TrigExile:DB$ ChangeZone | Origin$ Battlefield | Destination$ Exile | Defined$ Self | SubAbility$ DBDiscardHand
+SVar:DBDiscardHand:DB$ Discard | Mode$ Hand | Defined$ You | SubAbility$ ShuffleHand
+SVar:ShuffleHand:DB$ ChangeZoneAll | Defined$ You | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | Random$ True | UseAllOriginZones$ True
+
+# THIS WILL CREATE AN EMBLEM WITH PREDEFINED RULE SCRIPTS
+K:ETBReplacement:Other:Emblem1
+SVar:Emblem1:DB$ Effect | StackDescription$ SpellDescription | Name$ Emblem - FaceTheHydra - Horde Edition | StaticAbilities$ reduceCmdrCost,headMana,freeHydra,manaOfAnyColor,hydraCreatureHaste,hydraCastReduce,nonHeadAttckEachTurn,headsNoAttack,hydraMustBlock,noCastHero,heroProtection,hydraNoDraw,fightHydra,noLoseGame | Triggers$ hydraNoFirst,hydraTurn,growMoreHeads,hydraDmgPL,winCon | Replacements$ unexileTheDeadHead | SVars$ numTurns,HydraEndTurn,TrigDamageHead,TrigDamageElite,X,Z,AffectedX,DBChange,Mana,NonStackingEffect,TrigDig,TrigPlay,numHydraTurns,FightTheHydraHead,HasEffect,PlayMain1,TrigGrowingHeads,HydraLibraryToGraveyard,TrigChallengeWon,F,G,H | EffectOwner$ You | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+
+# CHOOSE A NUMBER 0-5 FOR THE AMOUNT OF HEADS THE HYDRA HEADS THAT WILL APPEAR - FOR A "CHOOSE YOUR OWN DIFFICULTY"
+T:Mode$ NewGame | Execute$ ChooseNumberA | TriggerDescription$ • When the game starts, Choose a number 0-5 for the amount of random Heads the Hydra will start with and a second number for how many turns the Hydra skips from 1-3.
+SVar:ChooseNumberA:DB$ ChooseNumber | Min$ 0 | Max$ 5 | Defined$ Opponent | SubAbility$ TrigHydraFetch1A | NoLooking$ True
+SVar:TrigHydraFetch1A:DB$ChangeZone | Origin$ Library | Destination$ Hand | ChangeNum$ xHnum | AtRandom$ True | ChangeType$ Permanent.Head | ChangeNum$ xHnum | NoLooking$ True | Shuffle$ False | StackDescription$ SpellDescription | References$ xHnum | SubAbility$ TrigHydraFetch1B
+SVar:TrigHydraFetch1B:DB$ChangeZone | Origin$ Hand | Destination$ Battlefield | ChangeType$ Permanent.Head | ChangeNum$ xHnum | Mandatory$ True | NoLooking$ True | Shuffle$ False | References$ xHnum | SubAbility$ ChooseNumberB
+SVar:xHnum:Number$ChosenNumber
+SVar:ChooseNumberB:DB$ ChooseNumber | Min$ 1 | Max$ 3 | Defined$ Opponent | Chooser$ Opponent | SubAbility$ HydraSkipTurns
+SVar:HydraSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ You | References$ xTnum | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:xTnum:Number$ChosenNumber
+
+# CHECKS IF OPPONENTS LIFE IS AT LEAST 40 #
+T:Mode$ NewGame | CheckSVar$ SurvCurLife | SVarCompare$ LE39 | References$ SurvCurLife | Execute$ SurvivorSetLife | TriggerDescription$ When the game starts if your life total is less than 40, it becomes 40.
+SVar:SurvCurLife:PlayerCountOpponents$LifeTotal
+SVar:SurvivorSetLife:DB$ SetLife | Defined$ Opponent | LifeAmount$ 40
+
+# OPPONENT MAY SEARCH FOR UP TO 2 HERO CARDS FROM SIDEBOARD TO BE PUT ONTO THE BATTLEFIELD #
+T:Mode$ NewGame | Execute$ TrigTheHero1A | Optional$ True | OptionalDecider$ Opponent | TriggerDescription$ • When the game starts, Each opponent may choose to search their sideboard for up to two Hero cards.
+SVar:TrigTheHero1A:DB$ ChangeZone | Origin$ Sideboard | Destination$ Battlefield | DefinedPlayer$ Opponent | ChangeType$ Card.Hero | ChangeNum$ 2 | ShuffleNonMandatory$ True | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+################# STATIC ABILITIES #######################
+
+# Creatures the Hydra controls have Haste
+SVar:hydraCreatureHaste:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddKeyword$ Haste | Description$ Creatures the Horde controls have haste.
+
+# Hydra Heads have {T}: Add one of any color.
+SVar:headMana:Mode$ Continuous | EffectZone$ Command | Affected$ Head.YouCtrl | AddAbility$ Mana | Description$ Heads you control have "{T}: Add one mana of any color."
+SVar:Mana:AB$Mana | Cost$ T | Produced$ Any | Amount$ 1 | SpellDescription$ Add one mana of any color..
+
+# nonHead creatures the Hydra controls attack each combat if able
+SVar:nonHeadAttckEachTurn:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.nonHead+YouCtrl | AddHiddenKeyword$ CARDNAME attacks each combat if able. | Description$ Creatures the Horde controls attack each combat if able.
+
+# HYDRA CAN PLAY NONLAND SPELLS WITHOUT PAYING MANACOST
+#SVar:hydraFreeCast:Mode$ Continuous | EffectZone$ Command | Affected$ Card.nonLand+YouOwn | MustPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Command | SpellDescription$ The Horde may cast spells from its hand without paying their mana costs.
+
+# Hydra cards cost {4} less to play and can cast Commander for free
+SVar:hydraCastReduce:Mode$ ReduceCost | ValidCard$ Card.Hydra | EffectZone$ Command | Type$ Spell | Activator$ You | Amount$ 4 | Description$ Hydra spells you cast cost {4} less to cast.
+SVar:reduceCmdrCost:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | EffectZone$ Command | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | SpellDescription$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
+SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
+
+# Hydra can play Hydra spells for free
+#SVar:freeHydra:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl+Hydra | AddKeyword$ Alternative Cost:0 | AffectedZone$ Hand,Graveyard,Exile,Library,Command | Description$ You may pay {0} rather than pay the mana cost for Hydra creature spells you cast.
+
+# Hydra can play commander for free
+SVar:manaOfAnyColor:Mode$ Continuous | EffectZone$ Command | Affected$ You | ManaColorConversion$ Additive | WhiteConversion$ Color | BlueConversion$ Color | BlackConversion$ Color | RedConversion$ Color | GreenConversion$ Color | ColorlessConversion$ Color | Description$ Players may spend mana as though it were mana of any color.
+SVar:NonStackingEffect:True
+
+# Heads creatures can't attack
+SVar:headsNoAttack:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.Head+YouCtrl | AddHiddenKeyword$ CARDNAME can't attack | Description$ Heads the Hydra controls can't attack
+
+# Heads the Hydra controls must block
+SVar:hydraMustBlock:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.Head+YouCtrl | AddHiddenKeyword$ CARDNAME blocks each combat if able. | Description$ Head creatures the Hydra controls block each combat if able.
+
+# OPPONENTS CAN'T CAST HERO CARDS FROM ANYWHERE #
+SVar:noCastHero:Mode$ CantBeCast | EffectZone$ Command | ValidCard$ Card.Hero | Caster$ Opponent | Origin$ Library,Graveyard,Exile,Command,Hand | HiddenDescription$ • Your opponents can't cast Hero spells from anywhere.
+
+# PROTECTION FOR HERO CARDS #
+SVar:heroProtection:Mode$ Continuous | EffectZone$ Command | Affected$ Hero.OppCtrl | AddKeyword$ Shroud & Indestructible & Protection from everything | HiddenDescription$ • Hero cards have Shroud, Indestructible, and Protection from everything.
+
+# HYDRA CAN'T DRAW CARDS #
+SVar:hydraNoDraw:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | HiddenDescription$ • The Hydra can't draw cards.
+
+# ORIGINAL RULES YOU ATTACK THE HEADS DIRECTLY - USED FIGHT INSTEAD #
+SVar:fightHydra:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddAbility$ FightTheHydraHead | AddSVar$ HasEffect | Description$ • Creatures opponent control have "This creature fights target creature. (Each deals damage equal to its power to the other.)"
+SVar:FightTheHydraHead:AB$ Fight | Cost$ T | Defined$ Self | ValidTgts$ Creature | TgtPrompt$ Select target creature | SpellDescription$ CARDNAME fights target creature. (Each deals damage equal to its power to the other.)
+SVar:HasEffect:TRUE
+SVar:PlayMain1:TRUE
+
+# CAN NOT LOSE IF 0 OR LESS #
+SVar:noLoseGame:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You don't lose the game for having 0 or less life. | HiddenDescription$ • The Hydra doesn't lose the game for having 0 or less life.
+
+######################### TRIGGER ABILITIES ##########################
+
+# Hydra mills when it loses life
+#SVar:lifeLossHydraMills:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it puts that many cards from the top of its library into its graveyard. (Damage causes loss of life.)
+#SVar:TrigMill:DB$ Mill | Defined$ You | NumCards$ X | References$ X | SubAbility$ DBCLeanup
+#SVar:X:TriggerCount$LifeAmount
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+# WHENEVER HYDRA LOSES LIFE IT DEALS X DAMAGE TO TRGT HEAD #
+#SVar:dmgDealtoHeads:Mode$ LifeLost | EffectZone$ Command | Execute$ TrigDealDamage | Defined$ You | TriggerDescription$ • Whenever the Hydra loses life, it deals that damage to target Head it controls.
+#SVar:TrigDealDamage:DB$DealDamage | ValidTgts$ Creature.Head+YouCtrl | TgtPrompt$ Select target Head | NumDmg$ V | References$ V
+#SVar:V:TriggerCount$LifeAmount
+
+# Hydra mills when it loses life
+#T:SVar:lifeLossHydraMills:Mode$ LifeGained | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it puts that many cards from the top of its library into its graveyard. (Damage causes loss of life.)
+#SVar:TrigMill:DB$ Mill | Defined$ You | NumCards$ X | References$ X | SubAbility$ DBCLeanup
+#SVar:X:TriggerCount$LifeAmount
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+
+##
+# SETUP TURNS - THE HYDRA CANNOT GO FIRST #
+SVar:hydraNoFirst:Mode$ Phase | Phase$ Upkeep |  EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | CheckSVar$ NumTurns | SVarCompare$ EQ1 | References$ NumTurns | Execute$ HydraEndTurn | TriggerDescription$ • If the Hydra goes first, end the turn.
+SVar:NumTurns:Count$TotalTurns
+SVar:HydraEndTurn:DB$ EndTurn
+##
+
+# HYDRA'S TURN #
+SVar:hydraTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | Execute$ TrigDig | TriggerDescription$ • At the beginning of the Hydra's upkeep, it reveals the top card of its library. If it's a Head or sorcery card, it cast it without paying its mana cost.
+SVar:TrigDig:DB$ Dig | DigNum$ 5 | Reveal$ True | AnyNumber$ True | ChangeValid$ Permanent.hasXCost,Sorcery,Instant | DestinationZone$ Hand | DestinationZone2$ Battlefield | SubAbility$ DBChange | StackDescription$ SpellDescription | SpellDescription$ Look at the top five cards of your library. Put any number of permanent cards from among them onto the battlefield and the rest into your hand.
+SVar:DBChange:DB$ ChangeZone | Origin$ Stack | Destination$ Exile | StackDescription$ None
+#SVar:TrigPlay:DB$ Play | Defined$ TopOfLibrary | WithoutManaCost$ True | ConditionDefined$ TopOfLibrary | ConditionPresent$ Permanent | ConditionCompare$ EQ1
+
+# GROWING HEADS #
+SVar:growMoreHeads:Mode$ ChangesZone | EffectZone$ Command | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Card.Head | Execute$ TrigGrowingHeads | TriggerController$ TriggeredCardController | TriggerDescription$ • Growing Heads: Whenever a Head leaves the battlefield, the Hydra reveals the top two cards of its library, puts all Heads onto the battlefield and put the rest into its graveyard.
+SVar:TrigGrowingHeads:DB$ Dig | DigNum$ 5 | Reveal$ True | ChangeNum$ 5 | ChangeValid$ Permanent | References$ | DestinationZone$ Battlefield | DestinationZone2$ Library
+
+
+#TESTING - WHEN HEADS ARE EXILED - RETURN THEM TO GRAVEYARD
+SVar:unexileTheDeadHead:Event$ Moved | ValidCard$ Card.Horde+Hydra+Head | EffectZone$ Command | Destination$ Exile | ReplaceWith$ HydraLibraryToGraveyard | Description$ If a Horde creature would be put into your graveyard from anywhere, exile it instead.
+SVar:HydraLibraryToGraveyard:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Library | Destination$ Graveyard
+
+
+# HYDRA DAMAGES PLAYERS AT ITS UPKEEP #
+SVar:hydraDmgPL:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You | Execute$ TrigDamageHead | TriggerDescription$ • At the beginning of the Hydra's upkeep, the Hydra deals 1 damage to each opponent for each untapped Head you control, If a untapped Head you control is Elite, the Hydra deals 2 damage to each opponent instead.
+SVar:TrigDamageHead:DB$ DealDamage | Defined$ Opponent | NumDmg$ X | References$ X | SubAbility$ TrigDamageElite
+SVar:TrigDamageElite:DB$ DealDamage | Defined$ Opponent | NumDmg$ Z | References$ Z
+SVar:X:Count$Valid Head.untapped+YouCtrl
+SVar:Z:Count$Valid Elite.untapped+YouCtrl
+
+# WIN CONDITION #
+SVar:winCon:Mode$ Phase | Phase$ End of Turn |  EffectZone$ Command | ValidPlayer$ Opponent | TriggerZones$ Command | CheckSVar$ H | SVarCompare$ EQ0 | References$ F,G,H | Execute$ TrigChallengeWon | TriggerDescription$ • At the end of your turn, if the Hydra controls no Heads and has no cards in its library. You have slain the Hydra.
+SVar:TrigChallengeWon:DB$ WinsGame | Defined$ Opponent
+SVar:F:Count$ValidLibrary Card.YouOwn+inZoneLibrary
+SVar:G:Count$ValidBattlefield Head.YouOwn+inZoneBattlefield
+SVar:H:SVar$F/Plus.G
+
+Oracle: • TESTING Theros Challenge 1 - Face The Hydra - Horde Edition •

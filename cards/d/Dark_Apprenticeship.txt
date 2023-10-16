@@ -1,0 +1,7 @@
+Name:Dark Apprenticeship
+ManaCost:1 R
+Types:Enchantment
+T:Mode$ Phase | Phase$ End Of Turn | ValidPlayer$ You | CheckSVar$ X | References$ X | Execute$ DBHate | TriggerZones$ Battlefield | TriggerDescription$ At the beginning your end step, if an opponent lost life from a source other than combat damage this turn, CARDNAME deals 2 damage to target player.
+SVar:DBHate:DB$ DealDamage | ValidTgts$ Player | TgtPrompt$ Choose target player | NumDmg$ 2
+SVar:X:PlayerCountOpponents$NonCombatDamageDealtThisTurn
+Oracle:Hate - At the beginning of your end step, if an opponent lost life this turn from a source other than combat damage this turn, Dark Apprenticeship deals  2 damage to target player.

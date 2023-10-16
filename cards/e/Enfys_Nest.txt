@@ -1,0 +1,11 @@
+Name:Enfys Nest
+ManaCost:G W
+Types:Legendary Creature Human Rebel
+PT:2/1
+K:Vigilance
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Optional$ True | OptionalDecider$ You | Execute$ TrigChange | TriggerDescription$ When CARDNAME enters the battlefield, exile target creature card from a graveyard. You gain life equal to that card's toughness.
+SVar:TrigChange:DB$ ChangeZone | Origin$ Battlefield | Destination$ Exile | TgtPrompt$ Choose target creature | ValidTgts$ Creature.OppCtrl | RememberLKI$ True | SubAbility$ DBGainLife
+SVar:DBGainLife:DB$ GainLife | Defined$ RememberedController | LifeAmount$ X | References$ X | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:X:RememberedLKI$CardPower
+Oracle:When Enfys Nest enters the battlefiled, you may exile target creature an opponent controls. If you do, its controller gains life equal to its power.

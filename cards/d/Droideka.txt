@@ -1,0 +1,13 @@
+Name:Droideka
+ManaCost:4 W
+Types:Artifact Creature Droid
+PT:3/6
+A:AB$ ChangeTargets | Cost$ 2 U | TargetType$ Spell,Activated,Triggered | ValidTgts$ Card | DefinedMagnet$ Self | ChangeSingleTarget$ True | SpellDescription$ Change a target of target spell or ability to CARDNAME.
+# Repair 3
+T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Battlefield | Destination$ Graveyard | Execute$ TrigExile | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies, exile it with four repair counters on it and it gains suspend.
+SVar:TrigExile:DB$ ChangeZone | Defined$ TriggeredNewCardLKICopy | Origin$ Graveyard | Destination$ Exile | SubAbility$ DBPutCounter | RememberChanged$ True
+SVar:DBPutCounter:DB$ PutCounter | Defined$ Remembered | CounterType$ REPAIR | CounterNum$ 3
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Exile | IsPresent$ Card.Self+counters_GE1_REPAIR | PresentZone$ Exile | Execute$ DBRemoveCounter | TriggerDescription$ At the beginning of your upkeep, if CARDNAME is exiled with an repair counter on it, remove an repair counter from it. Then if CARDNAME has no repair counters on it, return it to the battlefield.
+SVar:DBRemoveCounter:DB$ RemoveCounter | Defined$ Self | CounterType$ REPAIR | CounterNum$ 1 | SubAbility$ DBReturn
+SVar:DBReturn:DB$ Play | MayPlay$ True | Defined$ Self | Origin$ Exile | Destination$ Battlefield | Optional$ True | OptionalDecider$ You | ConditionDefined$ Self | ConditionPresent$ Card.counters_EQ0_REPAIR
+Oracle:{2}{U}: Change a target of target spell or ability to Droideka.\nRepair 3 (When this creature dies, put three repair counter on it. At the beginning of each of your upkeep, remove a repair counter. Whenever the last is removed, you may cast it from your graveyard until end of turn.)

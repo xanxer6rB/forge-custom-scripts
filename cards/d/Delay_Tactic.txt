@@ -1,0 +1,10 @@
+Name:Delay Tactic
+ManaCost:1 U
+Types:Instant
+A:SP$ Charm | Cost$ 1 U | Choices$ DBPumpAll,DBEffect | CharmNum$ 1
+SVar:DBPumpAll:DB$ PumpAll | ValidCards$ Creature.YouCtrl | KW$ Hexproof | SpellDescription$ Creatures you control gain hexproof until end of turn.
+SVar:DBEffect:DB$ Effect | ValidTgts$ Player | TgtPrompt$ Select target player | IsCurse$ True | StaticAbilities$ DontUntap | Triggers$ RestoreSight | SVars$ ExileEffect | RememberObjects$ Targeted | Duration$ Permanent | SpellDescription$ Creatures don't untap during target player's next untap step.
+SVar:DontUntap:Mode$ Continuous | ValidPlayer$ Player.IsRemembered | EffectZone$ Command | AffectedZone$ Battlefield | Affected$ Creature | AddHiddenKeyword$ This card doesn't untap.
+SVar:RestoreSight:Mode$ Phase | Phase$ Untap | ValidPlayer$ Player.IsRemembered | TriggerZones$ Command | Execute$ ExileEffect | Static$ True
+SVar:ExileEffect:DB$ ChangeZone | Defined$ Self | Origin$ Command | Destination$ Exile
+Oracle:Choose one —\n• Creatures you control gain hexproof until end of turn.\n• Creatures target opponent controls don't untap during his or her next untap step.

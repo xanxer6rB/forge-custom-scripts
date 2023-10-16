@@ -1,0 +1,25 @@
+Name:Bathe in Bacta
+ManaCost:1 G
+Types:Instant
+
+#A:AB$ DealDamage | Cost$ 1 G | Planeswalker$ True | ActivationLimit$ 1 | Optional$ True | OptionalDecider$ You | ValidTgts$ Creature | TgtPrompt$ Select target creature | NumDmg$ 2 | References$ X | SubAbility$ DBDealDamage | AILogic$ PingAfterAttack | SpellDescription$ CARDNAME deals 2 damage to target creature. If CARDNAME has dealt 2 or more damage this turn, CARDNAME deals 1 damage to you.
+#SVar:DBDealDamage:DB$DealDamage | Defined$ You | NumDmg$ 1 | SubAbility$ DBDamageResolve | ConditionCheckSVar$ X | ConditionSVarCompare$ GE0 | References$ X | StackDescription$ If CARDNAME has dealt 2 or more damage this turn, CARDNAME deals 1 damage to you.
+#SVar:DBDamageResolve:DB$ DamageResolve
+#SVar:X:Count$TotalDamageDoneByThisTurn
+
+
+#A:SP$ GainLife | LifeAmount$ 1 | ValidPlayers$ Player.You | CheckSVar$ Y | References$ Y | Execute$ DBHate | TriggerDescription$ Whenever CARDNAME attacks, if an opponent lost life from a source other than combat damage this turn, target creature blocks this turn if able.
+#SVar:DBHate:DB$ MustBlock | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature to block this creature | SpellDescription$ Target creature blocks CARDNAME this turn if able.
+#SVar:Y:Count$LifeOppsLostThisTurn
+
+A:SP$ GainLife | Cost$ 1 G | LifeAmount$ 6 | ValidPlayers$ Player.You | CheckSVar$ X | References$ X | SubAbility$ GainLife2 | SpellDescription$ You gain 6 life. If you lost life from a source other than combat damage this turn, you gain 9 life instead.
+SVar:GainLife2:DB$ GainLife | LifeAmount$ 9
+#SVar:X:Count$TotalnonCombatDamageDoneByThisTurn
+SVar:X:Count$LifeYouLostThisTurn
+DeckHas:Ability$LifeGain
+
+#A:SP$ GainLife | Cost$ 1 G | LifeAmount$ X | CheckSVar$ X | References$ X | ValidPlayers$ Player.You | SpellDescription$ Target player gains 4 life. Landfall — If you had a land enter the battlefield under your control this turn, that player gains 8 life instead.
+#SVar:X:Count$LifeYouLostThisTurn.9.6
+
+
+Oracle:STILL TESTING\nYou gain 6 life. If you lost life from a source other than combat damage this turn, you gain 9 life instead.

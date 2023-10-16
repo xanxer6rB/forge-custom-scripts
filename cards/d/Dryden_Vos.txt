@@ -1,0 +1,10 @@
+Name:Dryden Vos
+ManaCost:1 B R
+Types:Legendary Creature Human Rogue
+PT:2/3
+K:Menace
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigPut | TriggerDescription$ When CARDNAME enters the battlefield, put a Bounty counter on target creature.
+SVar:TrigPut:DB$ PutCounter | ValidTgts$ Creature | TgtPrompt$ Select target creature | CounterType$ BOUNTY | CounterNum$ 1
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | TriggerZones$ Battlefield | ValidCard$ Creature.OppCtrl+counters_GE1_BOUNTY | Execute$ DBDamage | TriggerDescription$ Whenever a creature an opponent controls with a Bounty counter on it dies, CARDNAME deals 2 damage to any target.
+SVar:DBDamage:DB$ DealDamage | ValidTgts$ Creature,Player,Planeswalker | TgtPrompt$ Select any target | NumDmg$ 2
+Oracle:Menace\nWhen Dryden Vos enters the battlefield, put a Bounty counter on target creature.\nBounty - Whenever a creature an opponent controls with a Bounty counter on it dies, Dryden Vos deals 2 damage to any target.

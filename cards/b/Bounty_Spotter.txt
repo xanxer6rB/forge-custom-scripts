@@ -1,0 +1,9 @@
+Name:Bounty Spotter
+ManaCost:1 B
+Types:Creature Zabrak Hunter
+PT:2/2
+K:CARDNAME doesn't untap during your untap step.
+A:AB$ PutCounter | Cost$ T | ValidTgts$ Creature | TgtPrompt$ Select target creature | CounterType$ BOUNTY | CounterNum$ 1 | IsCurse$ True | SpellDescription$ Put a bounty counter on target creature.
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.OppCtrl+counters_GE1_BOUNTY | Execute$ TrigUntap | OptionalDecider$ TriggeredCardController | TriggerController$ You | TriggerDescription$ Whenever a creature an opponent controls with a bounty counter on it dies, untap CARDNAME.
+SVar:TrigUntap:DB$Untap | Defined$ Self
+Oracle:Bounty Spotter doesn't untap durning your untap step.\n{T}: Put a bounty counter on target creature.\nBounty - Whenever a creature an opponent controls with a bounty counter on it dies, untap Bounty Collector.

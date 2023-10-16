@@ -1,0 +1,37 @@
+Name:WagicTheHomebrew Blitzkrieg
+ManaCost:no cost
+Types:Tribal Instant Wagic Blitzkrieg
+K:Split second
+K:CARDNAME can't be countered.
+
+# A way to kickstart Emblem ability/rule generation
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ TrigExile | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If CARDNAME is in your starting library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If CARDNAME is in your opening hand, you may choose any amount of target players and go through the prompts. Hope you enjoy the game.
+SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ TrigExile | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card
+SVar:TrigExile:DB$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self | SubAbility$ WTHB
+
+# Any amount of target players get an emblem
+SVar:WTHB:DB$ Effect | ValidTgts$ Player | TgtPrompt$ Choose any number of target players | TargetMin$ 0 | TargetMax$ MaxPl | StackDescription$ SpellDescription | MayChooseTarget$ True | Chooser$ You | Name$ WagicTheHomebrew Blitzkrieg Effect | StaticAbilities$ SkipDraw,UnlimLand | Triggers$ TrigHand,TrigLandPlay | SVars$ ChkHand,DBDraw,X,Difference,TrigDraw,DBCleanup | EffectOwner$ Targeted | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+SVar:MaxPl:PlayerCountPlayers$Amount
+
+# Abilities/rules added to created emblems
+
+# Skip your draw phase
+SVar:SkipDraw:Mode$ Continuous | EffectZone$ Command,Battlefield | Affected$ You | AddKeyword$ Skip your draw step. | HiddenDescription$ Skip your draw step.
+
+# You can play any amount of lands
+SVar:UnlimLand:Mode$ Continuous | EffectZone$ Command,Battlefield | Affected$ You | AdjustLandPlays$ Unlimited | Description$ You may play any amount of land on each of your turns.
+
+# Upkeep, if hand is less than 8 cards, draw until you have eight.
+SVar:TrigHand:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command,Battlefield | CheckSVar$ ChkHand | SVarCompare$ LE8 | References$ ChkHand | Execute$ DBDraw | TriggerDescription$ At the beginning of your upkeep, if you have less than eight cards in your hand, draw until you have eight.
+SVar:ChkHand:PlayerCountYour$NumCardsInHand
+SVar:DBDraw:DB$Draw | Defined$ You | NumCards$ Difference | References$ X,Difference | SubAbility$ DBCleanup
+SVar:X:Count$NumCardsInYourHand
+SVar:Difference:Number$8/Minus.X
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+# Whenever you play a land, draw a card.
+SVar:TrigLandPlay:Mode$ LandPlayed | ValidCard$ Land.YouCtrl | TriggerZones$ Command,Battlefield | Execute$ TrigDraw | TriggerDescription$ Whenever you play a land card, draw a card.
+SVar:TrigDraw:DB$Draw | Defined$ You | NumCards$ 1
+
+Oracle:At least one players' library or sideboard should have this card.\nWhen the game starts, follow the prompts.\nWagicTheHomebrew - Blitzkrieg\nAt the beginning of your draw phase, if your hand is less than eight, draw until you have eight.\nWhenever a land enters the battlefield under your control, draw a card.

@@ -1,0 +1,11 @@
+Name:Darth Tyranus, Count of Serenno
+ManaCost:1 W U B
+Types:Legendary Planeswalker Dooku
+Loyalty:3
+A:AB$ Pump | Cost$ AddCounter<1/LOYALTY> | Planeswalker$ True | NumAtt$ -6 | IsCurse$ True | TargetMin$ 0 | TargetMax$ 1 | ValidTgts$ Creature | UntilYourNextTurn$ True | SpellDescription$ Until your next turn, up to one target creature gets -6/-0.
+A:AB$ Sacrifice | Cost$ SubCounter<3/LOYALTY> | Planeswalker$ True | SacValid$ Artifact | SacMessage$ choose an artifact to sacrifice | Optional$ True | RememberSacrificed$ True | SubAbility$ DBArtifact | SpellDescription$ You may sacrifice an artifact. If you do, search your library for an artifact card and put that card onto the battlefield and shuffle your library
+SVar:DBArtifact:DB$ ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Artifact | ChangeNum$ 1 | Shuffle$ True | SubAbility$ DBCleanup | SpellDescription$ Search your library for an artifact card, reveal it, put it onto the battlefield, then shuffle your library.
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+A:AB$ SetLife | Cost$ SubCounter<6/LOYALTY> | Planeswalker$ True | Ultimate$ True | ValidTgts$ Player | TgtPrompt$ Select target player whose life becomes 5 | LifeAmount$ 5 | SubAbility$ DBSetLife | SpellDescription$ Target player's life total becomes 5. Another target player's life total becomes 30.
+SVar:DBSetLife:DB$ SetLife | ValidTgts$ Player | TgtPrompt$ Select another target player whose life becomes 30 | LifeAmount$ 30
+Oracle:[+1]: Up to one target creature gets -6/-0 until your next turn.\n[-3]: Sacrifice an artifact. If you do, you may search your library for an artifact card and put that card onto the battlefield. Shuffle your library afterwards.\n[-6]: Target player's life total becomes 5. Another target player's life becomes 30.

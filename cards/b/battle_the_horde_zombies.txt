@@ -1,0 +1,155 @@
+Name:Battle the Horde Zombies Avatar
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-7/-19
+
+K:Protection from creatures
+K:Protection from enchantments
+K:Protection from artifacts
+K:Protection from lands
+
+############################################ WORKING ABILITY SCRIPTS ######################################
+ 
+  #########################################
+ ########### CARD DECK-GEN/ENGINE ##########
+#############################################
+
+S:Mode$ CantTarget | EffectZone$ Command | AffectedZone$ Graveyard | Defined$ Player.You | Description$ Cards in graveyards can't be the targets of spells or abilities.
+SVar:NonStackingEffect:True
+
+T:Mode$ NewGame | ValidPlayer$ You | Execute$ StartGame | TriggerDescription$ "Battle the Horde Zombies!","When the game starts, if the Horde wins the flip it will skip its next turn.","Otherwise you start with two extra turns."
+SVar:StartGame:DB$ SkipTurn | NumTurns$ 2 | Defined$ You | SubAbility$ UnMulligan
+
+#T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ At the beginning of Batlle the Horde Zombies Avatar upkeep, it puts the top card of its library into its graveyard.
+#SVar:TrigMill:DB$ Mill | Defined$ You | NumCards$ 1
+
+T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigDig | TriggerDescription$ At the beginning of your upkeep, reveal the top card of your library. If it's a creature card that shares a creature type with a creature you control, you may cast that card without paying its mana cost. Otherwise, put that card on the bottom of your library.
+SVar:TrigDig:DB$ Dig | DigNum$ 1 | Reveal$ True | RememberRevealed$ True | ChangeNum$ All | ChangeValid$ Creature.sharesCreatureTypeWith,Creature.YouCtrl | DestinationZone$ Library | LibraryPosition$ 0 | LibraryPosition2$ -1 | SubAbility$ DBPlayIT
+SVar:DBPlayIT:DB$ Play | Defined$ Remembered | Controller$ You | WithoutManaCost$ True | Optional$ True | RememberPlayed$ True | ConditionCheckSVar$ MatchType | ConditionSVarCompare$ EQ1 | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:MatchType:Remembered$Valid Creature.sharesCreatureTypeWith Card
+
+#############################################
+
+  #########################################
+ ####### SURVIVOR ABILITY SCRIPTS ##########
+#############################################
+
+T:Mode$ Phase | Phase$ Main1 | ValidPlayer$ Opponent | Execute$ TrigGenericChoice | TriggerZones$ Command | TriggerDescription$ At the beginning of the Survivors Main Phase, ABILITY
+SVar:TrigGenericChoice:DB$ GenericChoice | AtRandom$ True | Choices$ R1,R2,R3,R4,R5,R6 | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SpellDescription$ Roll a die. On a 1, Create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color.". On 2, Create a Food token. (Then exile this card. You may cast the creature later from exile.). On a 3, draw a card. On a 4, Destroy all artifacts, creatures and enchantments. On a 5, Skip your next untap step. On a 6, Skip your next combat phase.
+
+SVar:R1:DB$ Token | Cost$ 0 | TokenAmount$ 1 | TokenScript$ c_a_treasure_sac | TokenOwner$ Opponent | LegacyImage$ c a treasure sac xln | SpellDescription$ Create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color."
+SVar:R2:DB$ Token | Cost$ 0 | TokenAmount$ 1 | TokenScript$ c_a_food_sac | TokenOwner$ Opponent | LegacyImage$ c a food sac eld | SpellDescription$ Create a Food token. (Then exile this card. You may cast the creature later from exile.)
+SVar:R3:DB$ Draw | Cost$ 0 | Defined$ Opponent | NumCards$ 1 | SpellDescription$ Draw a card.
+SVar:R4:DB$ DestroyAll | Cost$ 0 | ValidCards$ Artifact,Creature,Enchantment | SpellDescription$ Destroy all artifacts, creatures and enchantments.
+SVar:R5:DB$ Pump | Cost$ 0 | Defined$ You | KW$ Skip your next untap step. | Permanent$ True | SpellDescription$ Skip your next untap step.
+SVar:R6:DB$ Pump | Cost$ 0 | Defined$ You | KW$ Skip your next combat phase. | SpellDescription$ Skip your next combat phase.
+#
+#
+#SVar:R7:DB$ Pump | Cost$ 0 | SubAbility$ DBSkipTurn | SpellDescription$ You skip your next turn.
+#SVar:DBSkipTurn:DB$ SkipTurn | NumTurns$ 1 | Defined$ You
+#
+#T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ EatSomeDays | TriggerDescription$ When CARDNAME enters the battlefield, you skip your next two turns.
+#SVar:EatSomeDays:DB$ SkipTurn | Defined$ You | NumTurns$ 2
+
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.Zombie+Other+YouCtrl | TriggerZones$ Command | Execute$ TrigGainLife | TriggerDescription$ Whenever another Zombie you control dies, target opponent gains 1 life.
+SVar:TrigGainLife:DB$GainLife | LifeAmount$ 1 | ValidTgts$ Opponent | TgtPrompt$ Select target opponent
+SVar:PlayMain1:TRUE
+
+###############################################
+
+  #########################################
+ ####### HORDE NECROMANCY SCRIPTS ##########
+#############################################
+
+S:Mode$ Continuous | Affected$ Creature.YouCtrl+Zombie | AddKeyword$ Alternative Cost:0 | EffectZone$ Command | AffectedZone$ Hand,Graveyard,Exile,Library,Command | Description$ You may pay {0} rather than pay the mana cost for Zombie creature spells you cast.
+SVar:NonStackingEffect:True
+
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Zombie.YouOwn | MayPlay$ True | AffectedZone$ Graveyard | Description$ You may play Zombie cards from your graveyard.
+SVar:NonStackingEffect:True
+SVar:PlayMain1:TRUE
+
+#T:Mode$ ChangesZone | EffectZone$ Command | Origin$ Library | Destination$ Graveyard | ValidCard$ Card.Creature+Zombie | Execute$ TrigDig | TriggerController$ TriggeredCardController | TriggerDescription$ Whenever a Zombie from the Horde dies, the Zombie Horde reveal the top card of its library and puts that card onto the battlefield.
+#SVar:TrigDig:DB$ Dig | DigNum$ 1 | Reveal$ True | Optional$ True | ChangeNum$ 1 | ChangeValid$ Permanent.Creature | DestinationZone$ Battlefield | DestinationZone2$ Graveyard
+
+T:Mode$ ChangesZone | EffectZone$ Command | TriggerZones$ Command,Battlefield | ValidCard$ Zombie.YouCtrl+nonToken | Origin$ Any | Destination$ Battlefield | Execute$ TrigToken | TriggerDescription$ Whenever another nontoken Zombie enters the battlefield under your control, create a 2/2 black Zombie creature.
+SVar:TrigToken:DB$ Token | TokenOwner$ You | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | LegacyImage$ b 2 2 zombie soi
+DeckHints:Type$Zombie
+DeckHas:Ability$Token
+
+##############################################
+  
+  ##########################################
+ ## CREATE TOKENS BY CASTING ZOMBIE SPELLS ## 
+##############################################
+#T:Mode$ SpellCast | EffectZone$ Command | ValidCard$ Creature.Zombie | ValidActivatingPlayer$ You | TriggerZones$ Command,Battlefield,Graveyard | Execute$ TrigToken | TriggerDescription$ Whenever you cast a Zombie spell, create a tapped 2/2 black Zombie creature token.
+#SVar:TrigToken:DB$ Token | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | LegacyImage$ b 2 2 zombie soi | TokenTapped$ True | TokenOwner$ You 
+#SVar:BuffedBy:Zombie
+#DeckHints:Type$Zombie
+##############################################
+
+  ############################################
+ ########### HORDE STATIC ABILITIES ###########
+################################################
+
+S:Mode$ Continuous | EffectZone$ Command | AffectedZone$ Battlefield | Affected$ Creature.YouCtrl | AddKeyword$ Persist | Description$ Each creature card you control has Persist.
+
+S:Mode$ CantAttack | EffectZone$ Command | ValidCard$ Creature.OppCtrl | Target$ You | Description$ Creatures you can't attack Battle the Horde Zombies Avatar.
+
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ Your life total can't change. | Description$ Battle the Horde Avatar has no life total.
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ Battle the Horde Avatar can't draw cards.
+
+##################################################
+
+  ###############################################
+ ############ SURVIVORS ATTACK ABILITY ###########
+###################################################
+
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | OpponentTurn$ True | AddTrigger$ ZombieAttack | AddSVar$ HasAttackEffect | Description$ Other creatures have "Target creature you control fights another target creature."
+SVar:ZombieAttack:Mode$ Phase | ValidPlayer$ You | Phase$ BeginCombat | OptionalDecider$ You | ValidCard$ Card.Self | Execute$ ZombieFight | TriggerDescription$ At the beginning of opponents precombat main phase, ABILITY.
+SVar:ZombieFight:DB$ Pump | Defined$ TriggeredAttackerLKICopy | ValidTgts$ Creature.YouCtrl| TgtPrompt$ You may Choose target creature you control | SubAbility$ ZmbieHrdFight | StackDescription$ None | TargetMin$ 1 | TargetMax$ 1 | SpellDescription$ Target creature you control fights another target creature.
+SVar:ZmbieHrdFight:DB$ Fight | Defined$ ParentTarget | ValidTgts$ Creature.OppCtrl | TargetUnique$ True | TgtPrompt$ Choose target creature to fight the first target
+
+###################################################
+
+  ###############################################
+ ############ WIN CONDITION SCRIPT ###############
+###################################################
+
+T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | IsPresent$ Card.Creature | PresentZone$ Battlefield | PresentPlayer$ You | PresentCompare$ EQ0 | IsPresent2$ Card | PresentZone2$ Library | PresentPlayer2$ You | PresentCompare2$ EQ0 | Execute$ TrigWin | TriggerDescription$ At the beginning of the Zombie Horde's upkeep, if it controls no Creatures and has no cards in its Library, you win the game.
+SVar:TrigWin:DB$WinsGame | Defined$ Opponent
+
+###################################################
+
+Oracle:\nYou may pay {0} rather than pay the mana cost for Zombie creature spells you cast.\nDuring each of your turns, you may cast a Zombie creature card from your graveyard.\nWhenever you cast a Zombie spell, create a tapped 2/2 black Zombie creature token.
+
+###########################################################################################################
+
+  ###############################################
+ ########### ABILITY SCRIPTS FOR EDIT ############
+###################################################
+#SVar:R1:DB$ Pump | Cost$ 0 | Defined$ You | KW$ Skip your next untap step. | Permanent$ True | SpellDescription$ Skip your next untap step.
+#SVar:R2:DB$ PumpAll | Cost$ 0 | ValidCards$ Creature.OppCtrl | NumAtt$ +1 | NumDef$ +1 | SpellDescription$ Creatures you control get +1/+1 until end of turn.
+#SVar:R3:DB$ Token | Cost$ 0 | TokenAmount$ 1 | TokenScript$ c_a_treasure_sac | TokenOwner$ Opponent | LegacyImage$ c a treasure sac xln | SpellDescription$ Create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color."
+#SVar:R4:DB$ Token | Cost$ 0 | TokenAmount$ 1 | TokenScript$ c_a_food_sac | TokenOwner$ Opponent | LegacyImage$ c a food sac eld | SpellDescription$ Create a Food token. (Then exile this card. You may cast the creature later from exile.)
+#SVar:R5:DB$ PumpAll | Cost$ 0 | ValidCards$ Creature.OppCtrl | KW$ Indestructible | SpellDescription$ Creatures you control gain indestructible until end of turn.
+#SVar:R6:DB$ Draw | Cost$ 0 | Defined$ Opponent | NumCards$ 1 | SpellDescription$ Draw a card.
+#SVar:R7:DB$ DestroyAll | Cost$ 0 | ValidCards$ Artifact,Creature,Enchantment | SpellDescription$ Destroy all artifacts, creatures and enchantments.
+#SVar:R8:DB$ PumpAll | Cost$ 0 | ValidCards$ Creature.OppCtrl | KW$ Undying | Description$ Creatures you control gain undying.
+#
+#T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Card.Self | OptionalDecider$ TriggeredCardController | Execute$ TrigChange | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies, you may put it on the top or bottom of its owner's library.
+#SVar:TrigChange:DB$ GenericChoice | Defined$ TriggeredCardController | ShowCurrentCard$ TriggeredCard | Choices$ DBTop,DBBottom
+#SVar:DBTop:DB$ ChangeZone | Defined$ TriggeredCard | Origin$ Graveyard | Destination$ Library | LibraryPosition$ 0 | SpellDescription$ Put it on the top of library
+#SVar:DBBottom:DB$ ChangeZone | Defined$ TriggeredCard | Origin$ Graveyard | Destination$ Library | LibraryPosition$ -1 | SpellDescription$ Put it on the bottom of library
+#
+#T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.OppCtrl | TriggerZones$ Battlefield | Execute$ DBTreasure | TriggerDescription$ Whenever a creature an opponent controls dies, create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color."
+#
+#T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | PresentCompare$ GE10 | IsPresent$ Treasure.YouCtrl | Execute$ TrigWinsGame | TriggerZones$ Battlefield | TriggerDescription$ At the beginning of your upkeep, if you control ten or more Treasures, you win the game.
+#SVar:TrigWinsGame:DB$WinsGame | Defined$ You
+#
+#Oracle:At the beggining of your upkeep Roll a six sided die. On a 1, You skip your next untap step. On 2, You discard a card. On a 3, You lose 2 life. On a 4, You gain 2 life. On a 5, put two +1/+1 counters on target creature. On a 6, draw a card.
+#R:Event$Moved | ActiveZones$ Battlefield | Origin$ Graveyard | Destination$ Battlefield | ValidCard$ Creature | Prevent$ True | Description$ Creature cards in graveyards and libraries can't enter the battlefield.
+#R:Event$Moved | ActiveZones$ Battlefield | Origin$ Library | Destination$ Battlefield | ValidCard$ Creature | Prevent$ True
+#S:Mode$ CantBeCast | Origin$ Graveyard | Description$ Players can't cast spells from graveyards or libraries.
+#S:Mode$ CantBeCast | Origin$ Library
+#SVar:NonStackingEffect:True

@@ -1,0 +1,7 @@
+Name:Ewok Firedancers
+ManaCost:3 G
+Types:Creature Ewok Shamen
+PT:3/3
+K:Trample
+A:AB$ Pump | Cost$ 1 R | ValidCard$ Card.Self | NumAtt$ +1 | SpellDescription$ CARDNAME gets +1/+0 until end of turn.
+Oracle:Trample\n{1}{R}: Ewok Firedancers gets +1/+0 until end of turn.
