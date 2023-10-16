@@ -1,0 +1,8 @@
+Name:Terentatek Cub
+ManaCost:1 R
+Types:Creature Beast
+PT:2/2
+S:Mode$ Continuous | Affected$ Card.Self | AddKeyword$ CARDNAME attacks each combat if able. | AddPower$ +1 | AddToughness$ +1 | CheckSVar$ X | SVarCompare$ GE1 | Description$ As long as you control a Human, CARDNAME has hexproof and indestructible.
+SVar:X:Count$Valid Jedi.OppCtrl
+SVar:X:Count$Valid Sith.OppCtrl
+Oracle:As long as an opponent controls a Jedi or Sith, Terenatek Cub gets +1/+1 and attacks each turn if able.

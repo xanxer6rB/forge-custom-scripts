@@ -1,0 +1,20 @@
+Name:Xenagos Ascended
+ManaCost:no cost
+Types:Legendary Enchantment Creature God
+PT:6/5
+K:CARDNAME can't be countered.
+K:Indestructible
+K:CARDNAME can't be sacrificed.
+#K:Shroud
+#K:CARDNAME can't attack.
+T:Mode$ Always | TriggerZones$ Battlefield | IsPresent$ Creature.Reveler+YouCtrl | PresentCompare$ EQ0 | Execute$ TrigSac | TriggerDescription$ When there are no Reveler on the battlefield, sacrifice CARDNAME.
+SVar:TrigSac:DB$Sacrifice | Defined$ Self | SubAbility$ TrigLose
+SVar:TrigLose:DB$ WinsGame | Defined$ Opponent | SubAbility$ DBWinCleanup
+SVar:DBWinCleanup:DB$ Cleanup | ClearRemembered$ True
+DeckHints:Type$Reveler
+SVar:NeedsToPlay:Creature.Reveler+YouCtrl
+Oracle:Xenagos Ascended can't leave the battlefield as long as a Reveler is on the battlefield\nWhen Xenagos Ascended leaves the battlefield, each player wins the game.
+
+
+
+

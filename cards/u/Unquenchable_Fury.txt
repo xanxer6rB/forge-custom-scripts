@@ -1,0 +1,5 @@
+Name:Unquenchable Fury
+ManaCost:0
+Types:Sorcery
+
+Oracle:Each Minotaur can't be blocked this turn except by two or more creatures.

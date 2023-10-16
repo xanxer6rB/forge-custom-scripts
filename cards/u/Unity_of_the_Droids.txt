@@ -1,0 +1,8 @@
+Name:Unity of the Droids
+ManaCost:W U B
+Types:Instant
+A:SP$ Charm | Cost$ W U B | Choices$ DBPump,DBDig,DBDestroy | CharmNum$ 1
+SVar:DBPump:DB$ Pump | TargetMin$ 0 | TargetMax$ 1 | TgtPrompt$ Select up to one target artifact creature | ValidTgts$ Artifact.Creature | KW$ Prevent all damage that would be dealt to CARDNAME. | SpellDescription$ Prevent all damage that would be dealt this turn to up to one target artifact creature.
+SVar:DBDig:DB$ Dig | DigNum$ 4 | DestinationZone2$ Graveyard | SpellDescription$ Look at the top four cards of your library. Put one of them into your hand and the rest into your graveyard.
+SVar:DBDestroy:DB$ Destroy | ValidTgts$ Creature.nonArtifact | TgtPrompt$ Select target nonartifact creature | SpellDescription$ Destroy target nonartifact creature.
+Oracle:Choose one —\n• Prevent all damage that could be dealt to target artifact creature this turn.\n• Look at the top four cards of your library. Put one of them into your hand and the rest into you graveyard.\n• Destroy target nonartifact creature.

@@ -1,0 +1,8 @@
+Name:Xenagos's Scorn
+ManaCost:no cost
+Types:Sorcery
+
+A:SP$ Animate | ValidTgts$ Card.namedXenagos Ascended | Keywords$ Trample & CARDNAME attacks each combat if able. | RemoveKeywords$ CARDNAME can't attack. | SubAbility$ DBCleanup | SpellDescription$ Until end of turn, Xenagos Ascended loses defender and gains Trample and attacks this turn if able.
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+ 
+Oracle:Xenagos Ascended gains trample until end of turn and attacks this turn if able.

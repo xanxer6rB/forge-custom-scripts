@@ -1,0 +1,9 @@
+Name:The Harvester
+ManaCost:0
+Types:Artifact Hero
+K:Shroud
+K:Indestructible
+K:Protection from everything
+A:AB$ Draw | Cost$ T | NumCards$ 1  | SubAbility$ DBDiscard | SpellDescription$ Draw a card, then discard a card.
+SVar:DBDiscard:DB$Discard | Defined$ You | NumCards$ 1 | Mode$ TgtChoose
+Oracle:{T}: Draw a card, then discard a card.

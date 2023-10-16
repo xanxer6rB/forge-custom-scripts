@@ -1,0 +1,10 @@
+Name:Wild Holocron
+ManaCost:2
+Types:Artifact
+A:AB$PutCounter | Cost$ T | Defined$ Self | CounterType$ CHARGE | CounterNum$ 1 | SpellDescription$ Put a charge counter on CARDNAME.
+A:AB$Mana | Cost$ T SubCounter<1/CHARGE> | Produced$ R | SpellDescription$ Add {R}.
+A:AB$Mana | Cost$ T SubCounter<1/CHARGE> | Produced$ G | SpellDescription$ Add {G}.
+A:AB$Mana | Cost$ T SubCounter<1/CHARGE> | Produced$ W | SpellDescription$ Add {W}.
+A:AB$Mana | Cost$ T SubCounter<2/CHARGE> | Produced$ RG | SpellDescription$ Add {R}{G} to your mana pool.
+A:AB$Mana | Cost$ T SubCounter<2/CHARGE> | Produced$ GW | SpellDescription$ Add {G}{W} to your mana pool.
+Oracle:{T}: Put a charge counter on Wild Holocron.\n{T}, Remove a charge counter on Wild Holocron: Add {R},{G}, or {W} to your mana pool.\n{T}, Remove two charge counters from Wild Holocron: Add {R}{G} or {G}{W} to your mana pool.

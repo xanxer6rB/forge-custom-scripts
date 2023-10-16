@@ -1,0 +1,7 @@
+Name:Wookiee Bounty Hunter
+ManaCost:4 G
+Types:Creature Wookiee Hunter
+PT:4/5
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | TriggerZones$ Battlefield | ValidCard$ Creature.OppCtrl+counters_GE1_BOUNTY | Execute$ DBGainLife | TriggerDescription$ Whenever a creature an opponent controls with a Bounty counter on it dies, CARDNAME deals 2 damage to any target.
+SVar:DBGainLife:DB$ GainLife | ValidPlayers$ You | LifeAMount$ 3
+Oracle:Bounty - Whenever a creature an opponent controls with a bounty counter on it dies, you gain 3 life.

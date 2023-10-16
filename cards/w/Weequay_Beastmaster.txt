@@ -1,0 +1,9 @@
+Name:Weequay Beastmaster
+ManaCost:1 R
+Types:Creature Weequay Shaman
+PT:2/1
+S:Mode$ ReduceCost | ValidCard$ Creature.YouCtrl | Type$ Ability.Monstrosity | Amount$ 1 | MinMana$ 1 | AffectedZone$ Battlefield | Description$ Monstrosity abilities of creatures you control cost {1} less to activate. This effect can't reduce the mana in that cost to less than one mana.
+T:Mode$ BecomeMonstrous | ValidCard$ Creature.YouCtrl | TriggerZones$ Battlefield | Execute$ DBCounter | TriggerDescription$ Whenever a creature you control becomes monstrous, put an additional +1/+1 counter on that creature.
+SVar:DBCounter:DB$ PutCounter | Defined$ TriggeredCardLKICopy | CounterType$ P1P1 | CounterNum$ 1 | Static$ True | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+Oracle:Monstrosity abilities you activate cost {1} less to cast.\nWhenever a creature you control becomes monstrous, put an additional +1/+1 counter on that creature.

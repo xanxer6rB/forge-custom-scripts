@@ -1,0 +1,7 @@
+Name:TIE Striker
+ManaCost:1 B
+Types:Artifact Creature Starship
+PT:2/1
+#Using "Shadow" ability for "Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)"##
+K:Shadow
+Oracle:Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)

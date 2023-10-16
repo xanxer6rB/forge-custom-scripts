@@ -1,0 +1,10 @@
+Name:Unruly Sureshot
+ManaCost:4 B
+Types:Creature Human Hunter
+PT:4/4
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigPut | TriggerDescription$ When CARDNAME enters the battlefield, put a Bounty counter on target creature.
+SVar:TrigPut:DB$ PutCounter | ValidTgts$ Creature | TgtPrompt$ Select target creature | CounterType$ BOUNTY | CounterNum$ 1
+A:AB$ DealDamage | Cost$ 3 R | ValidTgts$ Creature.counters_GE1_BOUNTY | TgtPrompt$ Select target creature with a bounty counter on it | NumDmg$ 2 | SpellDescription$ CARDNAME deals 2 damage to target creature with a bounty counter on it.
+SVar:PlayMain1:TRUE
+DeckHas:Ability$Sacrifice & Ability$Counters
+Oracle:When Unruly Sureshot enters the battlefield, put a bounty counter on target creature an opponent controls.\n{3}{R}: Untruly Sureshot deals 2 damage to target creature with a bounty counter on it.

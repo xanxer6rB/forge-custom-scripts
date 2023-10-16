@@ -1,0 +1,10 @@
+Name:The Slayer
+ManaCost:0
+Types:Artifact Hero
+K:Shroud
+K:Indestructible
+K:Protection from everything
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigGainLife | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME enters the battlefield, gain 7 life.
+SVar:TrigGainLife:DB$GainLife | Defined$ You | LifeAmount$ 7
+Oracle:When The Slayer enters the battlefield, gain 7 life.
+

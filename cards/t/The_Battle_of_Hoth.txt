@@ -1,0 +1,6 @@
+Name:The Battle of Hoth
+ManaCost:X X W W W
+Types:Sorcery
+A:SP$ Token | Cost$ X X W W W | TokenAmount$ X | TokenScript$ w_5_5_at_at | TokenOwner$ You | LegacyImage$ w 5 5 at at stwtg | References$ X | SpellDescription$ Create X 5/5 white artifact AT-AT creature tokens with "When this creature dies, create two 1/1 white Trooper creature tokens."
+SVar:X:Count$xPaid
+Oracle:Create X 5/5 white artifact AT-AT creature tokens with "When this creature dies, create two 1/1 white Trooper creature tokens."

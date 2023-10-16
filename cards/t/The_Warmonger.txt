@@ -1,0 +1,11 @@
+Name:The Warmonger
+ManaCost:0
+Types:Artifact Hero
+K:Shroud
+K:Indestructible
+K:Protection from everything
+
+A:AB$ PumpAll | Cost$ Exile<1/CARDNAME> | ValidCards$ Creature.YouCtrl | NumAtt$ +2 | KW$ Haste | SpellDescription$ Exile CARDNAME: Creatures you control get +2/+0 and gain haste until end of turn,
+
+
+Oracle:Exile The Warmonger: Creatures you control get +2/+0 and gain haste until end of turn.

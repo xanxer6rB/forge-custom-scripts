@@ -1,0 +1,10 @@
+Name:Trade Federation Battleship
+ManaCost:3 W U B
+Types:Artifact Creature Starship
+PT:0/6
+K:Shadow
+S:Mode$ Continuous | Affected$ Creature.Droid+YouCtrl | AddPower$ 1 | AddToughness$ 1 | Description$ All Droid creatures get +1/+1.
+SVar:PlayMain1:TRUE
+A:AB$ Token | Cost$ T | TokenOwner$ You | TokenAmount$ 2 | TokenScript$ c_1_1_droid | TokenOwner$ You | LegacyImage$ c 1 1 droid stwtg | SpellDescription$ Create two 1/1 colorless Droid artifact creature tokens.
+DeckHas:Ability$Mana.Colorless & Ability$Token
+Oracle:Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)\nDroid creatures you control get +1/+1.\n{T}: Create two 1/1 colorless Droid artifact creature tokens.

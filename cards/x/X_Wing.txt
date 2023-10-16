@@ -1,0 +1,7 @@
+Name:X-Wing
+ManaCost:2 W
+Types:Artifact Creature Rebel Starship
+PT:2/2
+K:Shadow
+A:AB$ Pump | Cost$ W | KW$ Vigilance | Defined$ Self | SpellDescription$ CARDNAME gains vigilance until end of turn.
+Oracle:Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)\n{W}: X-Wing gains vigilance until end of turn.
