@@ -1,0 +1,7 @@
+Name:Porg
+ManaCost:no cost
+Types:Creature Bird
+Colors:green
+PT:0/1
+K:Monstrosity:1:G
+Oracle:

@@ -1,0 +1,9 @@
+[metadata]
+Code=plwkb
+Alias=plwkb
+Date=2018-8-3
+Name=planeswalkerKombat
+Type=Other
+
+[cards]
+S planeswalkerKombat

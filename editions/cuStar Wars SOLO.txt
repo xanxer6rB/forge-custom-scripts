@@ -1,0 +1,28 @@
+[metadata]
+Code=stwsolo
+Date=2020-01-14
+Name=cuStar Wars SOLO
+Code2=stwsolo
+MciCode=
+Type=Other
+
+[cards]
+9 C Afterburn
+12 R Chewbacca, the Beast
+4 U Conscription
+10 C Corellian Gunship
+5 U Despair
+1 U Droid Uprising
+13 R Dryden Vos
+14 M Enfys Nest
+11 R Gamble
+2 R Han Solo, Scrumrat
+6 U Kalevan Star Yacht
+15 C Maelstrom Blockade
+7 U Mud Trooper
+3 U Range Trooper
+8 R Tobias Beckett
+16 U Underground Forum
+
+[tokens]
+c_1_1_droid

@@ -1,0 +1,35 @@
+[metadata]
+Code=stwtlj
+Date=2020-01-14
+Name=cuStar Wars The Last Jedi
+Code2=stwtlj
+MciCode=
+Type=Other
+
+[cards]
+8 C Canto Bight Enforcer
+20 R Cantonica Casino
+1 R Captain Phasma
+11 C Code Slice
+4 C Delay Tactic
+12 C Fathier
+9 M First Order Dreadnought
+5 R Force Projection
+19 C Force Telepathy
+2 C Glorious Charge
+6 C Inspire
+22 C Island
+17 M Luke Skywalker, the Last Jedi
+7 C Mouse Droid
+21 C Plains
+15 U Porg Nest
+13 R Praetorian Trooper
+22 U Resistance Bomber
+10 U Sai Tok
+18 M Supreme Leader Snoke
+16 R TIE Silencer
+3 C Vulptex
+
+[tokens]
+g_0_1_porg
+w_1_1_trooper

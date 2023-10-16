@@ -1,0 +1,10 @@
+[metadata]
+Code=foiv
+Date=2019-12-22
+Name=cuFiresOfInventionVanguard
+Code2=foiv
+MciCode=
+Type=Other
+
+[cards]
+1 S FiresOfInventionVanguard

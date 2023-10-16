@@ -1,0 +1,23 @@
+[metadata]
+Code=TBTH
+Date=2019-09-30
+Name=cuBattle the Horde
+Type=Other
+
+[cards]
+1 S Minotaur Goreseeker
+2 S Minotaur Younghorn
+3 S Mogis's Chosen
+4 S Phoberos Reaver
+5 S Reckless Minotaur
+6 S Consuming Rage
+7 S Descend on the Prey
+8 S Intervention of Keranos
+9 S Touch of the Horned God
+10 S Unquenchable Fury
+11 S Altar of Mogis
+12 S Massacre Totem
+13 S Plundered Statue
+14 S Refreshing Elixir
+15 S Vitality Salve
+16 S Challenge 2 - Battle the Horde_Rev2

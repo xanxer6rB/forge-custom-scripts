@@ -1,0 +1,10 @@
+[metadata]
+Code=dngs
+Alias=dngs
+Date=2018-8-3
+Name=cuDungeons
+Type=Other
+
+[cards]
+S allThreeDungeons
+S AutoVenture

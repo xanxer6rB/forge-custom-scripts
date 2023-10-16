@@ -1,0 +1,10 @@
+[metadata]
+Code=tootg
+Date=2019-09-26
+Name=cuOath of the Gods
+Code2=tootg
+MciCode=
+Type=Other
+
+[cards]
+1 S Oath of the Gods

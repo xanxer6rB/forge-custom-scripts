@@ -1,0 +1,6 @@
+Name:Hunter
+ManaCost:no cost
+Types:Creature Hunter
+Colors:red
+PT:4/4
+Oracle:

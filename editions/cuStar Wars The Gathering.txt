@@ -1,0 +1,275 @@
+[metadata]
+Code=stwtg
+Date=2020-01-15
+Name=cuStar Wars The Gathering
+Code2=stwtg
+MciCode=
+Type=Other
+
+[cards]
+160 U AAT-1
+161 R Acklay of the Arena
+65 C Acquire Target
+35 R Admiral Ackbar
+162 C Adroit Hateflayer
+140 M Anakin Skywalker
+230 U Ancient Holocron
+66 C Aqualish Bounty Hunter
+36 U Armed Protocol Droid
+2 C Arrest
+164 R Asajj Ventress
+128 R AT-ST
+142 M Aurra Sing, Bane of Jedi
+96 U A-Wing
+3 R Bantha Herd
+129 C Bathe in Bacta
+5 C Battle Tactics
+68 R Bib Fortuna
+69 U Black Market Dealer
+166 R Blind Worship
+167 M Boba Fett
+131 R Bossk
+132 U Bounty Collector
+98 U Bounty Sniper
+70 U Bounty Spotter
+168 R Bull Rancor
+169 R C-3PO and R2D2
+6 C Cantina Band
+99 C Capture
+170 U Carbonite Chamber
+171 R Chewbacca
+172 R Chief Chirpa
+38 C Cloaking Device
+173 R Commander Cody
+7 U Condemn
+133 U Corellian Corvette
+100 C Crossfire
+174 U Cruelty of the Sith
+175 R Cunning Abduction
+176 C Dagobah Maw Slug
+101 U Dark Apprenticeship
+177 C Dark Decision
+231 U Dark Trooper
+178 R Darth Maul
+155 M Darth Sidious, Sith Lord
+156 M Darth Tyranus, Count of Serenno
+71 U Death Trooper
+8 U Deploy The Troops
+72 U Doom Blade
+73 C Droid Commando
+239 C Droid Factory
+240 U Droid Foundry
+9 U Droideka
+232 C Drone Holocron
+181 R Echo Base Commando
+10 U EMP Blast
+11 C Escape Pod
+134 C Ewok Ambush
+135 C Ewok Firedancers
+241 U Ewok Village
+136 R Exogorth
+182 U Ferocity of the Underworld
+102 R Flames of Remembrance
+183 C Force Choke
+39 C Force Denial
+74 C Force Drain
+12 C Force Healing
+103 C Force Lightning
+184 R Force Mastery
+137 C Force Pull
+40 U Force Push
+13 C Force Reflex
+104 U Force Scream
+105 C Force Spark
+224 C Fulfill Contract
+106 U Gamorrean Prison Guard
+185 M General Grievous
+14 C Gifted Initiate
+75 R Grand Moff Tarkin
+186 M Greater Krayt Dragon
+187 R Greedo
+107 U Gundark
+41 C Gungan Captain
+108 R Han Solo
+76 U Hazard Trooper
+77 C Head Hunting
+78 C Heavy Trooper
+188 R Hot Pursuit
+138 C Hungry Dragonsnake
+189 R Hunt to Extinction
+139 U Hutt Crime Lord
+242 U Hutt Palace
+79 R IG-88B
+190 C Images of the Past
+109 C Imperial Gunner
+110 C Impulsive Wager
+80 C Insatiable Rakghoul
+81 C Interrogation
+15 C Ion Cannon
+191 R Iron Fist of the Empire
+140 C Ithorian Initiate
+192 R Jabba the Hutt
+111 R Jango Fett
+42 R Jar Jar Binks
+112 C Jar'Kai Battle Stance
+16 U Jedi Battle Healer
+43 U Jedi Battle Mage
+141 U Jedi Battle Sage
+243 C Jedi Enclave
+233 C Jedi Holocron
+17 C Jedi Inquirer
+18 C Jedi Instructor
+193 U Jedi Knight
+44 R Jedi Mind Trick
+194 C Jedi Sentinel
+10 U Jedi Starfighter
+244 U Jedi Temple
+45 U Jedi Training
+46 U Jump Trooper
+245 C Jungle Village
+246 R Kamino Cloning Facility
+142 R Ki-Adi-Mundi
+20 U LAAT Gunship
+21 R Lando Calrissian
+143 R Legacy of the Beloved
+113 U Lightning Bolt
+234 C Lightsaber
+22 C Loyal Tauntaun
+195 M Luke Skywalker
+47 R Mace Windu
+196 C Maintenance Droid
+23 R Maintenance Hanger
+144 U Mantellian Savrip
+197 R March of the Droids
+145 C Massiff Swarm
+198 U Might of the Wild
+146 R Millennium Falcon
+24 U Miraculous Recovery
+247 U Moisture Farm
+48 U Mon Calamari Cruiser
+49 C Mon Calamari Initiate
+225 C N-1 Starfighter
+25 C Nebulon-B Frigate
+82 C Neophyte Hateflayer
+147 U Nerf Herder
+148 U Nexu Stalker
+149 C Nightspider
+150 C No Contest
+114 C Novice Bounty Hunter
+199 R Nute Gunray
+175 M Obi-Wan Kenobi
+83 U Open Season
+26 R Orbital Bombardment
+84 R Order 66
+50 C Ortolan Keyboardist
+201 C Outer Rim Slaver
+235 C Outlaw Holocron
+51 C Personal Energy Shield
+27 R Plo Koon
+202 R Precipice of Mortis
+151 C Predator's Strike
+34 U Preordain
+203 C Primal Instinct
+204 R Princess Leia
+52 C Probe Droid
+205 R Qui-Gon Jinn
+115 C Raging Reek
+116 C Rallying Fire
+226 U Ravenous Wampa
+152 U Regression
+53 C Republic Frigate
+85 C Repurpose
+117 C Revenge
+28 U Riding Ronto
+118 R Rocket Trooper
+248 U Rogue's Passage
+86 U Rule of Two
+54 C Rumination
+206 U Rumor Monger
+55 U Sabacc Game
+207 C Salvage Squad
+29 C Sand Trooper
+184 R Sarlacc Pit
+153 C Scout the Perimeter
+154 C Scout Trooper
+30 C Security Droid
+209 U Senator Bail Organa
+210 U Senator Lott Dod
+187 U Senator Onaconda Farr
+212 U Senator Padme Amidala
+213 U Senator Passel Argente
+155 C Shaak Herd
+56 C Shadow Trooper
+119 U Shock Trooper
+156 U Show of Dominance
+87 U Sith Assassin
+249 U Sith Citadel
+88 C Sith Evoker
+236 C Sith Holocron
+89 C Sith Inquisitor
+90 R Sith Lord
+214 R Sith Magic
+57 U Sith Manipulator
+120 U Sith Marauder
+215 U Sith Mindseer
+121 C Sith Ravager
+250 C Sith Ruins
+58 C Sith Sorcerer
+91 C Sith Thoughtseeker
+216 R Slave 1
+122 U Smash to Smithereens
+31 U Snow Trooper
+123 C Speeder Trooper
+217 R Star Destroyer
+227 C Strike Team Commando
+59 C Super Battle Droid
+60 C Surprise Maneuver
+92 C Swarm the Skies
+124 C Syndicate Enforcer
+218 R Tank Droid
+125 C Terentatek Cub
+130 M The Battle of Endor
+97 M The Battle of Geonosis
+4 M The Battle of Hoth
+37 M The Battle of Naboo
+67 M The Battle of Yavin
+1 M The Death Star
+93 U TIE Bomber
+94 C TIE Interceptor
+219 R Trade Federation Battleship
+228 C Tri-Fighter
+237 U Trooper Armor
+157 U Trooper Commando
+158 C Twi'lek Seductress
+61 C Ugnaught Scrap Worker
+251 C Underworld Slums
+220 U Unity of the Droids
+95 U Unruly Sureshot
+62 C Vapor Snag
+126 C V-Wing
+127 U Weequay Beastmaster
+238 C Wild Holocron
+221 U Wisdom of the Jedi
+32 C Womp Rat
+159 C Wookiee Bounty Hunter
+222 U Wookiee Mystic
+229 C Wookiee Raidleader
+33 C X-Wing
+197 M Yoda, Jedi Master
+63 U Y-Wing
+64 R Zam Wesell
+Emblem - Aurra Sing, Bane of Jedi
+
+[tokens]
+c_1_1_droid
+c_1_1_tie_fighter
+c_2_3_b_wing
+c_5_5_at_at
+g_1_1_ewok
+r_2_2_royal_guard
+r_4_4_hunter
+u_2_3_b_wing
+w_1_1_rebel
+w_1_1_trooper
+w_1_1_tusken_raider
+w_5_5_at_at

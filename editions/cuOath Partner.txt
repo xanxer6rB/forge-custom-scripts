@@ -1,0 +1,10 @@
+[metadata]
+Code=totp
+Date=2019-09-26
+Name=cuOath Partner
+Code2=tootp
+MciCode=
+Type=Other
+
+[cards]
+1 S Oath Partner Avatar
