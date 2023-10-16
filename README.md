@@ -1,13 +1,3 @@
-# INTRO
-Hello all,
-It's been a long time since I've updated this and have now created a git repo that contains the various Horde format files and other custom formats and even some custom formats like some of the starwars the gathering sets.
-
-The format card scripts are very much still a working in progress.
-
-The card script I primarily use as my main Horde format is "hordelikeformat". It has the basic Horde format rules but with some custom additions. Add this card to any of your decks and start a match. When the match starts the card will trigger and a serious of questions and choice scripts will follow.
-
-I welcome any contributions to the scripts or suggestions to help improve/optimize them to make them more playable for the Ai or even adding features to the format(s).
-
 # forge-custom-scripts
 Custom forge scripts to run different types of card formats and custom sets
 
@@ -28,3 +18,5 @@ I have also been trying to script some already existing custom sets like:
 - Pokemon
 
 To use files just add them to your custom folder
+
+I welcome any contributions to the scripts or suggestions to help improve/optimize them to help make them rn smoother and more playable for the Ai or even adding features to the format(s).
