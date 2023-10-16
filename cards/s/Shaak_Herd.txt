@@ -1,0 +1,7 @@
+Name:Shaak Herd
+ManaCost:1 G
+Types:Creature Beast
+PT:1/2
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Card.Self | TriggerController$ TriggeredCardController | Execute$ TrigChange | OptionalDecider$ You | TriggerDescription$ When CARDNAME dies, you may return target creature card from your graveyard to your hand.
+SVar:TrigChange:DB$ ChangeZone | Origin$ Graveyard | Destination$ Hand | ValidTgts$ Creature.YouOwn
+Oracle:When Shaak Herd dies, you may return target creature card from your graveyard to your hand.

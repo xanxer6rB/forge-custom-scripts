@@ -1,0 +1,14 @@
+Name:Supreme Leader Snoke
+ManaCost:U B R
+Types:Legendary Planeswalker Snoke
+Loyalty:3
+A:AB$ PutCounter | Cost$ AddCounter<1/LOYALTY> | Defined$ Self | CounterType$ LOYALTY | CounterNum$ X | References$ X | Planeswalker$ True | StackDescription$ SpellDescription | SpellDescription$ Put a loyalty counter on CARDNAME for each life lost by all opponetns this turn.
+SVar:X:Count$LifeOppsLostThisTurn
+SVar:PlayMain1:TRUE
+A:AB$ Draw | Cost$ SubCounter<1/LOYALTY> | NumCards$ 1 | SubAbility$ DBLoseLife1 | Planeswalker$ True | SpellDescription$ You draw a card and you lose 1 life.
+SVar:DBLoseLife1:DB$ LoseLife | LifeAmount$ 1
+A:AB$ GainControl | Cost$ SubCounter<X/LOYALTY> | Announce$ X | ValidTgts$ Creature.cmcLEX | TgtPrompt$ Select target creature an opponent controls. | LoseControl$ EOT | Untap$ True | AddKWs$ Haste | SubAbility$ DelTrig | References$ X | SpellDescription$ Gain control of target creature with converted mana cost X or less. Sacrifice that creature at the beginning of the next end step.
+SVar:DelTrig:DB$ DelayedTrigger | Mode$ Phase | Phase$ End of Turn | ValidPlayer$ Player | Execute$ TrigSac | RememberObjects$ Targeted
+SVar:TrigSac:DB$ SacrificeAll | Defined$ DelayTriggerRemembered | Controller$ You | ConditionDefined$ DelayTriggerRemembered
+SVar:X:Count$xPaid
+Oracle:[+1]: Put a loyalty counter on Supreme Leader Snoke for each life lost by all opponents from noncombat damage this turn.\n[-1]: Draw a card and lose 1 life.\n[-X]: Gain control of target creature with converted mana cost X. Untap that creature. It gains haste. Sacrifice that creature at the beginning of the next end step.

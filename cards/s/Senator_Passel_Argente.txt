@@ -1,0 +1,7 @@
+Name:Senator Passel Argente
+ManaCost:B R
+Types:Legendary Creature Koorivar Advisor
+PT:2/2
+T:Mode$ ChangesZone | Origin$ Battlefield | ValidCard$ Creature.Other | Destination$ Graveyard | TriggerZones$ Battlefield | Execute$ TrigLoseLife | TriggerDescription$ Whenever another creature dies, each opponent loses 1 life.
+SVar:TrigLoseLife:DB$ LoseLife | Defined$ Player.Opponent | LifeAmount$ 1
+Oracle:Whenever another creature dies, each opponent loses 1 life.

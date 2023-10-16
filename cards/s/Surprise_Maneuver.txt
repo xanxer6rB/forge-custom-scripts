@@ -1,0 +1,6 @@
+Name:Surprise Maneuver
+ManaCost:1 U
+Types:Instant
+A:SP$ Untap | Cost$ 1 U | ValidTgts$ Creature.YouCtrl | TargetMin$ 0 | TargetMax$ 2 | TgtPrompt$ Select target creature you control | SubAbility$ DBPump | SpellDescription$ Untap up to two target creatures.
+SVar:DBPump:DB$ PumpAll | ValidCards$ Creature.OppCtrl | NumAtt$ -1 | UEOT$ True | SpellDescription$ Creatures your opponents control get -1/-0 until end of turn.
+Oracle:Untap up to two target creatures you control.\nCreatures your opponents control gets -1/-0 until end of turn.

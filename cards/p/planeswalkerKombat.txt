@@ -1,0 +1,33 @@
+Name:planeswalkerKombat
+ManaCost:no cost
+Types:Tribal Instant planeswalkerKombat
+K:Split second
+K:CARDNAME can't be countered.
+
+# A way to kickstart Emblem ability/rule generation
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ WTHB | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If CARDNAME is in your starting library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If CARDNAME is in your opening hand, you may choose any amount of target players and go through the prompts. Hope you enjoy the game.
+SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ WTHB | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card
+SVar:WTHB:DB$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | AllowRepeats$ True | Controller$ You | SubAbility$ TrigExile
+SVar:TrigExile:DB$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self
+
+# Any amount of target players get an emblem
+
+SVar:Emblem1:DB$ Effect | ValidTgts$ Player | TgtPrompt$ Choose any number of target players | TargetMin$ 0 | TargetMax$ MaxPl | StackDescription$ SpellDescription | MayChooseTarget$ True | Chooser$ You | Name$ planeswalkerKombat Effect | StaticAbilities$ loseWalker | Triggers$ walkerWeapon | EffectOwner$ Targeted | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+SVar:MaxPl:PlayerCountPlayers$Amount
+
+# Abilities/rules added to created emblems
+
+##############################
+### RNDM EQUIPMENT GEN. WHEN ###
+### SURVIVOR CASTS CREATURE ####
+#
+
+SVar:walkerWeapon:Mode$ ChangesZone | EffectZone$ Command | Origin$ Any | ValidPlayer$ Player | Destination$ Battlefield | ValidCard$ Creature | TriggerZones$ Command,Battlefield | Execute$ TrigCopyEquip | TriggerDescription$ •Whenever a creature enters the battlefield under a players control,create a token that's a copy of a random Equipment card with converted mana cost less than that creature's converted mana cost. Attach that Equipment to that creature.
+SVar:TrigCopyEquip:DB$ CopyPermanent | Defined$ TriggeredCard | NumCopies$ 1 | ValidSupportedCopy$ Equipment.cmcLEX | References$ X | RandomCopied$ True | RandomNum$ 1 | AttachedTo$ TriggeredCard | SubAbility$ DBCleanup
+SVar:X:TriggeredCard$CardManaCost
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+SVar:loseWalker:Mode$ Continuous | EffectZone$ Command,Battlefield | AffectedZone$ Battlefield,Hand,Graveyard,Exile,Stack,Library,Command | ValidCard$ Planeswalker | RemoveType$ Planeswalker | AddType$ Creature | Description$ Oracle:Planeswalkers players control lose being a planeswalker and are a creature in addition to their other types. The same is true for planeswalker spells players control and planeswalker cards players own that aren't on the battlefield. (Loyalty abilities can still be activated.)
+
+Oracle:Planeswalkers players Controller

@@ -1,0 +1,11 @@
+Name:Sith Ravager
+ManaCost:2 R
+Types:Creature Human Sith
+PT:3/1
+T:Mode$ LifeLost | ValidPlayer$ Opponent | CheckSVar$ X | References$ X | Execute$ TrigPump | TriggerZones$ Battlefield | TriggerDescription$ Whenever an opponent loses life from a source other than combat damage, CARDNAME gets +1/+0 until end of turn.
+SVar:TrigPump:DB$ Pump | Defined$ Self | NumAtt$ +1
+SVar:X:PlayerCountOpponents$NonCombatDamageDealtThisTurn
+
+SVar:BuffedBy:Sith
+DeckHints:Type$Sith
+Oracle:Whenever an opponent loses life from a source other than combat damage, Sith Ravager gets +1/+0 until end of turn.

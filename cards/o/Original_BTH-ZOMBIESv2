@@ -1,0 +1,384 @@
+Name:Battle the Horde ZOMBIESv2
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-6/+91
+############################################# •KNOWN BUG(s)• ##########################################
+##
+# BUG: If the Opponent(the Survivor) uses Ashnod as their chosen Avatar
+# and a Devil token is on the Hordes side of the battlefield and gets destroyed,
+# if the Opponent(the Survivor) is chosen by the Devil tokens burn (1) damage it 
+# will tigger Ashnods abillity to destroy the Devil token and then the
+# Devil tokens burn (1) damage will be triggered again and then Ahsnod will be triggered
+# again and...etc..
+##
+# BUG: When the Horde casts an Equipment it will appear on the Survivors battlefield instead.
+##
+###################################### •WORKING ABILITY SCRIPTS• ######################################
+#
+## #########################################
+# ############## GAME STARTS ################
+#################           ##################
+##
+# HORDE SEARCHES LBRARY FOR A ZOMBIE AT START #
+##
+#T:Mode$ NewGame | ValidPlayer$ You | Execute$ TrigChange | TriggerDescription$ •At the start of the game, the Horde searches its library for a Zombie card and puts it onto the battlefield, then the Horde shuffles its library.
+#SVar:TrigChange:DB$ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Card.Creature+Zombie | ChangeNum$ 1 | ShuffleNonMandatory$ True | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+##
+#  ## IF HORDE STARTS IT SKIPS NEXT TWO TURNS ##
+### IF SURVIVOR STARTS THEY GET TWO EXTRA TURNS #
+#
+T:Mode$ NewGame | ValidPlayer$ You | Execute$ StartGame | TriggerDescription$ •"Battle the Horde ZOMBIESv2!", When the game starts, if the Horde wins the flip it will skip its next two turns, Otherwise you start with two extra turns.
+SVar:StartGame:DB$ SkipTurn | NumTurns$ 2 | Defined$ You | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+## ##########################################
+# ############ ENDLESS HORDE SCRPIT ##########
+###############################################
+#
+#T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigToken | TriggerDescription$ •At the beginning of your upkeep, create X tapped 2/2 black Zombie creature tokens, where X is half the number of Zombies you control, rounded down.
+#SVar:TrigToken:DB$ Token | LegacyImage$ b 2 2 zombie bthz | TokenAmount$ M | TokenScript$ b_2_2_zombie | TokenOwner$ You | TokenTapped$ True | References$ M | SubAbility$ DBCleanup
+#SVar:M:Count$Valid Creature.Zombie+YouCtrl+inZoneBattlefield/HalfDown 
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#DeckHints:Type$Zombie
+#DeckHas:Ability$Token
+#
+## ##################################
+# ######## HORDES OMEN SCRIPT ########
+####################################### 
+#
+T:Mode$ Phase | Phase$ Draw | EffectZone$ Command | ValidPlayer$ Player | Execute$ TrigOmenExileCard | TriggerZones$ Command | TriggerDescription$ •At the beginning of each player's draw step, that player exiles the top card of their library. If it's a land card, the player puts it onto the battlefield. Otherwise, the player casts it without paying its mana cost if able.
+SVar:TrigOmenExileCard:DB$ Mill | NumCards$ 1 | Defined$ TriggeredPlayer | Destination$ Exile | RememberMilled$ True | SubAbility$ DBOmenLand
+SVar:DBOmenLand:DB$ ChangeZone | Origin$ Exile | Destination$ Battlefield | ChangeType$ Land.IsRemembered+ActivePlayerCtrl | ChangeNum$ 1 | DefinedPlayer$ TriggeredPlayer | Chooser$ TriggeredPlayer | Hidden$ True | Mandatory$ True | SubAbility$ DBOmenPlay
+SVar:DBOmenPlay:DB$ Play | ValidZone$ Exile | Controller$ TriggeredPlayer | Valid$ Card.IsRemembered | WithoutManaCost$ True | SubAbility$ DBOmenCleanup
+SVar:DBOmenCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+## ######## THE HORDE CAN'T DRAW #######
+# #### INSTEAD DURING ITS DRAW PHASE ####
+#### IT REVEALS TOPofLIBRARY & CASTS IT ##
+#### IF COND.IS MET,IF COND.IS NOT MET ####
+### IT PUTS IT ON BOTTOM OF ITS LIBRARY ####
+#############################################
+#
+#T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigHordeDig | TriggerDescription$ •At the beginning of the Horde's  upkeep, it reveals the top card of its library. If it's a creature card that shares a creature type with a creature the Horde controls, the Horde may cast that card without paying its mana cost. Otherwise, it puts that card on the bottom of its library.
+#SVar:TrigHordeDig:DB$ Dig | DigNum$ 1 | Reveal$ True | RememberRevealed$ True | ChangeNum$ All | ChangeValid$ Creature.sharesCreatureTypeWith Creature.YouCtrl | DestinationZone$ Library | LibraryPosition$ 0 | LibraryPosition2$ -1 | SubAbility$ DBPlayIT
+#SVar:DBPlayIT:DB$ Play | Defined$ Remembered | Controller$ You | WithoutManaCost$ True | Optional$ True | RememberPlayed$ True | ConditionCheckSVar$ MatchType | ConditionSVarCompare$ EQ1 | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#SVar:MatchType:Remembered$Valid Creature.sharesCreatureTypeWith Card
+#
+### #############################
+## ###### THE HORDE CREATES A #### 
+########### TOKEN @ UPKEEP ########
+####################################
+#
+#T:Mode$ Phase | Phase$ Upkeep  | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigHordeZombieToken | TriggerDescription$ •At the beginning of the Horde's upkeep, it creates a 2/2 black Zombie creature token.
+#SVar:TrigHordeZombieToken:DB$ Token | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | TokenOwner$ You | LegacyImage$ b 2 2 zombie bthz | SubAbility$ DBCleanup
+#SVar:TrigHordeSpiritToken:DB$ Token | TokenAmount$ 1 | TokenScript$ wb_1_1_spirit_flying | TokenOwner$ You | LegacyImage$ wb 1 1 spirit bthz | SubAbility$ DBCleanup
+#SVar:TrigHordeSpiritToken:DB$ Token | TokenAmount$ 1 | TokenScript$ c_1_1_spirit | TokenOwner$ You | LegacyImage$ c 1 1 spirit bthz | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#DeckHints:Type$Zombie,Spirit
+#DeckHas:Ability$Token
+#
+## ############\DIABLO/###########
+# ###########\HELLS PIT/###########
+#############\RNDM TKNS/############
+#
+########## AMASS THE HORDE #########
+#
+#T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You |TriggerZones$ Command | Execute$ DBAmass | TriggerDescription$ •At the beginning of your upkeep, amass 1. (Put a +1/+1 counter on an Army you control. If you don’t control one, create a 0/0 black Zombie Army creature token first.)
+#SVar:DBAmass:DB$ Amass | Num$ 1
+#T:Mode$ Attacks | ValidCard$ Creature.Zombie+token+YouCtrl+powerGE5 | TriggerZones$ Command | Execute$ TrigPump | TriggerDescription$ •Whenever a Zombie token you control with power 5 or greater attacks, it gains lifelink until end of turn.
+#SVar:TrigPump:DB$Pump | Defined$ TriggeredAttacker | KW$ Lifelink
+#DeckHints:Ability$Amass & Type$Zombie
+#DeckHas:Ability$Amass & Ability$Counters & Ability$Token
+#
+## ############# CREATE ############
+# ## DEVILtkns ACTIVATED ABILITY ####
+###### USING INFECTION COUNTERS ######
+#
+#A:AB$ Token | ActivationZone$ Command | PlayerTurn$ True | ActivationLimit$ 1 | Cost$ AddCounter<0/INFECTION> | Vanguard$ True | TokenAmount$ 1 | TokenScript$ r_1_1_devil_burn | TokenOwner$ You | LegacyImage$ r 1 1 devil burn bthz | SpellDescription$ •Create a 1/1 red Devil creature token "When this creature dies, it deals 1 damage to any target."
+#
+## ###############################
+# ### RNDM. TOKEN OF THE DAMNED ###
+##### CREATED AT HORDES UPKEEP #####
+#
+#T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | ActivationLimit$ 2 | Execute$ TrigHordeCharm | TriggerDescription$ •At the beginning of the Horde's upkeep, it chooses one at random. Create a creature token with those characteristics.
+#SVar:TrigHordeCharm:DB$ Charm | Random$ True | Choices$ DBToken1,DBToken2,DBToken3,DBToken4,DBToken5,DBToken6 | SubAbility$ DBCleanup
+#SVar:DBToken1:DB$ Token | TokenAmount$ 1 | TokenScript$ wb_1_1_spirit_flying | TokenOwner$ You | LegacyImage$ wb 1 1 spirit flying bthz | SpellDescription$ •Create a 1/1 white and black Spirit creature token with flying.
+#SVar:DBToken2:DB$ Token | TokenAmount$ 1 | TokenScript$ b_1_1_skeleton_regenerate | TokenOwner$ You | LegacyImage$ b 1 1 skeleton regenerate bthz | SpellDescription$ •Create a 1/1 black Skeleton creature token. It has "{B}: Regenerate this creature."
+#SVar:DBToken3:DB$ ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Card.Creature+Devil | ChangeNum$ 2 | ShuffleNonMandatory$ True
+#SVar:DBToken4:DB$ Token | TokenAmount$ 1 | TokenScript$ minor_demon | TokenOwner$ You | LegacyImage$ minor demon bthz | SpellDescription$ •Create a 1/1 black and red Demon creature token named Minor Demon.
+#SVar:DBToken5:DB$ Token | TokenAmount$ 1 | TokenScript$ b_0_1_cleric | TokenOwner$ You | LegacyImage$ b 0 1 cleric bthz | SpellDescription$ •Create a 0/1 black Cleric creature token.
+#SVar:DBToken6:DB$ Token | TokenAmount$ 1 | TokenScript$ b_6_6_demon_flying_trample_aristocrat | TokenOwner$ You| LegacyImage$ b 6 6 demon flying trample aristocrat bthz | SpellDescription$ •Create a 6/6 black Demon creature token with flying, trample, and "At the beginning of your upkeep, sacrifice another creature. If you can't, this creature deals 6 damage to you."
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#DeckHints:Type$Spirit,Devil,Skeleton,Minor Demon,Demon,Cleric
+#DeckHas:Ability$Token
+#
+## ###### REVEALS TOP CARD #####
+# ####### AND PUTS IT ONTO ######
+###### BATTLEFIELD IF CREATURE ###
+#
+#T:Mode$ ChangesZone | EffectZone$ Command | Origin$ Library | Destination$ Graveyard | ValidCard$ Card.Creature+Zombie | Execute$ TrigDig | TriggerController$ TriggeredCardController | TriggerDescription$ •Whenever a Zombie the Horde controls dies, the Horde reveals the top card of its library and puts it onto the battlefield if it's a Zombie.
+#SVar:TrigDig:DB$ Dig | DigNum$ 1 | Reveal$ True | Optional$ True | ChangeNum$ 1 | ChangeValid$ Permanent.Creature | DestinationZone$ Battlefield | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+#  #########################################
+# ### THE HORDE - SOME STATIC & TRIGGERED ###
+################## ABILITIES #################
+#
+####### CARDS IN GYs CAN'T BE TARGETED #######
+#
+#S:Mode$ CantTarget | EffectZone$ Command | AffectedZone$ Graveyard | Description$ •Cards in graveyards can't be the targets of spells or abilities.
+#
+##### CREATURES HORDE CONTROL ETBTAPPED ######
+#
+#S:Mode$ ETBTapped | ValidCard$ Creature.YouCtrl | Description$ •Creatures you control enter the battlefield tapped.
+#
+####### HORDE CREATURES HAVE PERSIST #########
+#
+S:Mode$ Continuous | EffectZone$ Command,Exile | AffectedZone$ Battlefield | Affected$ Creature.nonToken+YouCtrl | AddKeyword$ Persist | Description$ •Each non-Token creature card the Horde controls has Persist.
+#
+#### HORDE CREATURES ATTACK EACH COMBAT ######
+#
+S:Mode$ Continuous | EffectZone$ Command | AffectedZone$ Battlefield | Affected$ Creature.nonToken+YouCtrl | AddHiddenKeyword$ CARDNAME attacks each combat if able. | IsPresent$ Card.Self+counters_GE3_INFECTION | PresentZone$ Command | Description$ •Each non-Token creature the Horde controls attack each combat if able.
+#
+######### HORDE CREATURES HAVE HASTE #########
+#
+S:Mode$ Continuous | EffectZone$ Command | AffectedZone$ Battlefield | Affected$ Creature.nonToken+YouCtrl | AddKeyword$ Haste | IsPresent$ Card.Self+counters_GE2_INFECTION | PresentZone$ Command | Description$ •Each non-Token creature the Horde controls gain Haste.
+#
+######## HORDE CREATURES GAIN WITHER #########
+#
+S:Mode$ Continuous | EffectZone$ Command | AffectedZone$ Battlefield | Affected$ Creature.nonToken+YouCtrl | AddKeyword$ Wither | IsPresent$ Card.Self+counters_GE8_INFECTION | PresentZone$ Command | Description$ •Each non-Token creature the Horde controls gains Wither.
+#
+### SURVIVOR CREATURES HAVE SCAVENGE IN GY ###
+#
+S:Mode$ Continuous | EffectZone$ Command | AffectedZone$ Graveyard | Affected$ Creature.OppOwn  | AddKeyword$ Scavenge:CardManaCost | Description$ •Each creature card in the Survivors graveyard has scavenge. The scavenge cost is equal to its mana cost.
+#
+## LANDS THE HORDE CONTROL HAVE VANISHNIG:2 ##
+#
+S:Mode$ Continuous | EffectZone$ Command,Exile,Graveyard | AffectedZone$ Battlefield | Affected$ Land.YouCtrl | AddKeyword$ Vanishing:2 | Description$ •Lands the Horde controls have Vanishing:2.
+#
+## ###### SURVIVOR CANTATTACK SCRIPT #####
+# ### ENABLE WHEN FIGHT ABILITY ENABLED ###
+######## FOR MORE ACC. HORDE FORMAT ########
+#
+#S:Mode$ CantAttack | EffectZone$ Command | ValidCard$ Creature.OppCtrl | Target$ You | Description$ •Creatures you can't attack Battle the Horde Zombies Avatar.
+#
+#### HORDE CAN"T LOSE FOR HAVING ZERO or LESS LIFE ####
+#
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You don't lose the game for having 0 or less life. | Description$ •The Horde can't lose the game for having 0 or less life.
+#
+##### WHEN HORDE LOSES ANY LIFE IT GETS AN INFECTION COUNTER #####
+#
+T:Mode$ LifeLost | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigPutCounter | TriggerDescription$ •Whenever the Horde loses life, it gets an INFECTION counter.
+SVar:TrigPutCounter:DB$PutCounter | Defined$ Self | CounterType$ INFECTION | CounterNum$ 1 | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+##### THE HORDE CAN'T DRAW CARDS #####
+#
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ •The Horde can't draw cards.
+#
+##### THE HORDE DIGS 1 DURING DRAW PHASE INSTEAD OF DRAW #####
+#
+T:Mode$ Phase | Phase$ Draw | TriggerZones$ Command | ValidPlayer$ You | Execute$ HordeDig | TriggerDescription$ •At the beginning of the Hordes draw phase, the Horde puts the top card of its library into its hand.
+SVar:HordeDig:DB$ Dig | DigNum$ 1 | ChangeNum$ All | ChangeValid$ Card | DestinationZone$ Hand | RememberChanged$ True | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+#  #########################################
+# #### SOME SURVIVOR & InfctnVrs SCRIPTS ####
+##############################################
+###
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.Zombie+Other+YouCtrl | TriggerZones$ Command | Execute$ TrigSurvivorGainLife | TriggerDescription$ •Whenever another Zombie the Horde control dies, target Survivor gains 1 life.
+SVar:TrigSurvivorGainLife:DB$GainLife | LifeAmount$ 1 | ValidTgts$ Opponent | TgtPrompt$ Select target opponent | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:PlayMain1:TRUE
+###
+## ##########################################
+# ######## THE HORDE RAGE INFECTION ##########
+############### AND APOCALYPSE ################
+##
+### WHEN A NON TOKEN CREATURE HORDE CONTROL DIES ##
+######### HORDE GETS AN INFECTION COUNTER ##########
+##
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.nonToken+YouCtrl | ActivationLimit$ 1 | Execute$ TrigPutCounter | TriggerZones$ Command | TriggerDescription$ •Whenever a nontoken creature the Horde control dies, the Horde gets an INFECTION counter.
+SVar:TrigPutCounter:DB$PutCounter | Defined$ Self | CounterType$ INFECTION | CounterNum$ 1 | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+###
+############## APOCALYPSE SCRIPT #############
+#
+T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command,Battlefield | ValidPlayer$ You | IsPresent$ Card.Self+counters_GE12_INFECTION | PresentZone$ Command | Execute$ DBRemoveCounter | TriggerZones$ Command,Battlefield | TriggerDescription$ •APOCALYPSE!, if CARDNAME has twelve or more charge counters it removes all INFECTION counters and destroys each non land permanent.
+SVar:DBRemoveCounter:DB$ RemoveCounter | Defined$ Self | CounterType$ INFECTION | CounterNum$ All | RememberRemoved$ True | SubAbility$ DBAPOCALYPSE | AddSVar$ ShuffleDrawSetLife
+SVar:DBAPOCALYPSE:DB$ DestroyAll | ValidCards$ Permanent.nonLand | ConditionCompare$ GE1 | SubAbility$ DBSurvivorDiscard
+SVar:DBSurvivorDiscard:DB$ Discard | Defined$ Opponent | Mode$ Hand | RememberDiscarded$ True | SubAbility$ DBSurvivorDraw 
+SVar:DBSurvivorDraw:DB$ Draw | Defined$ Opponent | NumCards$ V | References$ V | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:V:Remembered$Amount
+DeckHas:Ability$Discard
+DeckHints:Keyword$Madness & Ability$Delirium
+#
+## ###########################################
+# ########### THE HORDE RAGE Virus ############
+################################################
+###
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl+Zombie | AddTrigger$ TrigHordeBlocks | #AddSVar$ HordeAttackerBlocked | IsPresent$ Card.Self+counters_GE6_INFECTION | PresentZone$ Command | Description$ •Creatures you control have "Whenever CARDNAME blocks, it gets +3/+0 until end of turn."
+SVar:TrigHordeBlocks:Mode$ Blocks | ValidCard$ Card.Self | Execute$ TrigPump | TriggerDescription$ •Whenever CARDNAME blocks, it gets +3/+0 until end of turn. 
+#SVar:HordeAttackerBlocked:DB$ AttackerBlocked | ValidCard$ Card.Self | Execute$ TrigPump | Secondary$ True | TriggerDescription$ •Whenever CARDNAME blocks, it gets +3/+0 until end of turn.
+SVar:TrigPump:DB$Pump | Defined$ Self | NumAtt$ +3
+SVar:PlayMain1:TRUE
+SVar:MaxInfectionEffect:6
+DeckHints:Ability$Token
+DeckHas:Ability$Counters
+#
+## ######### SURVIVOR CREATURES GAIN ########
+# ######## ABILITY TO EXILE CARDS FROM #######
+## HORDES GRAVEYARD WHEN ENTERING BATTLEFIELD #
+#
+#S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddTrigger$ ConstrictingZombieTrig | AddSVar$ ConstrictingZombieExile | IsPresent$ Card.Self+counters_GE7_INFECTION | PresentZone$ Command | Description$ •Creatures the opponent controls have "When this creature enters the battlefield, exile target card from an opponent's graveyard."
+#SVar:ConstrictingZombieTrig:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ ConstrictingZombieExile | TriggerDescription$ •When this creature enters the battlefield, exile target card from an opponent's graveyard.
+#SVar:ConstrictingZombieExile:DB$ ChangeZone | Origin$ Graveyard | Destination$ Exile | RememberChanged$ True | ValidTgts$ Card.OppCtrl | TgtPrompt$ Select target creature an opponent controls | ConditionPresent$ Card.Self | SubAbility$ ConstrictingEffect
+#SVar:PlayMain1:TRUE
+#SVar:MaxInfectionEffect:7
+#DeckHints:Ability$Token
+#DeckHas:Ability$Counters
+#
+## ##### SURVIVORS ATTACK/FIGHT SCRIPT #####
+# #### FOR MORE ACRTE. HORDE RULES ENABLE ###
+#### WITH SURVIVOR CANTATTACK HORDE SCRIPT ###
+###############################################
+###
+##  ###################################
+## ########### FIGHT SCRIPT ############
+# ############ TRIGGERS WHEN ############
+######## SURVIVOR CREATURES ATTACK #######
+#
+#S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddTrigger$ SurvivorAttack | AddSVar$ HasAttackEffect | Description$ •Other creatures have "Whenever this creature attacks, you may have it fight CARDNAME."
+#SVar:SurvivorAttack:Mode$ Attacks | ValidCard$ Card.Self | Execute$ FightTheHorde | OptionalDecider$ You | TriggerDescription$ •Whenever this creature attacks, ABILITY.
+#SVar:FightTheHorde:DB$ Fight | Defined$ TriggeredAttackerLKICopy | ValidTgts$ Creature.OppCtrl | SpellDescription$ •You may have it fight creature opponent controls.
+#SVar:HasAttackEffect:TRUE
+#
+##  #################################
+####### FIGHT SCRIPT FOR SURVIVOR ####
+#### CREATURES AS ACTIVATED ABILITY ###
+#
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddAbility$ FightTheHorde | AddSVar$ HasEffect | IsPresent$ Card.Self+counters_GE7_INFECTION | PresentZone$ Command | Description$ •Other creatures have "CARDNAME fights target creature. (Each deals damage equal to its power to the other.)"
+SVar:FightTheHorde:AB$ Fight | Cost$ T | Defined$ Self | ValidTgts$ Creature | ReplaceDyingDefined$ Targeted | TgtPrompt$ Select target creature | SpellDescription$ CARDNAME fights target creature. (Each deals damage equal to its power to the other.)
+SVar:HasEffect:TRUE
+SVar:PlayMain1:TRUE
+SVar:MaxInfectionEffect:7
+DeckHints:Ability$Token
+DeckHas:Ability$Counters
+#
+## #########################################
+# ######### SURVIVORS RNDM. BENIFIT #########
+##############################################
+#
+T:Mode$ Phase | Phase$ Main1 | ValidPlayer$ Opponent | Execute$ TrigGenericChoice | TriggerZones$ Command | TriggerDescription$ •At the beginning of the Survivors Main Phase, ABILITY
+SVar:TrigGenericChoice:DB$ GenericChoice | AtRandom$ True | Choices$ R3,R4,R5 | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SubAbility$ DBCleanup | SpellDescription$ •A stumbling luck. On R1, Create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color.". On R2, Create a Food token. On R3, draw a card. On R4, Skip your next untap step. On R5, Skip your next combat phase.
+#SVar:R1:DB$ Token | Cost$ 0 | TokenAmount$ 1 | TokenScript$ c_a_treasure_sac | TokenOwner$ Opponent | LegacyImage$ c a treasure sac bthz | SpellDescription$ Create a colorless Treasure artifact token with "{T}, Sacrifice this artifact: Add one mana of any color."
+#SVar:R2:DB$ Token | Cost$ 0 | TokenAmount$ 1 | TokenScript$ c_a_food_sac | TokenOwner$ Opponent | LegacyImage$ c a food sac bthz | SpellDescription$ Create a colorless Food artifact token with "{2}{T}, Sacrifice this artifact: You gain 3 life."
+SVar:R3:DB$ Draw | Cost$ 0 | Defined$ Opponent | NumCards$ 1 | SpellDescription$ Draw a card.
+SVar:R4:DB$ Pump | Cost$ 0 | Defined$ You | KW$ Skip your next untap step. | Permanent$ True | SpellDescription$ The Horde Skips its next untap step.
+SVar:R5:DB$ Pump | Cost$ 0 | Defined$ You | KW$ Skip your next combat phase. | Permanent$ True | SpellDescription$ The Horde Skips its next combat phase.
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+### #########################################
+## ######### RNDM EQUIPMENT GEN. WHEN ########
+# ########### SURVIVOR CASTS CREATURE ######### 
+########### \\ MAY NEED TO CHANGE // ###########
+#### "BUG": When the Horde casts an Equipment ####
+# it will appear onto the SURVIVORS battlefield. #
+##################################################
+#
+R:Event$ Moved | ValidCard$ Card.Equipment+YouCtrl | Destination$ Battlefield | ReplaceWith$ DBChooseOpp | Layer$ Control | Description$ •CARDNAME enters the battlefield under the control of an opponent of your choice.
+SVar:DBChooseOpp:DB$ ChoosePlayer | Defined$ You | Choices$ Player.Opponent | ChoiceTitle$ Choose an opponent to give control to: | AILogic$ Curse | SubAbility$ MoveToPlay
+SVar:MoveToPlay:DB$ ChangeZone | Hidden$ True | Origin$ All | Destination$ Battlefield | Defined$ ReplacedCard | GainControl$ True | NewController$ ChosenPlayer | SubAbility$ ClearRemembered
+T:Mode$ ChangesZone | Origin$ Any | ValidPlayer$ Opponent | OpponentTurn$ True | Destination$ Battlefield | ValidCard$ Creature.nonToken+OppCtrl | TriggerZones$ Command | ActivationLimit$ 1 | Execute$ TrigCopyEquip | TriggerDescription$ •Whenever a creature enters the battlefield under the Survivors control,the Survivors create a token that's a copy of a random Equipment card with converted mana cost less than that creature's converted mana cost. Attach that Equipment to that creature.
+SVar:TrigCopyEquip:DB$ CopyPermanent | Defined$ TriggeredCard | NumCopies$ 1 | ValidSupportedCopy$ Equipment.cmcLEX | References$ X | RandomCopied$ True | RandomNum$ 1 | AttachedTo$ TriggeredCard | SubAbility$ DBCleanup
+SVar:X:TriggeredCard$CardManaCost
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+#  #############################################
+# ############## THE HORDE CAN PLAY #############
+########### ZOMBIES FROM ITS GRAVEYARD ###########
+#
+####### ZOMBIES AND DEVILS COST ZERO TO CAST #####
+#
+S:Mode$ Continuous | Affected$ Creature.YouCtrl+Zombie | AddKeyword$ Alternative Cost:0 | EffectZone$ Command | AffectedZone$ Hand,Graveyard,Exile,Library,Command | Description$ •The Horde may pay {0} rather than pay the mana cost for Zombie creature spells it casts.
+S:Mode$ Continuous | Affected$ Creature.YouCtrl+Devil | AddKeyword$ Alternative Cost:0 | EffectZone$ Command | AffectedZone$ Hand,Graveyard,Exile,Library,Command | Description$ •The Horde may pay {0} rather than pay the mana cost for Devil creature spells it casts.
+SVar:NonStackingEffect:True
+#
+## HORDE CAN PLAY 1 ZOMBIE FROM ITS GY EACH TURN ##
+#
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Zombie.YouOwn | MayPlay$ True | MayPlayLimit$ 1 | AffectedZone$ Graveyard | Description$ •You may play Zombie cards from your graveyard.
+SVar:NonStackingEffect:True
+SVar:PlayMain1:TRUE
+#
+# # IF CREATURE GOES TO GY FROM HORDES LBRY ##
+######### THE HORDE CREATES ZOMBIE TKN ########
+#
+T:Mode$ ChangesZone |  EffectZone$ Command | ValidCards$ Creature.YouOwn | Origin$ Library | Destination$ Graveyard | TriggerZones$ Command | Execute$ TrigHordeToken | TriggerDescription$ •Whenever one or more creature cards are put into the Horde's graveyard from its library, it creates a 2/2 black Zombie creature token.
+SVar:TrigHordeToken:DB$ Token | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | TokenOwner$ You | LegacyImage$ b 2 2 zombie bthz | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#
+## ###### WHENEVER A CREATURE THE HORDE ######
+# ############# CONTROLS DIES IT ############## 
+################ CREATES A TKN #################
+####### ENABLE WHICH ONE AND CHANGE EXECUTE$ ####
+#
+T:Mode$ ChangesZone | EffectZone$ Command | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.YouCtrl+nonToken | TriggerZones$ Command | ActivationLimit$ 1 | Execute$ TrigHordeSpiritToken | TriggerDescription$ •Whenever a nontoken creature the Horde control dies, it creates a 1/1 colorless Spirit creature token.
+#SVar:TrigHordeZombieToken:DB$ Token | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | TokenOwner$ You | LegacyImage$ b 2 2 zombie bthz | SubAbility$ DBCleanup
+#SVar:TrigHordeSpiritToken:DB$ Token | TokenAmount$ 1 | TokenScript$ wb_1_1_spirit_flying | TokenOwner$ You | LegacyImage$ wb 1 1 spirit bthz | SubAbility$ DBCleanup
+SVar:TrigHordeSpiritToken:DB$ Token | TokenAmount$ 1 | TokenScript$ c_1_1_spirit | TokenOwner$ You | LegacyImage$ c 1 1 spirit bthz | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+DeckHas:Ability$Token
+#
+# WHEN HORDE nonTknCREATURES DIE THEY GET TUCKED #
+#
+#T:Mode$ ChangesZone | EffectZone$ Command | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.YouCtrl | TriggerZones$ Command | Execute$ TrigChange | TriggerDescription$ •Whenever a creature you control dies, put it on the bottom of its owner's library.
+#SVar:TrigChange:DB$ ChangeZone | Defined$ TriggeredCard | Origin$ Graveyard | Destination$ Library | LibraryPosition$ -1
+#SVar:BuffedBy:Creature
+#
+## ######## THE HORDE CAN CREATE ZOMBIE TKNS ####
+############ WHEN IT CASTS FROM HAND OR GY #######
+#
+######## CAST FROM HAND #######
+#
+#T:Mode$ SpellCast | ValidCard$ Card.wasCastFromHand | ValidActivatingPlayer$ You | ActivationLimit$ 1 | Execute$ TrigHordeToken | TriggerZones$ Command | TriggerDescription$ •Whenever the Horde casts a spell from its hand, it creates a 2/2 black Zombie creature token.
+#SVar:TrigHordeToken:DB$ Token | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | TokenOwner$ You | LegacyImage$ b 2 2 zombie bthz | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#DeckHints:Type$Zombie
+#DeckHas:Ability$Token
+#
+##### CAST FROM GRAVEYARD #####
+#
+T:Mode$ SpellCast | ValidCard$ Creature.wasCastFromGraveyard | ValidActivatingPlayer$ You | ActivationLimit$ 1 | Execute$ TrigHordeToken | TriggerZones$ Command | TriggerDescription$ •Whenever the Horde casts a creature spell from its graveyard, it creates a 2/2 black Zombie creature token.
+SVar:TrigHordeToken:DB$ Token | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | TokenOwner$ You | LegacyImage$ b 2 2 zombie bthz | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+DeckHints:Type$Zombie
+DeckHas:Ability$Token
+#
+## ####  CREATURE ENTER UNDER HORDES CONTROL ####
+# #### FOM ANYWHERE HORDE CREATES ZOMBIE TKNS ####
+##
+#T:Mode$ ChangesZone | EffectZone$ Command | TriggerZones$ Command,Battlefield | ValidCard$ Zombie.YouCtrl+nonToken | Origin$ Any | Destination$ Battlefield | Execute$ TrigHordeToken | TriggerDescription$ •Whenever another nontoken Zombie enters the battlefield under the Hordes control, it creates a 2/2 black Zombie creature.
+#SVar:TrigHordeToken:DB$ Token | TokenOwner$ You | TokenAmount$ 1 | TokenScript$ b_2_2_zombie | LegacyImage$ b 2 2 zombie bthz | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#DeckHints:Type$Zombie
+#DeckHas:Ability$Token
+#
+## #############################################
+# ############ WIN CONDITION SCRIPT #############
+##################################################
+#
+#S:Mode$ Continuous | EffectZone$ Command | Affected$ You | CheckSVar$ X | SVarCompare$ GE1 | AddKeyword$ You can't lose the game. | Description$ •You can't lose the game.
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ X | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ •Opponents can't win the game.
+T:Mode$ Phase | Phase$ End of Turn |  EffectZone$ Command | ValidPlayer$ Opponent | TriggerZones$ Command | CheckSVar$ X | SVarCompare$ EQ0 | References$ E,F,G,X,Y,Z | Execute$ TrigYouHaveSurvived | TriggerDescription$ •At the end of your turn, if the Horde controls no creatures and has no cards in its library and graveyard. You have surived the game.
+SVar:TrigYouHaveSurvived:DB$ WinsGame | Defined$ Opponent
+SVar:E:Count$ValidGraveyard Card.YouOwn+inZoneGraveyard
+SVar:F:Count$ValidLibrary Card.YouOwn+inZoneLibrary
+SVar:G:Count$ValidBattlefield Card.YouOwn+inZoneBattlefield
+SVar:X:SVar$Y/Plus.Z
+SVar:Y:SVar$E/Plus.F
+SVar:Z:SVar$G
+#
+Oracle:Hand -6, life +91\n If the Horde controls no creatures and has no cards in its library and graveyard. You will surive the game.\nCan you survive?

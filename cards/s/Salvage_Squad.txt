@@ -1,0 +1,12 @@
+Name:Salvage Squad
+ManaCost:W U B
+Types:Creature Jawa Artificer
+PT:2/2
+
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ DBSacArtifact | OptionalDecider$ You | TriggerDescription$ When CARDNAME enters the battlefield, you may sacrifice an artifact. If you do, put two +1/+1 counters on CARDNAME and each opponent loses 2 life.
+SVar:DBSacArtifact:DB$ Sacrifice | SacValid$ Artifact.YouCtrl | SacMessage$ an artifact | RememberSacrificed$ True | SubAbility$ DBGainLife
+SVar:DBGainLife:DB$ GainLife | Defined$ You | LifeAmount$ 2 | SubAbility$ DBDraw | ConditionDefined$ Remembered | ConditionPresent$ Card | ConditionCompare$ GE1
+SVar:DBDraw:DB$ Draw | NumCards$ 1 | ConditionDefined$ Remembered | ConditionPresent$ Card | ConditionCompare$ GE1 | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+Oracle:When Salvage Squad enters the battlefield you may sacrifice an artifact. If ou do, you gain 2 life and draw two cards.

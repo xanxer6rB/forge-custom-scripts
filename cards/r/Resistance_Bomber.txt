@@ -1,0 +1,8 @@
+Name:Resistance Bomber
+ManaCost:3 R
+Types:Artifact Creature Rebel Starship
+PT:2/2
+K:Shadow
+K:etbCounter:CHARGE:1
+A:AB$ DealDamage | Cost$ SubCounter<1/CHARGE> | ValidTgts$ Creature | TgtPrompt$ Select target creature | NumDmg$ 5 | IsPresent$ Card.Self+attacking | SpellDescription$ CARDNAME deals 5 damage to any target.
+Oracle:Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)\nResistance Bomber enters the battlefield with a charge counter on it.\nRemove a charge counter from Resistance Bomber: Resistance Bomber deals 5 damage to target creature. Activate this ability only if Resistance Bomber is attacking.

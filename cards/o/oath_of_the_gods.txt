@@ -1,0 +1,22 @@
+Name:Oath of the Gods
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:+0/+5 
+
+T:Mode$ NewGame | ValidPlayer$ You | Execute$ StartGame | TriggerDescription$ "Battle of the Gods!","When the game starts, if CARDNAME wins the flip CARDNAME will skip its next 2 turns.","Otherwise you start with an extra turn."
+SVar:StartGame:DB$ SkipTurn | NumTurns$ 2 | Defined$ You | SubAbility$ UnMulligan
+
+T:Mode$ NewGame | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigChange | TriggerDescription$ At the start of the game, CARDNAME searchs its library for two God cards and puts them onto the battlefield, then Battle the Gods shuffles its library.
+SVar:TrigChange:DB$ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Card.God | ChangeNum$ 2 | ShuffleNonMandatory$ True
+
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Graveyard | ValidCard$ Card.God+YouOwn | Execute$ TrigFromGraveyard | OptionalDecider$ You | TriggerController$ TriggeredCardController | TriggerDescription$ Whenever a God you control dies or is put into exile from the battlefield, return it to the battlefield.
+SVar:TrigFromGraveyard:DB$ChangeZone | Defined$ TriggeredCard | Origin$ Graveyard | Destination$ Battlefield 
+
+Oracle:	Welcome to Oath of the Gods!,\n	When the game starts, if Oath of the Gods wins the flip Oath of the Gods will skip its next 2 turns.\n	Otherwise you start with two extra turns.\n	At the start of the game, Oath of the Gods searchs its library for two God cards and puts them onto the battlefield, then Oath of the Gods shuffles its library.\n	Whenever a God you control dies or is put into exile from the battlefield, return it to the battlefield.
+
+################## Test Abilities ###################
+
+#S:Mode$ Continuous | Affected$ You | TriggerZones$ Command | Execute$ TrigChangeGod | TriggerDescription$ At the begginging of each main phase, CARDNAME searchs its library for two God cards and puts them onto the battlefield, then Battle the Gods shuffles its library.
+#SVar:TrigChangeGod:DB$ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Card.God+YouOwn | ChangeNum$ 2 | ShuffleNonMandatory$ True
+
+#####################################################

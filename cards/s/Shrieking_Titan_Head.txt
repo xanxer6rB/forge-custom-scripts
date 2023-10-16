@@ -1,0 +1,14 @@
+Name:Shrieking Titan Head
+ManaCost:0
+Types:Elite Creature Head
+PT:0/8
+
+T:Mode$ Phase | Phase$ End of Turn | ValidPlayer$ You | TriggerZones$ Battlefield | Execute$ TrigDiscard | TriggerDescription$ At the beginning of the Hydra's end step, each player discards a card.
+SVar:TrigDiscard:DB$Discard | Defined$ Player | NumCards$ 1 | Mode$ TgtChoose
+
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard,Exile | ValidCard$ Card.Self | Execute$ TrigGainLife | TriggerDescription$Hero's Reward - When CARDNAME leaves the battlefield, each player gains 4 life.
+SVar:TrigGainLife:DB$GainLife | Defined$ Opponent | LifeAmount$ 4
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard,Exile | ValidCard$ Card.Self | Execute$TrigDraw | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME leaves the battlefield, each player draws a card.
+SVar:TrigDraw:DB$Draw | Defined$ Opponent | NumCards$ 1
+
+Oracle:At the beginning of the Hydra's upkeep, each player discards a card.\nHero's Reward - When Shrieking Titan Head leaves the battlefield, each player gains 4 life and draws a card.

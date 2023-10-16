@@ -1,0 +1,9 @@
+Name:Slave 1
+ManaCost:B R G
+Types:Legendary Artifact Creature Starship
+PT:3/3
+K:First strike
+K:Shadow
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.DamagedBy | TriggerZones$ Battlefield | Execute$ TrigPutCounter | TriggerDescription$ Whenever a creature dealt damage by CARDNAME this turn dies, put two +1/+1 counter on CARDNAME.
+SVar:TrigPutCounter:DB$ PutCounter | Defined$ Self | CounterType$ P1P1 | CounterNum$ 2 | ConditionPresent$ Card.StrictlySelf
+Oracle:First strike\nSpaceflight\nWhenever a creature dealt damage by Slave 1 this turn dies, put two +1/+1 counters on Slave 1.

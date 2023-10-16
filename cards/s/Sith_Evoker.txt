@@ -1,0 +1,7 @@
+Name:Sith Evoker
+ManaCost:3 B
+Types:Creature Chiss Sith
+PT:3/3
+A:AB$ GainLife | Cost$ B T Sac<1/Creature> | LifeAmount$ X | References$ X | SpellDescription$ You gain life equal to the sacrificed creature's toughness.
+SVar:X:Sacrificed$CardToughness
+Oracle:{B}, {T}, Sacrifice a creature: You gain life equal to the sacrificed creature's toughness.

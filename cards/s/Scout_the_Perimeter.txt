@@ -1,0 +1,8 @@
+Name:Scout the Perimeter
+ManaCost:2 G
+Types:Sorcery
+A:SP$ ChangeZone | Cost$ 2 G | Origin$ Library | Destination$ Battlefield | ChangeType$ Land | Tapped$ True | ChangeNum$ 1 | SubAbility$ TrigPut | SpellDescription$ Search your library for a land card, put it onto the battlefield tapped, then shuffle. Put a bounty counter on up to one target creature an opponent controls.
+
+SVar:TrigPut:DB$ PutCounter | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature opponent controls | CounterType$ BOUNTY | CounterNum$ 1
+
+Oracle:Search your library for a land card, put it onto the battlefield tapped, then shuffle.\nPut a bounty counter on up to one target creature an opponent controls.

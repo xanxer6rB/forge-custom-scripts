@@ -1,0 +1,7 @@
+Name:Strike the Weak Spot
+ManaCost:0
+Types:Sorcery
+A:SP$ Destroy | Cost$ 0 | ValidTgts$ Creature.Head | TgtPrompt$ Select target Head | SubAbility$ DBAddTurn | SpellDescription$ Destroy target Head. If that Head was Elite, take an extra turn.
+SVar:DBAddTurn:DB$AddTurn | Defined$ TargetedController | NumTurns$ 1 | ConditionCheckSVar$ X | ConditionCompare$ GE1 | SpellDescription$ If that creature was Elite, Take an extra turn.
+SVar:X:Targeted$Valid Elite
+Oracle:Destroy target Head. If that Head was Elite, take an extra turn.

@@ -1,0 +1,9 @@
+Name:Sith Citadel
+ManaCost:no cost
+Types:Land
+K:CARDNAME enters the battlefield tapped.
+T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigMana | TriggerDescription$ When CARDNAME enters the battlefield, add {U}.
+SVar:TrigMana:DB$Mana | Produced$ B | Amount$ 1
+A:AB$ Mana | Cost$ T | Produced$ U | SpellDescription$ Add {U}.
+A:AB$ Mana | Cost$ T | Produced$ R | SpellDescription$ Add {R}.
+Oracle:ith Citadel enters the battlefield tapped.\nWhen Sith Citadel enters the battlefield, add {B} to your mana pool.\n{T}: Add {U} or {R} to your mana pool.

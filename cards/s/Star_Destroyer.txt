@@ -1,0 +1,9 @@
+Name:Star Destroyer
+ManaCost:4 U B R
+Types:Artifact Creature Starship
+PT:6/6
+K:Shadow
+A:AB$ Tap | Cost$ 2 U | ValidTgts$ Artifact.Creature | SpellDescription$ Tap target artifact creature.
+A:AB$ Token | Cost$ 2 B | TokenAmount$ 1 | TokenScript$ w_1_1_trooper | LegacyImage$ w 1 1 trooper stwtg | SpellDescription$ Create a 1/1 white Trooper creature tokens.
+A:AB$ DealDamage | Cost$ 2 R | ValidTgts$ Creature.nonStarship,Player | TgtPrompt$ Select target non-Starship creature or player | NumDmg$ 2 | SpellDescription$ CARDNAME deals 2 damage to target non-Starship creature or player.
+Oracle:Spaceflight\n{2}{U}: Tap target artifact creature.\n{2}{B}: Create a 1/1 black Starship artifact creature token with spaceflight named TIE Fighter.\n{2}{R}: Star Destroyer deals 2 damage to target non-Starship creature or player.

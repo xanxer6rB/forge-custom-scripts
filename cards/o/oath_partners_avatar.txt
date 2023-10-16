@@ -1,0 +1,32 @@
+Name:Oath Partner Avatar
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-7/+5 
+
+############### WORKING ABILITIES ##################
+
+T:Mode$ NewGame | ValidPlayer$ You | Execute$ StartGame | TriggerDescription$ "Oath-Partners-Game","When the game starts, if Oath Partner Avatar wins the flip it will skip its next turn.","Otherwise you start with an extra turn."
+SVar:StartGame:DB$ SkipTurn | NumTurns$ 1 | Defined$ You | SubAbility$ UnMulligan
+
+T:Mode$ NewGame | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigDigStartNewGame | TriggerDescription$ At the start of the game, Oath Partner Avatar reveals the top two cards of its library and puts all Planeswalker cards and puts it onto the battlefield, then the Oath Partner Avatar shuffles its library.
+SVar:TrigDigStartNewGame:DB$ Dig | DigNum$ 2 | Reveal$ True | ChangeNum$ 2 | ChangeValid$ Permanent.Planeswalker | DestinationZone$ Battlefield
+ 
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Card.Planeswalker | Execute$ TrigDig | TriggerController$ TriggeredCardController | TriggerDescription$ Whenever a Planeswalker dies, reveal the top card of your library. You may put that card onto the battlefield if it's a Planeswalker card.
+SVar:TrigDig:DB$ Dig | DigNum$ 1 | Reveal$ True | Optional$ True | ChangeNum$ 1 | ChangeValid$ Permanent.Planeswalker | DestinationZone$ Battlefield
+
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ Your life total can't change. | Description$ Oath Partner Avatar's has no life total.
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ Oath Partner Avatar can't draw cards.
+
+Oracle:
+
+#####################################################
+
+################### TEST ABILITIES ##################
+
+#T:Mode$ NewGame | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigChange | TriggerDescription$ At the start of the game, Oath Partner Avatar searches its library for two Planeswalker cards and puts it onto the battlefield, then the Oath Partner Avatar shuffles its library.
+#SVar:TrigChange:DB$ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Card.Planeswalker | ChangeNum$ 2 | ShuffleNonMandatory$ True
+
+#T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Any | ValidCard$ Card.Creature+Planeswalker | Execute$ TrigLose | TriggerController$ TriggeredCardController | TriggerDescription$ When a Planeswalker leaves the battlefield, you lose the game.
+#SVar:TrigLose:DB$ LosesGame | Defined$ You
+
+#####################################################
