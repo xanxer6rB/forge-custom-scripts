@@ -7,6 +7,7 @@ Custom forge scripts to run different types of card formats and custom sets
      - Battle the Horde Challenge
      - Defeat a God Challenge
      - Random other formats for testing
+
 I have also been trying to script some already existing custom sets like:
 - StarWars the Gathering
 - Zelda
