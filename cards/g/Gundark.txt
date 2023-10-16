@@ -1,0 +1,9 @@
+Name:Gundark
+ManaCost:R
+Types:Creature Beast
+PT:1/1
+K:Haste
+K:Monstrosity:3:3 R R
+T:Mode$ BecomeMonstrous | ValidCard$ Card.Self | TriggerZones$ Battlefield | Execute$ TrigPump | SpellDescription$ When CARDNAME becomes monstrous, CARDNAME gets +2/+2 until end of turn.
+SVar:TrigPump:DB$ Pump | Defined$ Self | NumAtt$ +2 | NumDef$ +2 | Description$ CARDNAME gets +2/+2 until end or turn.
+Oracle:Haste\n{3}{R}{R}: Monstrosity 3.\nWhen Gundark becomes monstrous, it gets +2/+2 until end of turn.

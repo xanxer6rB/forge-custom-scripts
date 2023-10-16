@@ -1,0 +1,22 @@
+Name:IG-88B
+ManaCost:1 B B
+Types:Legendary Artifact Creature Droid Hunter
+PT:1/4
+K:Deathtouch
+
+T:Mode$ DamageDone | ValidSource$ Card.Self | ValidTarget$ Player | CombatDamage$ True | Execute$ TrigLoseLife | TriggerDescription$ Whenever CARDNAME deals combat damage to a player, that player loses 1 life for each artifact they control.
+SVar:TrigLoseLife:DB$ LoseLife | Defined$ TriggeredTarget | LifeAmount$ X
+SVar:X:Count$TotalCounters_BOUNTY_Creature.OppCtrl
+
+#SVar:DBDamage:DB$ DealDamage | Defined$ Remembered | NumDmg$ X
+#SVar:X:Count$Valid Land.RememberedPlayerCtrl
+
+# Repair 3
+T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Battlefield | Destination$ Graveyard | Execute$ TrigExile | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies, exile it with four repair counters on it and it gains suspend.
+SVar:TrigExile:DB$ ChangeZone | Defined$ TriggeredNewCardLKICopy | Origin$ Graveyard | Destination$ Exile | SubAbility$ DBPutCounter | RememberChanged$ True
+SVar:DBPutCounter:DB$ PutCounter | Defined$ Remembered | CounterType$ REPAIR | CounterNum$ 3
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | TriggerZones$ Exile | IsPresent$ Card.Self+counters_GE1_REPAIR | PresentZone$ Exile | Execute$ DBRemoveCounter | TriggerDescription$ At the beginning of your upkeep, if CARDNAME is exiled with an repair counter on it, remove an repair counter from it. Then if CARDNAME has no repair counters on it, return it to the battlefield.
+SVar:DBRemoveCounter:DB$ RemoveCounter | Defined$ Self | CounterType$ REPAIR | CounterNum$ 1 | SubAbility$ DBReturn
+SVar:DBReturn:DB$ Play | MayPlay$ True | Defined$ Self | Origin$ Exile | Destination$ Battlefield | Optional$ True | OptionalDecider$ You | ConditionDefined$ Self | ConditionPresent$ Card.counters_EQ0_REPAIR
+
+Oracle:Deathtouch\nWhenever IG-88B deals combat damage to a player, that player loses life equal to the number of bounty counters on creatures he or she controls.\nRepair 3 (When this creature dies, put four repair counter on it. At the beginning of each of your upkeep, remove a repair counter. Whenever the last is removed, you may cast it from your graveyard until end of turn.)

@@ -1,0 +1,8 @@
+Name:Force Lightning
+ManaCost:X R R
+Types:Sorcery
+A:SP$ DealDamage | Cost$ X R R | ValidTgts$ Creature,Player,Planeswalker | TgtPrompt$ Select any target | NumDmg$ X | SpellDescription$ CARDNAME deals X damage to target creature or player. Scry X.
+SVar:DBScry:DB$ Scry | Defined$ You | ScryNum$ xPaid | SubAbility$ DBCleanup | StackDescription$ None
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:X:Count$xPaid
+Oracle:Force Lightning deals X damage to target creature or player. Scry X.

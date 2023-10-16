@@ -1,0 +1,7 @@
+Name:Head Hunting
+ManaCost:1 B
+Types:Instant
+A:SP$ PutCounter | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature opponent controls | CounterType$ BOUNTY | CounterNum$ 1 | SubAbility$ DBLoseLife | SpellDescription$ Put a bounty counter on target creature an opponent controls. Each opponent loses 1 life. Draw a card.
+SVar:DBLoseLife:DB$ LoseLife | Defined$ Player.Opponent | LifeAmount$ 2 | SubAbility$ DBDraw | SpellDescription$ Each opponent loses 2 life
+SVar:DBDraw:DB$ Draw | NumCards$ 1 | Defined$ You | SpellDescription$ Draw a card
+Oracle:Put a bounty counter on target creature an opponent controls. Each opponent loses 1 life. Draw a card.

@@ -1,0 +1,136 @@
+Name:Horde Magic Avatar - Basic Rules
+ManaCost:no cost
+Types:Enchantment
+
+K:CARDNAME can't be countered.
+K:Your starting hand size is zero.
+
+# A way to kickstart Emblem ability/rules distribution
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ HordeMagic | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library,Hand | Execute$ HordeMagic | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If CARDNAME is in your opening hand, exile it and go through the prompts. Hope you enjoy the game.
+SVar:HordeMagic:DB$ ChangeZone | Defined$ Self | Origin$ Library | Destination$ Battlefield | SubAbility$ TrigExile | SpellDescription$ Put CARDNAME onto the battlefield.
+SVar:TrigExile:DB$ ChangeZone | Origin$ Battlefield | Destination$ Exile | Defined$ Self | SubAbility$ DBDiscardHand
+SVar:DBDiscardHand:DB$ Discard | Mode$ Hand | Defined$ You | SubAbility$ ShuffleHand
+SVar:ShuffleHand:DB$ ChangeZoneAll | Defined$ You | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | Random$ True | UseAllOriginZones$ True
+
+# Any amount of target players get an emblem
+K:ETBReplacement:Other:Emblem1
+SVar:Emblem1:DB$ Effect | StackDescription$ SpellDescription | Name$ Emblem - Horde Magic Avatar - Basic Rules | StaticAbilities$ vanishLands,hordeNoDraw,freeCmdr,reduceCmdrCost,hordeCreatureHaste,hordeAttckEachTurn,hordeNoBlock,hordeNoHand,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ exileTheDead | SVars$ TrigHordeCascade,HordeCascadeCast,HordeCascadeCreateToken,HordeCascadeCleanup,AffectedX,TrigMill,X,DBCleanup,HordeLibraryToExile,TrigYouHaveSurvived,Y,Z,W | EffectOwner$ You | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+#SVar:MaxPl:PlayerCountPlayers$Amount
+
+# Abilities/rules added to created emblems
+
+# GAME START EVENTS
+T:Mode$ NewGame | CheckSVar$ SurvCurLife | SVarCompare$ LE39 | References$ SurvCurLife | Execute$ SurvivorSetLife | TriggerDescription$ When the game starts each survivor's life total becomes 40.
+SVar:SurvCurLife:PlayerCountOpponents$LifeTotal
+SVar:SurvivorSetLife:DB$ SetLife | Defined$ Opponent | LifeAmount$ 40 | SubAbility$ DBCleanup1
+SVar:DBCleanup1:DB$ Cleanup | ClearRemembered$ True
+
+# HORDE CONJURING
+
+# STILL TESTING DECK CREATION, DO YOU WANT TO CREATE A HORDE DECK?
+#T:Mode$ NewGame | Execute$ DBHordeDck | Optional$ True | OptionalDecider$ Opponent | TriggerDescription$ Would you like to create a Horde deck?, If Yes - Choose creatures from a selected Horde list and then how many to conjure to the Hordes library, No - I already have one.
+
+#CHOOSE A HORDE LIST AND A HORDE CREATURE FROM THE LIST TO CONJURE INTO HORDES' LIBRARY
+#SVar:DBHordeDck:DB$ Charm | Defined$ Player.Opponent | Choices$ DBHordeList | CanRepeatModes$ True
+#SVar:DBHordeList:DB$ GenericChoice | Defined$ Player.Opponent | Chooser$ Opponent | ChoicePrompt$ Choose a Horde list | Choices$ DBNameCardDmn,DBNameCardDvl,DBNameCardDrgn,DBNameCardEldrazi,DBNameCardElf,DBNameCardGoblin,DBNameCardMerfolk,DBNameCardVamp,DBNameCardZed
+#SVar:DBNameCardDmn:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Demon Berserker RB (2/3),Horde Demon B Flying (5/5),Horde Demon B Trample Aristrocat (6/6) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Demon Horde creature to conjure.
+#SVar:DBNameCardDvl:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Devil R (1/1),Horde Devil R (1/1),Horde Devil R (1/1) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Devil Horde creature to conjure.
+#SVar:DBNameCardDrgn:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Dragon Egg R (0/2),Horde Dragon R FB (2/2),Horde Dragon RG (1/1),Horde Dragon R Flying FB (2/2),Horde Dragon R (4/4),Horde Dragon R (5/5),Horde Dragon R (6/6),Horde Dragon Spirit U (5/5) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Dragon Horde creature to conjure.
+#SVar:DBNameCardEldrazi:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Eldrazi Spawn C (0/1),Horde Eldrazi Scion C (1/1),Horde Eldrazi Horror C (3/2),Horde Eldrazi C (7/7),Horde Eldrazi C (10/10) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Eldrazi Horde creature to conjure.
+#SVar:DBNameCardElf:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Elf Druid G (1/1),Horde Elf G (1/1),Horde Elf Knight GW (2/2),Horde Elf Warrior G (1/1),Horde Elf Warrior GW (1/1) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Elf Horde creature to conjure.
+#SVar:DBNameCardGoblin:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Goblin Sitout R (1/1),Horde Goblin War Caller R (1/1),Horde Goblin R Haste (1/1),Horde Goblin R Haste (2/1),Horde Goblin R (1/1),Horde Goblin R (2/1),Horde Goblin Rogue B (1/1),Horde Goblin Scout R (1/1),Horde Goblin Soldier RW (1/1),Horde Goblin Warrior RG (1/1) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Goblin Horde creature to conjure.
+#SVar:DBNameCardMerfolk:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Merfolk U Hexproof (1/1),Horde Merfolk U (1/1),Horde Merfolk Wizard U (1/1) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Merfolk Horde creature to conjure.
+#SVar:DBNameCardVamp:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Vampire B (1/1),Horde Vampire B (2/2),Horde Vampire Knight B (1/1),Horde Vampire B Lifelink (1/1),Horde Vampire W (1/1) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Vampire Horde creature to conjure.
+#SVar:DBNameCardZed:DB$ NameCard | Draft$ True | Defined$ Player.Opponent | Chooser$ Opponent | ChooseFromList$ Horde Zombie Wizard UB (1/1),Horde Zombie B (2/2),Horde Zombie Enchantment B (2/2),Horde Zombie B Decayed (2/2),Horde Zombie Knight B Menace (2/2),Horde Zombie Warrior B (4/4),Horde Zombie Giant B (5/5) | SubAbility$ DBNumHorde | StackDescription$ SpellDescription | SpellDescription$ Choose a Zombie Horde creature to conjure.
+
+#SVar:DBNumHorde:DB$ ChooseNumber | ChooseAnyNumber$ True | Defined$ Opponent | RememberChosen$ True | SubAbility$ DBConjure1
+#SVar:DBConjure1:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ V | References$ V | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 1 Horde
+#SVar:V:Remembered:Amount
+
+# CHOOSE A NUMBER FOR THE AMOUNT OF SELECTED HORDE TO CONJURE INTO THE HORDES' LIBRARY
+#SVar:DBNumHorde:DB$ Charm | Defined$ Player.Opponent | Chooser$ Opponent | ChoicePrompt$ Choose a number of Horde | Choices$ DBConjure1,DBConjure2,DBConjure3,DBConjure4,DBConjure5,DBConjure10,DBConjure25,DBConjure40 | CanRepeatModes$ True | SpellDescription$ Choose how many Horde creatures to add.
+#SVar:DBNumHorde:DB$ GenericChoice | Defined$ Player.Opponent | Chooser$ Opponent | ChoicePrompt$ Choose a number of Horde | Choices$ DBConjure1,DBConjure2,DBConjure3,DBConjure4,DBConjure5,DBConjure10,DBConjure25,DBConjure40
+#SVar:DBConjure1:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 1 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 1 Horde
+#SVar:DBConjure2:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 2 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 2 Horde
+#SVar:DBConjure3:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 3 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 3 Horde
+#SVar:DBConjure4:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 4 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 4 Horde
+#SVar:DBConjure5:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 5 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 5 Horde
+#SVar:DBConjure10:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 10 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 10 Horde
+#SVar:DBConjure25:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 25 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 25 Horde
+#SVar:DBConjure40:DB$ MakeCard | Name$ ChosenName | Defined$ Player.You | Zone$ Library | Amount$ 40 | Shuffle$ True | SubAbility$ DBChooseHordeAgain | SpellDescription$ add 40 Horde
+
+# CHOOSE ANOTHER HORDE CREATURE OR CONTINUE
+SVar:DBChooseHordeAgain:DB$ Vote | Defined$ Player.Opponent | VoteYes - Choose another Horde creature$ DBHordeList | VoteNo - To continue$ DBCleanup2 | VoteType$ Yes - Choose another Horde creature,No - To continue
+SVar:DBCleanup2:DB$ Cleanup | ClearNamedCard$ True
+
+# SETUP TURNS - CHOOSE A NUMBER OF TURNS THE HORDE SKIPS #
+T:Mode$ NewGame | Execute$ ChooseNumberB | TriggerDescription$ How many turns would you like to prepare to face the Horde?
+SVar:ChooseNumberB:DB$ ChooseNumber | Min$ 1 | Max$ 3 | Defined$ Opponent | SubAbility$ HordeSkipTurns
+SVar:HordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ You | References$ xTnum | SubAbility$ CleanupTnum
+SVar:CleanupTnum:DB$ Cleanup | ClearRemembered$ True
+SVar:xTnum:Count$ChosenNumber
+
+# THE HORDE CANNOT GO FIRST
+T:Mode$ NewGame | Execute$ TrigBranch | TriggerDescription$ The Horde can not go first.
+SVar:TrigBranch:DB$ Branch | BranchConditionSVar$ X | BranchConditionSVarCompare$ EQ0 | TrueSubAbility$ HordeEndTurn | FalseSubAbility$ DBCleanup3
+#SVar:DBGenericChoice:DB$ GenericChoice | Defined$ Opponent | Choices$ HordeEndTurn,DBCleanup3
+SVar:HordeEndTurn:DB$ EndTurn | PlayerTurn$ True | SubAbility$ DBCleanup3
+SVar:DBCleanup3:DB$ Cleanup | ClearRemembered$ True
+SVar:X:Count$StartingPlayer.1.0
+
+# HORDE TURN
+# Upkeep event
+
+SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigHordeCascade | TriggerDescription$ The Horde reveals the top card of its library until it reveals a nonHorde card, casts that card and puts all Horde creatures onto the battlefield.
+SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Amount$ 1 | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | SubAbility$ HordeCascadeCast
+SVar:HordeCascadeCast:DB$ Play | Defined$ Remembered | WithoutManaCost$ True | Optional$ True | SubAbility$ HordeCascadeCreateToken
+SVar:HordeCascadeCreateToken:DB$ CopyPermanent | Defined$ ValidAll Card.IsImprinted | SubAbility$ HordeCascadeCleanup
+SVar:HordeCascadeCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
+
+# HORDE RULES
+# Lands the Horde controls have Vanishing 2 (why not?)
+SVar:vanishLands:Mode$ Continuous | EffectZone$ Command,Exile,Graveyard | AffectedZone$ Battlefield | Affected$ Land.YouCtrl | AddKeyword$ Vanishing:2 | HiddenDescription$ Lands the Horde controls have Vanishing:2.
+
+# Horde has no hand
+SVar:hordeNoHand:Mode$ Continuous | Affected$ You | EffectZone$ Command | RaiseMaxHandSize$ -7 | Description$ The Hordes maximum hand size is reduced by seven.
+
+# Horde can't draw cards
+SVar:hordeNoDraw:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ The Horde can't draw cards.
+
+# Horde can play cards from hand for free and Commander for free
+SVar:freeCmdr:Mode$ Continuous | Affected$ Card.nonLand+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand without paying their mana costs.
+SVar:reduceCmdrCost:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | Description$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
+SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
+
+# Creatures the Horde controls have Haste
+SVar:hordeCreatureHaste:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddKeyword$ Haste | Description$ Creatures the Horde controls have haste.
+
+# Creatures the Horde controls attack each combat if able
+SVar:hordeAttckEachTurn:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddHiddenKeyword$ CARDNAME attacks each combat if able. | Description$ Creatures the Horde controls attack each combat if able.
+
+# Creatures the Horde controls can't block
+SVar:hordeNoBlock:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddHiddenKeyword$ CARDNAME can't block. | Description$ Creatures the Horde controls can't block.
+
+# Horde mills when it loses life
+SVar:lifeLossHordeMills:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it puts that many cards from the top of its library into its graveyard. (Damage causes loss of life.)
+SVar:TrigMill:DB$ Mill | Defined$ You | NumCards$ X | References$ X | SubAbility$ DBCleanup
+SVar:X:TriggerCount$LifeAmount
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+# Exile Horde "tokens" if they hit the graveyard
+SVar:exileTheDead:Event$ Moved | ValidCard$ Card.Horde | Destination$ Graveyard | ReplaceWith$ HordeLibraryToExile | Description$ If a Horde creature would be put into your graveyard from anywhere, exile it instead.
+SVar:HordeLibraryToExile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Library | Destination$ Exile
+
+# WIN CONDITION
+# Survivers win if they the Horde has no cards in Library or Graveyard.
+# Can't win otherwise.
+SVar:cantWin:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ Survivors can't win the game as long as the Horde controls at least one creature and has at least one card in its library.
+SVar:cantLose:Mode$ Continuous | EffectZone$ Command | Affected$ You | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't lose the game. | Description$ The Horde can't lose the game as long as it controls at least one creature and has at least one card in its library.
+SVar:winCon:Mode$ Phase | Phase$ End of Turn |  EffectZone$ Command | ValidPlayer$ Opponent | TriggerZones$ Command | CheckSVar$ W | SVarCompare$ EQ0 | References$ Y,Z,W | Execute$ TrigYouHaveSurvived | TriggerDescription$ At the end of your turn, if the Horde controls no creatures and has no cards in its library, you have surived the game.
+SVar:TrigYouHaveSurvived:DB$ WinsGame | Defined$ Opponent
+SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
+SVar:Z:Count$Valid Creature.YouCtrl
+SVar:W:SVar$Y/Plus.Z
+
+Oracle:Horde has no hand.\n If the Horde controls no creatures and has no cards in its library, you will survive the game.\nCan you survive?\nTO PLAY THE HORDE FORMAT, HAVE THIS CARD IN THE OPPONENTS DECK.\nOPPONENTS DECK MUST CONTAIN HORDE CREATURES.

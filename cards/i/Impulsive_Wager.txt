@@ -1,0 +1,5 @@
+Name:Impulsive Wager
+ManaCost:R
+Types:Sorcery
+
+Oracle:TESTING/nAs an additional cost to cast Impulsive Wager, discard a card at random.\nIf the discarded card was a nonland card, draw two cards. Otherwise, put a bounty on target creature an opponent controls.

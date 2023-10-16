@@ -1,0 +1,9 @@
+Name:Hammerhead Corvette
+ManaCost:3 G
+Types:Artifact Creature Rebel Starship
+PT:3/3
+K:Shadow
+T:Mode$ Attacks | ValidCard$ Card.Self | Execute$ TrigChoose | TriggerDescription$ Whenever CARDNAME attacks, defending player chooses an untapped Starship they control. That Starship blocks CARDNAME this turn if able.
+SVar:TrigChoose:DB$ ChooseCard | Defined$ DefendingPlayer | Amount$ 1 | Choices$ Creature.untapped+Starship+OppCtrl | Mandatory$ True | SubAbility$ DBMustBlock
+SVar:DBMustBlock:DB$ MustBlock | Defined$ ChosenCard
+Oracle:Spaceflight (This creature can block or be blocked by only creatures with spaceflight.)\nWhenever Hammerhead Corvette attacks, defending player chooses an untapped Starship they control. That Starship blocks CARDNAME this turn if able.

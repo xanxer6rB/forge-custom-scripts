@@ -1,0 +1,9 @@
+Name:Hungry Dragonsnake
+ManaCost:4 G G
+Types:Creature Snake Beast
+PT:4/4
+K:Trample
+T:Mode$ ChangesZone | ValidCard$ Creature.OppCtrl | TriggerZones$ Battlefield | Origin$ Any | Destination$ Battlefield | Execute$ DBPutCounter |TriggerDescription$ Whenever a creature enters the battlefield under an opponent's control, put a +1/+1 counter on CARDNAME.
+SVar:DBPutCounter:DB$ PutCounter | CounterType$ P1P1 | CounterNum$ 1
+DeckHas:Ability$Counters
+Oracle:Trample\nWhenever a creature enters the battlefield under an opponent's control, put a +1/+1 counter on Hungry Dragonsnake.

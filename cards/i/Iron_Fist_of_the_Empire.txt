@@ -1,0 +1,10 @@
+Name:Iron Fist of the Empire
+ManaCost:U B R
+Types:Enchantment
+T:Mode$ LifeLost | ValidPlayer$ Opponent | CheckSVar$ X | References$ X | Execute$ DBGainLife | TriggerZones$ Battlefield | TriggerDescription$ Whenever an opponent loses life from a source other than combat damage, you gain 2 life and create a 2/2 red Soldier creature token with first strike.
+SVar:DBGainLife:DB$ GainLife | LifeAmount$ 2 | SubAbility$ DBToken
+SVar:DBToken:DB$ Token | LegacyImage$ r 2 2 soldier first strike | TokenAmount$ 1 | TokenScript$ r_2_2_soldier_first_strike | TokenOwner$ You
+SVar:X:PlayerCountOpponents$NonCombatDamageDealtThisTurn
+SVar:BuffedBy:Enchantment
+DeckHints:Type$Enchantment
+Oracle:Hate - Whenever an opponent loses life from a source other than combat damage, you gain 2 life and create a 2/2 red Soldier creature token with first strike named Royal Guard.

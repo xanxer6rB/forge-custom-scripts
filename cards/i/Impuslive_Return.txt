@@ -1,0 +1,6 @@
+Name:Impulsive Return
+ManaCost:no cost
+Types:Sorcery
+A:SP$ ChangeZone | Origin$ Graveyard | Destination$ Battlefield | TgtPrompt$ Choose target creature card in your graveyard | ValidTgts$ Creature.namedEcstatic Piper+YouOwn | TargetMin$ 0 | TargetMax$ 2 | SubAbility$ DBCleanup | SpellDescription$ Return up to two target creature cards from your graveyard onto the battlefield.
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+Oracle:Return two cards named Ecstatic Piper from Xenagos's graveyard to the battlefield. At the beginning of combat this turn, Impulsive Return deals damage to each player equal to the number of Revelers on the battlefield.

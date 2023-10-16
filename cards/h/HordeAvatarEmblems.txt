@@ -1,0 +1,77 @@
+Name:Horde Magic Avatar - Emblems-inTstng
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-7/+80
+
+######################################################################################################
+# TODO: Emblems: Use a card (like a Swamp or Infect token) to represent an bonus for the horde. 
+#	Each time one is revealed, the horde gets a bonus to make it more powerful. Some people treat 
+#	the emblem as an extra turn, one extra reveal from the horde deck, or an emblem which gives the 
+#	horde an extra reveal each turn. Depending on how powerful they are for your meta, you can choose 
+#	to give the horde the emblem if they reveal it from a flip, or even 
+#	when it gets milled to the graveyard.
+######################################################################################################
+
+# GAME START EVENTS
+
+# Survivors gain extra life
+T:Mode$ NewGame | Execute$ SurvivorSetLife | TriggerDescription$ When the game starts each survivor's life total becomes 40.
+SVar:SurvivorSetLife:DB$ SetLife | Defined$ Player.Opponent | LifeAmount$ 40
+
+# Setup turns - the Horde skips its first two turns
+T:Mode$ NewGame | Execute$ HordeSkipTurns | TriggerDescription$ When the game begins, the Horde skips its next two turns.
+SVar:HordeSkipTurns:DB$ SkipTurn | NumTurns$ 2 | Defined$ You
+
+# Setup turns - the Horde cannot go first
+T:Mode$ Phase | Phase$ Upkeep |  EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | CheckSVar$ NumTurns | SVarCompare$ EQ1 | References$ NumTurns | Execute$ HordeEndTurn | TriggerDescription$ If the Horde goes first, end the turn.
+SVar:NumTurns:Count$TotalTurns
+SVar:HordeEndTurn:DB$ EndTurn
+
+# HORDE TURN
+# Upkeep event
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | CheckSVar$ NumTurns | SVarCompare$ GE2 | References$ NumTurns | Execute$ TrigHordeCascade | EffectZone$ Command | TriggerDescription$ The Horde reveals the top card of its library until it reveals a nontoken card, casts that card and puts all token creatures onto the battlefield.
+SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Amount$ 1 | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | SubAbility$ HordeCascadeCast
+SVar:HordeCascadeCast:DB$ Play | Defined$ Remembered | WithoutManaCost$ True | Optional$ True | SubAbility$ HordeCascadeCreateToken
+SVar:HordeCascadeCreateToken:DB$ CopyPermanent | Defined$ ValidAll Card.IsImprinted | SubAbility$ HordeCascadeCleanup
+SVar:HordeCascadeCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
+
+# HORDE RULES
+# Lands the Horde controls have Vanishing 2 (why not?)
+S:Mode$ Continuous | EffectZone$ Command,Exile,Graveyard | AffectedZone$ Battlefield | Affected$ Land.YouCtrl | AddKeyword$ Vanishing:2 | HiddenDescription$ Lands the Horde controls have Vanishing:2.
+
+# Horde can't draw cards
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ The Horde can't draw cards.
+
+# Horde can play cards from hand for free
+S:Mode$ Continuous | Affected$ Card.nonLand+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand | EffectZone$ Command | Description$ The Horde may cast spells from its hand without paying their mana costs.
+
+# Creatures the Horde controls have Haste
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddKeyword$ Haste | Description$ Creatures the Horde controls have haste.
+
+# Creatures the Horde controls attack each combat if able
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddHiddenKeyword$ CARDNAME attacks each combat if able. | Description$ Creatures the Horde controls attack each combat if able.
+
+# Creatures the Horde controls can't block
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddHiddenKeyword$ CARDNAME can't block. | Description$ Creatures the Horde controls can't block.
+
+# Horde mills when it loses life
+T:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it puts that many cards from the top of its library into its graveyard. (Damage causes loss of life.)
+SVar:TrigMill:DB$ Mill | Defined$ You | NumCards$ X | References$ X
+SVar:X:TriggerCount$LifeAmount
+
+# Exile Horde "tokens" if they hit the graveyard
+R:Event$ Moved | ValidCard$ Card.Horde | Destination$ Graveyard | ReplaceWith$ HordeLibraryToExile | Description$ If a Horde token would be put into your graveyard from anywhere, exile it instead.
+SVar:HordeLibraryToExile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Library | Destination$ Exile
+
+# WIN CONDITION
+# Survivers win if they the Horde has no cards in Library or Graveyard.
+# Can't win otherwise.
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ Survivors can't win the game as long as the Horde controls at least one creature and has at least one card in its library.
+S:Mode$ Continuous | EffectZone$ Command | Affected$ You | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't lose the game. | Description$ The Horde can't lose the game as long as it controls at least one creature and has at least one card in its library.
+T:Mode$ Phase | Phase$ End of Turn |  EffectZone$ Command | ValidPlayer$ Opponent | TriggerZones$ Command | CheckSVar$ W | SVarCompare$ EQ0 | References$ Y,Z,W | Execute$ TrigYouHaveSurvived | TriggerDescription$ At the end of your turn, if the Horde controls no creatures and has no cards in its library, you have surived the game.
+SVar:TrigYouHaveSurvived:DB$ WinsGame | Defined$ Opponent
+SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
+SVar:Z:Count$Valid Creature.YouCtrl
+SVar:W:SVar$Y/Plus.Z
+
+Oracle:Hand -7, Life +80\n If the Horde controls no creatures and has no cards in its library, you will surive the game.\nCan you survive?

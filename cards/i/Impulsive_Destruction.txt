@@ -1,0 +1,9 @@
+Name:Impulsive Destruction
+ManaCost:no cost
+Types:Sorcery
+A:SP$ Sacrifice | Mode$ TgtChoose | Amount$ 1 | SacValid$ Artifact,Enchantment | Defined$ Player | RememberSacrificed$ True | Optional$ True | SubAbility$ DBRepeat | SpellDescription$ Each player may sacrifice an artifact or enchantment. CARDNAME deals 3 damage to each player who didn't sacrifice a permanent this way.
+SVar:DBRepeat:DB$ RepeatEach | RepeatPlayers$ Player | RepeatSubAbility$ DBLoseLife | SubAbility$ DBCleanup
+SVar:DBLoseLife:DB$ DealDamage | NumDmg$ 3 | ConditionCheckSVar$ X | ConditionSVarCompare$ EQ0 | Defined$ Player.IsRemembered | References$ X
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:X:Remembered$Valid Creature.RememberedPlayerCtrl
+Oracle:Each player may sacrifice an artifact or enchantment. Impulsive Destruction deals 3 damage to each player who didn't sacrifice a permanent this way.

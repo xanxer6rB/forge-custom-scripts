@@ -1,0 +1,7 @@
+Name:Force Pull
+ManaCost:2 G
+Types:Sorcery
+A:SP$ Destroy | Cost$ 2 G | ValidTgts$ Creature.withShadow | TgtPrompt$ Select target creature with [spaceflight] shadow | SubAbility$ DBScry | SpellDescription$ Destroy target creature with [spaceflight] shadow. Scry 3
+SVar:DBScry:DB$ Scry | Defined$ You | ScryNum$ 3 | SubAbility$ DBCleanup | StackDescription$ None
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+Oracle:Destroy target creature with [spaceflight] shadow. Scry 3

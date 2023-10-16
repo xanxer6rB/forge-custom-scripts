@@ -1,0 +1,18 @@
+Name:Fulfill Contract
+ManaCost:BR BR
+Types:Instant
+#A:SP$ Destroy | ValidTgts$ Creature.counters_GE1_BOUNTY | TgtPrompt$ Select target creature with a bounty counter. | RememberLKI$ True | SubAbility$ DBGainLife
+#SVar:DBGainLife:DB$ GainLife | Defined$ You | LifeAmount$ X | ConditionDefined$ Remembered | ConditionPresent$ Creature | ConditionCompare$ GE1 | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#SVar:X:RememberedLKI$CardToughness
+
+
+#T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigDestroy | TriggerDescription$ When CARDNAME enters the battlefield, destroy all artifacts and enchantments. Put a +1/+1 counter on CARDNAME for each permanent destroyed this way.
+#SVar:TrigDestroy:DB$ DestroyAll | ValidCards$ Artifact,Enchantment | RememberDestroyed$ True | SubAbility$ DBPutCounter
+#SVar:DBPutCounter:DB$ PutCounter | CounterType$ P1P1 | CounterNum$ X | SubAbility$ DBCleanup
+#SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+#SVar:X:Remembered$Amount
+#SVar:Y:Count$Valid Artifact.OppCtrl,Enchantment.OppCtrl
+#SVar:NeedsToPlayVar:Y GE2
+#AI:RemoveDeck:Random
+Oracle:

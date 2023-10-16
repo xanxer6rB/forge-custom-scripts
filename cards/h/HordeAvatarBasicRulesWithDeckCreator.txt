@@ -1,0 +1,98 @@
+Name:Horde Magic - Basic Rules With Deck Creator Original
+ManaCost:no cost
+Types:Enchantment
+
+K:CARDNAME can't be countered.
+
+# A ROUGH WAY TO KICKSTART EMBLEM ABILITY/RULES DISTRIBUTION
+#
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ HordeMagic | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library,Hand | Execute$ DBDraw | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If CARDNAME is in your opening hand, exile it and go through the prompts. Hope you enjoy the game.
+SVar:DBDraw:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ HordeMagic | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card
+SVar:HordeMagic:DB$ ChangeZone | Defined$ Self | Origin$ Library,Hand | Destination$ Battlefield | SubAbility$ TrigExile | SpellDescription$ Put CARDNAME onto the battlefield.
+SVar:TrigExile:DB$ ChangeZone | Origin$ Battlefield | Destination$ Exile | Defined$ Self
+
+# TARGET A SINGLE OR "X" OPPONENT - Use EmblemX
+K:ETBReplacement:Other:DBEmblemX
+SVar:DBEmblemX:DB$ Effect | ValidTgts$ Player | TargetMin$ 0 | TargetMax$ MaxPl | Optional$ True | OptionalDecider$ You | TgtPrompt$ Choose target player to become the Horde | StackDescription$ SpellDescription | Name$ Horde Magic Avatar - Basic Rules | StaticAbilities$ vanishLands,freeCmdr,reduceCmdrCost,hordeCreatureHaste,hordeNoHand,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ exileTheDead | SVars$ TrigHordeCascade,HordeCascadeCast,HordeCascadeCreateToken,HordeCascadeCleanup,AffectedX,TrigMill,X,DBCleanup,DBExileHorde,TrigYouHaveSurvived,Y,Z,W | EffectOwner$ Targeted | Duration$ Permanent | SubAbility$ DBCrtDck | SpellDescription$ When the game starts, choose any number of players to get a Horde emblem.
+SVar:MaxPl:PlayerCountPlayers$Amount
+
+# "HORDE DECK CREATOR"
+SVar:DBCrtDck:DB$ Vote | Defined$ Player.You | VoteYes - Add Horde cards?$ DBHordeDck | VoteNo - To continue$ DBCleanup2 | VoteType$ Yes - Add Horde cards?,No - To continue
+SVar:DBHordeDck:DB$ NameCard | Draft$ True | Defined$ You | Optional$ True | OptionalDecider$ You | TgtPrompt$ Would you like to add Horde cards to target players library? | ValidCards$ Card.Creature+Horde | ValidDesc$ Horde | StackDescription$ SpellDescription | SubAbility$ DBNumHorde | SpellDescription$ Choose a Horde creature card name.
+SVar:DBNumHorde:DB$ ChooseNumber | ChooseAnyNumber$ True | Defined$ You | SubAbility$ DBNumHordeRepeat
+SVar:DBNumHordeRepeat:DB$ Repeat | MaxRepeat$ xHorde | RepeatSubAbility$ DBConjure1 | References$ xHorde | StackDescription$ None | SubAbility$ DBChooseHordeAgain
+SVar:DBConjure1:DB$ MakeCard | Name$ ChosenName | Defined$ Targeted | Zone$ Library | Amount$ 1 | Shuffle$ True | SubAbility$ DBDiscardHand
+SVar:DBDiscardHand:DB$ Discard | Mode$ Hand | Defined$ Targeted | SubAbility$ ShuffleHand
+SVar:ShuffleHand:DB$ ChangeZoneAll | Defined$ You | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | Random$ True | UseAllOriginZones$ True | SubAbility$ DBCleanup2
+SVar:DBCleanup2:DB$ Cleanup | ClearRemembered$ True
+SVar:xHorde:Count$ChosenNumber
+SVar:DBChooseHordeAgain:DB$ Vote | Defined$ Player.You | VoteYes - Choose another Horde creature?$ DBHordeDck | VoteNo - To continue$ DBCleanup2 | VoteType$ Yes - Choose another Horde creature?,No - To continue
+
+# MINIMUM LIFE FOR SURVIVORS IS SET TO 40
+T:Mode$ NewGame | CheckSVar$ SurvCurLife | SVarCompare$ LE39 | References$ SurvCurLife | Execute$ SurvivorSetLife | TriggerDescription$ When the game starts each survivor's life total becomes 40.
+SVar:SurvCurLife:PlayerCountYour$LifeTotal
+SVar:SurvivorSetLife:DB$ SetLife | Defined$ You | LifeAmount$ 40
+
+# SETUP TURNS - CHOOSE A NUMBER OF TURNS THE HORDE SKIPS AND HORDE CANNOT GO FIRST
+T:Mode$ NewGame | Execute$ DBChooseNumber | TriggerDescription$ How many turns would you like to prepare to face the Horde?
+SVar:DBChooseNumber:DB$ ChooseNumber | Min$ 1 | Max$ 3 | Defined$ You | SubAbility$ DBHordeSkipTurns
+SVar:DBHordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ Opponent | References$ xTnum | SubAbility$ TrigBranch
+SVar:xTnum:Count$ChosenNumber
+SVar:TrigBranch:DB$ Branch | BranchConditionSVar$ X | BranchConditionSVarCompare$ EQ0 | TrueSubAbility$ HordeEndTurn | FalseSubAbility$ DBCleanup2
+SVar:HordeEndTurn:DB$ EndTurn | PlayerTurn$ True
+SVar:X:Count$StartingPlayer.1.0
+
+# ABILITIES/RULES ADDED TO EMBLEM(S) FOR HORDE RULES
+
+# HORDE'S TURN - UPKEEP
+SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigHordeCascade | TriggerDescription$ The Horde reveals the top card of its library until it reveals a nonHorde card, casts that card and puts all Horde creatures onto the battlefield.
+SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Reveal$ True | Amount$ 1 | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | SubAbility$ HordeCascadeCast
+SVar:HordeCascadeCast:DB$ Play | Defined$ Remembered | WithoutManaCost$ True | ValidSA$ Spell | SubAbility$ HordeCascadeCreateToken | StackDescription$ {p:You} The Horde casts the exiled card without paying its mana cost.
+SVar:HordeCascadeCreateToken:DB$ CopyPermanent | Defined$ ValidAll Card.IsImprinted | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
+
+#SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Amount$ 1 | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | RevealRandomOrder$ True | RememberFound$ True | SubAbility$ DBPlay | StackDescription$ then reveals cards from the top of it until they reveal a nonland card. {p:You} exiles that card and puts the rest on the bottom of their library in a random order. | SpellDescription$ then reveal cards from the top of it until you reveal a nonland card. Exile that card and put the rest on the bottom of your library in a random order.
+#SVar:HordeCascadeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | WithoutManaCost$ True | StackDescription$ {p:You} may cast the exiled card without paying its mana cost. | SpellDescription$ You may cast the exiled card without paying its mana cost.
+
+
+# LANDS THE HORDE CONTROLS HAVE VANISHING 2 (WHY NOT?)
+SVar:vanishLands:Mode$ Continuous | EffectZone$ Command,Exile,Graveyard | AffectedZone$ Battlefield | Affected$ Land.YouCtrl | AddKeyword$ Vanishing:2 | HiddenDescription$ Lands the Horde controls have Vanishing:2.
+
+# HORDE HAS NO HAND
+SVar:hordeNoHand:Mode$ Continuous | Affected$ You | EffectZone$ Command | RaiseMaxHandSize$ -7 | Description$ The Hordes maximum hand size is reduced by seven.
+
+# HORDE CANNOT DRAW
+#SVar:hordeNoDraw:Mode$ CantDraw | ValidPlayer$ You | DrawLimit$ 0 | Description$ The Horde can't draw.
+#SVar:hordeNoDraw:Event$ Draw | EffectZone$ Command | ActiveZones$ Command | ValidPlayer$ You | Prevent$ True | Description$ If the Horde would draw a card, it skips that draw instead.
+#SVar:hordeNoDraw::Event$ BeginPhase | EffectZone$ Command | ActiveZones$ Command | ValidPlayer$ You | Phase$ Draw | Skip$ True | Description$ Skip your draw step.
+
+# HORDE CAN PLAY CARDS FROM HAND AND COMMANDER FOR FREE
+SVar:freeCmdr:Mode$ Continuous | Affected$ Card.nonLand+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand without paying their mana costs.
+SVar:reduceCmdrCost:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | Description$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
+SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
+
+# CREATURES THE HORDE CONTROLS HAVE HASTE, ATTACK EACH TURN IF ABLE, CANNOT BLOCK
+SVar:hordeCreatureHaste:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddKeyword$ Haste & CARDNAME attacks each combat if able. & CARDNAME can't block. | Description$ Creatures the Horde controls have haste, attack each turn if able and can't block.
+
+# HORDE MILLS WHEN IT LOSES LIFE
+SVar:lifeLossHordeMills:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it puts that many cards from the top of its library into its graveyard. (Damage causes loss of life.)
+SVar:TrigMill:DB$ Mill | Defined$ You | NumCards$ X | References$ X
+SVar:X:TriggerCount$LifeAmount
+
+# EXILE HORDE "TOKENS" IF THEY HIT THE GRAVEYARD
+SVar:exileTheDead:Event$ Moved | ValidCard$ Card.Horde | Destination$ Graveyard | ReplaceWith$ DBExileHorde | Description$ If a Horde creature would be put into your graveyard from anywhere, exile it instead.
+SVar:DBExileHorde:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Library | Destination$ Exile
+
+# WIN CONDITION
+# Survivors win if the Horde has no cards in Library or Graveyard.
+# Can't win otherwise.
+SVar:cantWin:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ Survivors can't win the game as long as the Horde controls at least one creature and has at least one card in its library.
+SVar:cantLose:Mode$ Continuous | EffectZone$ Command | Affected$ You | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't lose the game. | Description$ The Horde can't lose the game as long as it controls at least one creature and has at least one card in its library.
+SVar:winCon:Mode$ Phase | Phase$ End of Turn |  EffectZone$ Command | ValidPlayer$ Opponent | TriggerZones$ Command | CheckSVar$ W | SVarCompare$ EQ0 | References$ Y,Z,W | Execute$ TrigYouHaveSurvived | TriggerDescription$ At the end of your turn, if the Horde controls no creatures and has no cards in its library, you have surived the game.
+SVar:TrigYouHaveSurvived:DB$ WinsGame | Defined$ Opponent
+SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
+SVar:Z:Count$Valid Creature.YouCtrl
+SVar:W:SVar$Y/Plus.Z
+
+Oracle:Horde Magic - Basic Rules With Deck Creator.\nTO PLAY THE HORDE FORMAT, HAVE THIS CARD IN YOUR LIBRARY.\nOPPONENTS LIBRARY MUST CONTAIN HORDE CREATURES.\nOR YOU CAN CONJURE SOME INTO THE OPPONENTS LIBRARY.

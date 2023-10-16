@@ -1,0 +1,8 @@
+Name:First Order Dreadnought
+ManaCost:4 B B
+Types:Artifact Creature Starship
+PT:5/6
+K:Shadow
+A:AB$ Destroy | Cost$ 2 B T | ValidTgts$ Card.Creature | TgtPrompt$ Select target creature | SpellDescription$ Destroy target creature.
+SVar:NonStackingEffect:True
+Oracle:Spaceflight (This creature can only block or be blocked by creatures with spaceflight.)\n{2}{B}{T}:Destroy target creature.

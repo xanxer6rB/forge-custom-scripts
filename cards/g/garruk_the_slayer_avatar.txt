@@ -1,0 +1,24 @@
+Name:Garruk the Slayer Avatar
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-7/-19 
+
+############### WORKING ABILITIES ##################
+
+K:Hexproof
+K:Shroud
+
+S:Mode$ Continuous | Affected$ Planeswalker.YouCtrl |  EffectZone$ Command  | AddKeyword$ Hexproof | Description$ Planeswalkers you control have hexproof.
+S:Mode$ Continuous | Affected$ Planeswalker.YouCtrl |  EffectZone$ Command  |AddKeyword$ Shroud | Description$ Planeswalkers you control have Shroud.
+#S:Mode$ Continuous | Affected$ Planeswalker.YouCtrl |  EffectZone$ Command  |AddKeyword$ Indestructible | Description$ Planeswalkers you control have Indestructible.
+
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Any | ValidCard$ Card.Planeswalker+Garruk | Execute$ TrigLose | TriggerController$ TriggeredCardController | TriggerDescription$ When Garruk the Slayer leaves the battlefield, you lose the game.
+SVar:TrigLose:DB$ LosesGame | Defined$ You
+
+T:Mode$ NewGame | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigChange | TriggerDescription$ At the start of the game, Garruk the Slayer Avatar searchs its library for Garruk the Slayer and puts it onto the battlefield, then Garruk the Slayer Avatar shuffles his library.
+SVar:TrigChange:DB$ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Card.Garruk | ChangeNum$ 1 | ShuffleNonMandatory$ True
+
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ Your life total can't change. | Description$ Xenagos Avatar's has no life total.
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ Xenagos Avatar can't draw cards.
+
+Oracle:At the start of the game, Garruk the Slayer Avatar searches his library for Garruk the Slayer and puts it into the battle, then shuffle his library. When Garruk the Slayer leaves the battlefield, you win the game.

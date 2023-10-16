@@ -1,0 +1,9 @@
+Name:Force Denial
+ManaCost:1 U
+Types:Instant
+
+#A:SP$ Counter | Cost$ 1 U | CheckSVar$ X | References$ X | Execute$ DBHate | TargetType$ Spell | TgtPrompt$ Select target spell | ValidTgts$ Card | UnlessCost$ 1 | SpellDescription$ Counter target spell unless its controller pays {1}.
+#SVar:DBHate:DB$ Counter |
+#SVar:X:PlayerCountOpponents$NonCombatDamageDealtThisTurn
+
+Oracle:Counter target spell unless its controller pays {1}.\nHate - If an opponent lost life from a source other than combat damage this turn, counter that spell instead.\nScry 1.

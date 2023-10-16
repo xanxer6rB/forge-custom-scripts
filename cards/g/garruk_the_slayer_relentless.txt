@@ -1,0 +1,28 @@
+Name:Garruk the Slayer - Relentless
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-7/+5 
+
+############### WORKING ABILITIES ##################
+
+T:Mode$ NewGame | ValidPlayer$ You | Execute$ StartGame | TriggerDescription$ "Battle With Garruk Avatar!","When the game starts, if Garruk the Slayer Avatar wins the flip Garruk the Slayer will skip his next turn.","Otherwise you start with an extra turn."
+SVar:StartGame:DB$ SkipTurn | NumTurns$ 1 | Defined$ You | SubAbility$ UnMulligan
+
+T:Mode$ NewGame | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigChange | TriggerDescription$ At the start of the game, Garruk the Slayer Avatar searchs its library for Garruk the Slayer and puts it onto the battlefield, then Garruk the Slayer Avatar shuffles his library.
+SVar:TrigChange:DB$ChangeZone | Origin$ Library | Destination$ Battlefield | ChangeType$ Card.Garruk | ChangeNum$ 1 | ShuffleNonMandatory$ True
+
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Card.Planeswalker | Execute$ TrigFromGraveyard | OptionalDecider$ You | TriggerController$ TriggeredCardController | TriggerDescription$ When CARDNAME dies or is put into exile from the battlefield, return it to the battlefield.
+SVar:TrigFromGraveyard:DB$ChangeZone | Defined$ TriggeredCard | Origin$ Graveyard | Destination$ Battlefield 
+
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ Xenagos Avatar can't draw cards.
+
+A:AB$ Token | ActivationZone$ Command | PlayerTurn$ True | ActivationLimit$ 1 | Cost$ AddCounter<0/CHARGE> | Vanguard$ True | TokenScript$ g_2_2_wolf | LegacyImage$ g 2 2 wolf m15 | SpellDescription$ Create a 2/2 green Wolf creature token.
+
+S:Mode$ Continuous | Affected$ Planeswalker.YouCtrl |  EffectZone$ Command  | AddKeyword$ Hexproof | Description$ Planeswalkers you control has hexproof.
+S:Mode$ Continuous | Affected$ Planeswalker.YouCtrl |  EffectZone$ Command  |AddKeyword$ Shroud | Description$ Planeswalkers you control has Shroud.
+
+S:Mode$ Continuous | Affected$ Planeswalker.YouOwn | EffectZone$ Graveyard | RemoveKeyword$ Hexproof | AddHiddenKeyword$ CARDNAME can't have or gain Hexproof | Description$ Planeswalkers you control lose hexproof while in the graveyard.
+S:Mode$ Continuous | Affected$ Planeswalker.YouOwn | EffectZone$ Graveyard | RemoveKeyword$ Shroud | AddHiddenKeyword$ CARDNAME can't have or gain Shroud | Description$ Planeswalkers you control lose hexproof Shroud in the graveyard.
+
+
+Oracle:At the start of the game, Garruk the Slayer Avatar searches his library for Garruk the Slayer and puts it into the battle, then shuffle his library.\n[0]: Create a 2/2 green Wolf creature token.\n"When this Planeswalker dies, return it to the battlefield under its owner's control."

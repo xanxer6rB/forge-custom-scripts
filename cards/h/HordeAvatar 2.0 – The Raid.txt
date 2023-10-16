@@ -1,0 +1,101 @@
+Name:Horde Magic Avatar 2.0 – The Raid-inTstng
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-7/+40
+
+# TODO: Define a SVar:[name]:DB$ variable name for most if not all existing ability/rule scripts, change some existing variable parameter and
+# TODO: convert Vanguard to a "Blinking" - Enchantment that gives any amount of players an emblem with predefined rules
+# TODO: use cuWagic_Blitzkrieg as a reference.
+
+#####################################################################################################
+#
+#	YOU VS Ai - COMPLETEDISH: Horde 2.0 Magic Variant – The Raid
+#                    BUG: You see the stacking order of Horde library after selecting boss and color.
+#                    BUG: If Horde shuffles library it will undo stacking order you created.
+#   YOU VS multiple Ai - needsTesting
+#####################################################################################################
+
+# GAME START EVENTS
+T:Mode$ NewGame | ValidPlayer$ Opponent | Execute$ DBBoss | TriggerDescription$ When the game starts you will be prompt to select your first Legendary creature that will act as a "Boss" and then prompt to choose a color. The color chosen will grab all cards from the Hordes library and stack it on top of your selected "Boss". You can do this as many times as you want but 5 is suggested with having the idea of stacking one color onto the previously chosen color and having a "Boss" at the end of each color. Time to Build your Adventure. Lets get started.
+SVar:DBBoss:DB$ ChangeZone | Origin$ Sideboard | Destination$ Library | LibraryPosition1$ 0 | ChangeType$ Creature.Legendary | Chooser$ Opponent | ChangeNum$ 1 | SelectPrompt$ Select a Legendary card for a Boss | RememberChanged$ True | Reveal$ False | IsCurse$ True | Mandatory$ True | Shuffle$ False | DifferentNames$ True | SubAbility$ DBColorName
+SVar:DBColorName:DB$ ChooseColor | Defined$ Player.Opponent | Chooser$ Opponent | SubAbility$ CB1
+SVar:CB1:DB$ ChangeZone | Origin$ Library | Destination$ Library | LibraryPosition2$ 0 | ChangeNum$ GXFetch | ChangeType$ Artifact,Card.Creature+ChosenColor+nonLegendary,Instant.ChosenColor,Sorcery.ChosenColor,Enchantment.ChosenColor,Land.ChosenColor | References$ GXFetch | AtRandom$ True | Reveal$ False | IsCurse$ True | Mandatory$ True | Shuffle$ False | SubAbility$ ChooseBossAgain
+SVar:GXFetch:Count$ChosenColorInYourLibrary.Card
+SVar:ChooseBossAgain:DB$ Vote | Defined$ Player.Opponent | VoteYes - Choose another Legendary creature and color$ DBBoss | VoteNo - To continue$ DB1Cleanup | VoteType$ Yes - Choose another Legendary creature and color,No - To continue
+SVar:DB1Cleanup:DB$ Cleanup | ClearRemembered$ True
+
+# Minimum life total script - checks if opponents life is 40. If life is less than 40, sets life total to 40.
+T:Mode$ NewGame | CheckSVar$ SurvCurLife | SVarCompare$ LE39 | References$ SurvCurLife | Execute$ SurvivorSetLife | TriggerDescription$ When the game starts each survivor's life total becomes 40.
+SVar:SurvCurLife:PlayerCountOpponents$LifeTotal
+SVar:SurvivorSetLife:DB$ SetLife | Defined$ Opponent | LifeAmount$ 40
+
+# Setup turns - the Horde skips its first two turns
+T:Mode$ NewGame | Execute$ HordeSkipTurns | TriggerDescription$ When the game begins, the Horde skips its next two turns.
+SVar:HordeSkipTurns:DB$ SkipTurn | NumTurns$ 2 | Defined$ You
+
+# Setup turns - the Horde cannot go first
+T:Mode$ Phase | Phase$ Upkeep |  EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | CheckSVar$ NumTurns | SVarCompare$ EQ1 | References$ NumTurns | Execute$ HordeEndTurn | TriggerDescription$ If the Horde goes first, end the turn.
+SVar:NumTurns:Count$TotalTurns
+SVar:HordeEndTurn:DB$ EndTurn
+
+# HORDE TURN
+# Upkeep event
+T:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | CheckSVar$ NumTurns | SVarCompare$ GE2 | References$ NumTurns | Execute$ TrigHordeCascade | EffectZone$ Command | TriggerDescription$ The Horde reveals the top card of its library until it reveals a nontoken card, casts that card and puts all token creatures onto the battlefield.
+SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Amount$ 1 | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | SubAbility$ HordeCascadeCast
+SVar:HordeCascadeCast:DB$ Play | Defined$ Remembered | WithoutManaCost$ True | Optional$ True | SubAbility$ HordeCascadeCreateToken
+SVar:HordeCascadeCreateToken:DB$ CopyPermanent | Defined$ ValidAll Card.IsImprinted | SubAbility$ HordeCascadeCleanup
+SVar:HordeCascadeCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
+
+# Horde can play cards from hand for free and Commander for free
+S:Mode$ Continuous | Affected$ Card.nonLand+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand without paying their mana costs.
+S:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | Description$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
+SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
+
+# HORDE RULES
+# Lands the Horde controls have Vanishing 2 (why not?)
+S:Mode$ Continuous | EffectZone$ Command,Exile,Graveyard | AffectedZone$ Battlefield | Affected$ Land.YouCtrl | AddKeyword$ Vanishing:2 | HiddenDescription$ Lands the Horde controls have Vanishing:2.
+
+# Horde can't draw cards
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | Description$ The Horde can't draw cards.
+
+# Horde can't shuffle
+#S:Mode$ CantTarget | EffectZone$ Command | AffectedZone$ Library | ValidCard$ Card.YouOwn | Activator$ Player | Description$ Can't target Horde's library.
+#S:Mode$ Continuous | EffectZone$ Command | Affected$ You | AddKeyword$ CantTargetLibrary | Description$ The Horde can't shuffle.
+#S:Mode$ CantTarget | EffectZone$ Command | AffectedZone$ Library | ValidCard$ Card.YouOwn | Activator$ Opponent | Description$ The Horde can't shuffle.
+
+# Creatures the Horde controls have Haste
+#S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddKeyword$ Haste | Description$ Creatures the Horde controls have haste.
+
+# Creatures the Horde controls attack each combat if able
+#S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddHiddenKeyword$ CARDNAME attacks each combat if able. | Description$ Creatures the Horde controls attack each combat if able.
+
+# Creatures the Horde controls can't block
+#S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddHiddenKeyword$ CARDNAME can't block. | Description$ Creatures the Horde controls can't block.
+
+# Horde mills when it loses life
+#T:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it puts that many cards from the top of its library into its graveyard. (Damage causes loss of life.)
+#SVar:TrigMill:DB$ Mill | Defined$ You | NumCards$ X | References$ X
+#SVar:X:TriggerCount$LifeAmount
+
+# Artifacts are considered "Loot" and will be put onto your battlefield instead of Hordes
+R:Event$ Moved | ValidCard$ Card.Artifact+nonCreature+nonVehicle+YouCtrl | Destination$ Battlefield | ReplaceWith$ DBChooseOpp | Layer$ Control | Description$ • An Artifact has been found and loot has been gathered.
+SVar:DBChooseOpp:DB$ ChoosePlayer | Defined$ You | Choices$ Player.Opponent | ChoiceTitle$ Choose an opponent to give control to: | AILogic$ Curse | SubAbility$ MoveToPlay
+SVar:MoveToPlay:DB$ ChangeZone | Hidden$ True | Origin$ All | Destination$ Battlefield | Defined$ ReplacedCard | GainControl$ True | NewController$ ChosenPlayer | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+# Exile Horde "tokens" if they hit the graveyard
+R:Event$ Moved | ValidCard$ Card.Horde | Destination$ Graveyard | ReplaceWith$ HordeLibraryToExile | Description$ If a Horde token would be put into your graveyard from anywhere, exile it instead.
+SVar:HordeLibraryToExile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Library | Destination$ Exile
+
+# WIN CONDITION
+# Survivers win if they the Horde has no cards in Library or Graveyard.
+# Can't win otherwise.
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ Survivors can't win the game as long as the Horde controls at least one creature and has at least one card in its library.
+S:Mode$ Continuous | EffectZone$ Command | Affected$ You | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't lose the game. | Description$ The Horde can't lose the game as long as it controls at least one creature and has at least one card in its library.
+T:Mode$ Phase | Phase$ End of Turn |  EffectZone$ Command | ValidPlayer$ Opponent | TriggerZones$ Command | CheckSVar$ W | SVarCompare$ EQ0 | References$ Y,Z,W | Execute$ TrigYouHaveSurvived | TriggerDescription$ At the end of your turn, if the Horde controls no creatures and has no cards in its library, you have surived the game.
+SVar:TrigYouHaveSurvived:DB$ WinsGame | Defined$ Opponent
+SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
+SVar:Z:Count$Valid Creature.YouCtrl
+SVar:W:SVar$Y/Plus.Z
+
+Oracle:Hand -7, Life +80\n The Horde V2.0 - The Raid is a DnD style Horde game where you choose a Boss and a color for each stage of the game.\n If the Horde controls no creatures and has no cards in its library
