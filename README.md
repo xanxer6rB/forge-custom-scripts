@@ -10,8 +10,8 @@ Add suggested card script to your library before starting a match.
      - Face the Hydra Challenge: Challenge 1 - FaceTheHydra_Rev3
      - Battle the Horde Challenge: Challenge 2 - Battle the Horde_Rev2
      - Defeat a God Challenge: Challenge 3 Defeat a God Rev2
-     - Random other formats for testing 
-       - Type 4 format from this example: 
+     - Random other formats for testing
+       - A Type 4 format style game from this example: 
 https://www.slightlymagic.net/forum/viewtopic.php?f=52&t=30384)
 I have also been trying to script some already existing custom sets like:
 - StarWars the Gathering
