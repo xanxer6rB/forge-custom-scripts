@@ -13,6 +13,7 @@ Add suggested card script to your library before starting a match.
      - Random other formats for testing
        - A Type 4 format style game from this example: 
 https://www.slightlymagic.net/forum/viewtopic.php?f=52&t=30384)
+
 I have also been trying to script some already existing custom sets like:
 - StarWars the Gathering
 - Zelda
