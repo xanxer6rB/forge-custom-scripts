@@ -16,8 +16,18 @@ https://www.slightlymagic.net/forum/viewtopic.php?f=52&t=30384)
        - Wagic the Homebrew - Blitzkrieg
 
 I have also been trying to script some already existing custom sets like:
-- StarWars the Gathering
-- Zelda
+- StarWars the Gathering:
+  - Basic set - stwtg
+  - SOLO - stwsolo
+  - The Last Jedi - stwtlj
+  - Rogue One - stwro
+  - The Force Awakens - stwtfa
+
+Want to start list
+- Zelda:
+  - Legend of Zelda - LoZ
+  - Link to the Past - LttP
+  - Links Awakening - LoA
 - Pokemon
 
 To use files just add them to your custom folder
