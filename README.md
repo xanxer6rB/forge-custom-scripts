@@ -16,7 +16,7 @@ https://www.slightlymagic.net/forum/viewtopic.php?f=52&t=30384)
        - Wagic the Homebrew - Blitzkrieg
 
 I have also been trying to script some already existing custom sets like:
-- Star Wars: The Gathering
+- Star Wars: The Gathering:
   - Basic set - stwtg
   - SOLO - stwsolo
   - The Last Jedi - stwtlj
