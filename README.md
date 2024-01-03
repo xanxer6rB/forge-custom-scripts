@@ -23,13 +23,6 @@ I have also been trying to script some already existing custom sets like:
   - Rogue One - stwro
   - The Force Awakens - stwtfa
 
-Want to start list
-- Zelda:
-  - Legend of Zelda - LoZ
-  - Link to the Past - LttP
-  - Links Awakening - LoA
-- Pokemon
-
 To use files just add them to your custom folder
 
 I welcome any contributions to the scripts or suggestions to help improve/optimize them to help make them run smoother and more playable for the Ai or even adding features to the format(s).
