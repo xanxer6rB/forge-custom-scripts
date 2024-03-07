@@ -1,6 +1,0 @@
-Name:Droid
-ManaCost:no cost
-Types:Artifact Creature Droid
-Colors:colorless
-PT:1/1
-Oracle:

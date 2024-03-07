@@ -1,6 +1,0 @@
-Name:Ewok
-ManaCost:no cost
-Types:Creature Ewok
-Colors:colorless
-PT:1/1
-Oracle:

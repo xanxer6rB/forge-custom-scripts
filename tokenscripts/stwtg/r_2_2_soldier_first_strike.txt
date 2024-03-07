@@ -1,7 +1,0 @@
-Name:Royal Guard
-ManaCost:no cost
-Types:Creature Soldier
-Colors:red
-PT:2/2
-K:First strike
-Oracle:First strike

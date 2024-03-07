@@ -1,7 +1,0 @@
-Name:B-Wing
-ManaCost:no cost
-Types:Artifact Creature Rebel Starship
-Colors:colorless
-PT:2/3
-K:Shadow
-Oracle:
