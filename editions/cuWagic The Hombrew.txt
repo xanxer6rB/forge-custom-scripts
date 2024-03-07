@@ -1,0 +1,12 @@
+[metadata]
+Code=wthg
+Date=2020-01-14
+Name=cuWagic The Homebrew - Game Modes
+Code2=wthg
+MciCode=
+Type=Other
+
+[cards]
+1 S WagicTheHomebrew Blitzkrieg
+
+[tokens]

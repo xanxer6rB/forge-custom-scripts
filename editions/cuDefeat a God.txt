@@ -1,0 +1,8 @@
+[metadata]
+Code=TDAG
+Date=2017-11-24
+Name=cuDefeat a God
+Type=Other
+
+[cards]
+1 S Challenge 3 Defeat a God Rev2

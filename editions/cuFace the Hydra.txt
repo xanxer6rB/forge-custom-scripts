@@ -1,0 +1,8 @@
+[metadata]
+Code=TFTH
+Date=2017-11-24
+Name=cuFace the Hydra
+Type=Other
+
+[cards]
+1 S Challenge 1 - FaceTheHydra_Rev3

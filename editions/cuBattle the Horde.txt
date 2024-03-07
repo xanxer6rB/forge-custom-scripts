@@ -1,0 +1,8 @@
+[metadata]
+Code=TBTH
+Date=2019-09-30
+Name=cuBattle the Horde
+Type=Other
+
+[cards]
+1 S Challenge 2 - Battle the Horde_Rev2
