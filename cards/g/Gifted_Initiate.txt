@@ -1,9 +1,0 @@
-Name:Gifted Initiate
-ManaCost:1 W
-Types:Creature Human Jedi
-PT:2/1
-T:Mode$ ChangesZone | ValidCard$ Card.Self | Origin$ Any | Destination$ Battlefield | Execute$ TrigTap | OptionalDecider$ You | TriggerZones$ Battlefield | TriggerDescription$ Whenever CARDNAME enters the battlefield, you may tap target creature and CARDNAME.
-SVar:TrigTap:DB$ Tap | ValidTgts$ Creature | TgtPrompt$ Select target creature | SubAbility$ TapSelf
-SVar:TapSelf:DB$ Tap | ValidCard$ Card.Self
-A:AB$ ChangeZone | Cost$ 1 W | Origin$ Battlefield | Destination$ Hand | SorcerySpeed$ True | SpellDescription$ Return CARDNAME to its owner's hand. Meditate only any time you could cast a sorcery.
-Oracle:Whenever Gifted Initiate enters the battlefield, you may tap target creature and Gifted Initiate.\nMeditate {1}{W} (Return this creature to its owner's hand. Meditate only as a sorcery.)

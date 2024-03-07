@@ -1,9 +1,0 @@
-Name:Upsilon-class Shuttle
-ManaCost:5
-Types:Artifact Creature Starship
-PT:2/3
-K:Shadow
-T:Mode$ Attacks | ValidCard$ Card.Self | Execute$ TrigChoose | TriggerDescription$ Whenever CARDNAME attacks, target creature you control gains spaceflight until end of turn.
-SVar:TrigChoose:DB$ ChooseCard | Defined$ DefendingPlayer | Amount$ 1 | Choices$ Creature.YouCtrl | Mandatory$ True | SubAbility$ GainsSpcFl
-SVar:GainsSpcFl:DB$ Pump | ValidTgts$ Creature.YouCtrl | TgtPrompt$ Select target creature | KW$ Shadow | SpellDescription$
-Oracle:Spaceflight(This creature can only block or be blocked by creatures with spaceflight.)\nWhenever Upsilon-class Shuttle attacks, target creature you control gains spaceflight until end of turn.

@@ -1,8 +1,0 @@
-Name:Chirrut Imwe
-ManaCost:G W U
-Types:Legendary Creature Human Monk
-PT:3/3
-S:Mode$ Continuous | Affected$ Creature.YouCtrl | CanBlockAmount$ 2 | AddHiddenKeyword$ CARDNAME can block up to two additional creatures each combat. | Description$ CARDNAME can block up to two additional creatures each combat.
-SVar:NonStackingEffect:True
-A:AB$ Pump | Cost$ 1 W | Defined$ Self | KW$ Prevent all combat damage that would be dealt to CARDNAME. | SpellDescription$ Prevent all combat damage that would be dealt to CARDNAME this turn.
-Oracle:Chirrut Imwe can block up to two additional creatures each combat.\n{1}{W}: Prevent all combat damage that would be dealt to Chirrut Imwe this turn.

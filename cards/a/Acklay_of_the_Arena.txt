@@ -1,8 +1,0 @@
-Name:Acklay of the Arena
-ManaCost:1 R G W
-Types:Creature Insect Beast
-PT:5/4
-K:Monstrosity:1:2 R G W
-T:Mode$ BecomeMonstrous | ValidCard$ Creature.YouCtrl | TriggerZones$ Battlefield | Execute$ TrigFight | TriggerDescription$ Whenever a creature becomes monstrous, it fights target creature an opponent controls.
-SVar:TrigFight:DB$ Fight | Defined$ TriggeredCardLKICopy | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature an opponent controls to fight.
-Oracle:{2}{R}{G}{W}: Monstrosity 1 (If this creature isn't monstrous, put a +1/+1 counter on it and it becomes monstrous.)\nWhenever a creature you control becomes monstrous, it fights target creature an opponent controls.

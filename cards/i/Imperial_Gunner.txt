@@ -1,7 +1,0 @@
-Name:Imperial Gunner
-ManaCost:R
-Types:Creature Human Soldier
-PT:1/2
-A:AB$ DealDamage | Cost$ 1 T | ValidTgts$ Player,Creature.Starship | TgtPrompt$ Select target player or starship | NumDmg$ 1 | SpellDescription$ CARDNAME deals 1 damage to target player or Starship creature.
-SVar:NonCombatPriority:1
-Oracle:{1},{T}: Imperial Gunner deals 1 damage to target player or Starship creature.

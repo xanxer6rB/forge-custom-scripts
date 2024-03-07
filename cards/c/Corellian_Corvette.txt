@@ -1,8 +1,0 @@
-Name:Corellian Corvette
-ManaCost:3 G
-Types:Artifact Creature Starship
-PT:3/3
-K:Shadow
-K:You may have CARDNAME assign its combat damage as though it weren't blocked.
-
-Oracle:Spaceflight\nYou may have Corellian Corvette assign its combat damage as though it weren't blocked.

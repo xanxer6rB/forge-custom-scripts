@@ -1,6 +1,0 @@
-Name:Unified Lunge
-ManaCost:0
-Types:Sorcery
-A:SP$ DamageAll | Cost$ 0 | ValidPlayers$ Player | TgtPrompt$ each player | NumDmg$ X | References$ X | SpellDescription$ CARDNAME deals damage to target player or planeswalker equal to the number of Heads the Hydra controls.
-SVar:X:Count$TypeOnBattlefield.Head
-Oracle:Unified Lunge deals damage to each player equal to the number of Heads the Hydra controls.

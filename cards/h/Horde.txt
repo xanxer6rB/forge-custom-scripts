@@ -1,5 +1,0 @@
-Name:Horde
-ManaCost:no cost
-Types:Creature Horde
-PT:0/0
-Oracle:When revealed randomly generate a creature token most prominent in library.

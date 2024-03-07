@@ -1,8 +1,0 @@
-Name:U-Wing
-ManaCost:2 U
-Types:Artifact Creature Rebel Starship
-PT:2/2
-K:Shadow
-S:Mode$ Continuous | Affected$ Card.Self+tapped | AddPower$ 1 | Description$ As long as U-Wing  tapped, it gets +1/+0.
-S:Mode$ Continuous | Affected$ Card.Self+untapped | AddToughness$ 1 | Description$ As long as U-Wing is untapped, it gets +0/+1.
-Oracle:Spaceflight (This creature can only block or be blocked by creatures with spaceflight.")\nAs long as U-Wing  tapped, it gets +1/+0.\nAs long as U-Wing is untapped, it gets +0/+1.

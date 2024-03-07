@@ -1,5 +1,0 @@
-Name:Horde Magic Survivor Avatar
-ManaCost:no cost
-Types:Vanguard
-HandLifeModifier:+0/+0
-Oracle: Can you survive the Horde?

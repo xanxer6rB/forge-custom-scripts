@@ -1,6 +1,0 @@
-Name:Impulsive Charge
-ManaCost:no cost
-Types:Sorcery
-A:SP$ AnimateAll | ValidCards$ Creature.Reveler+YouCtrl | PreCombatMain$ True | Keywords$ Haste & CARDNAME attacks each combat if able. | RemoveKeywords$ CARDNAME can't attack. | SubAbility$ DBCleanup | SpellDescription$ Until end of turn, Reveler creatures lose defender, gain haste and attacks this turn if able.
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
-Oracle:At the begnning of combat this turn, all Revelers gain haste until end of turn and attack this combat if able.

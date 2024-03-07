@@ -1,6 +1,0 @@
-Name:Ewok Ambush
-ManaCost:2 G
-Types:Instant
-A:SP$ Token | Cost$ 2 G | TokenAmount$ 2 | TokenScript$ g_1_1_ewok | LegacyImage$ g 1 1 ewok stwtg | SpellDescription$ Create two 1/1 green Ewok creature tokens.
-DeckHas:Ability$Counters & Ability$Token
-Oracle:Create two 1/1 green Ewok creature tokens.

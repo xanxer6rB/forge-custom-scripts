@@ -1,7 +1,0 @@
-Name:TIE Bomber
-ManaCost:2 B
-Types:Artifact Creature Starship
-PT:3/2
-K:Shadow
-A:AB$ Debuff | Cost$ 1 | Keywords$ Shadow | Defined$ Self | ActivationPhases$ BeginCombat->EndCombat | SpellDescription$ CARDNAME loses spaceflight until end of turn.
-Oracle:Spaceflight (This creature can block or be blocked by creatures with spaceflight.)\nWhenever TIE Interceptor attacks, each opponent loses 2 life.

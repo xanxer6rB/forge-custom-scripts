@@ -1,7 +1,0 @@
-Name:Acquire Target
-ManaCost:2 B
-Types:Sorcery
-A:SP$ Draw | Cost$ 2 B | NumCards$ 2 | ValidTgts$ Player | TgtPrompt$ Choose a player | SubAbility$ DBLoseLife | AIManaPref$ B | SpellDescription$ Target player draws two cards and loses 2 life. Adamant — If at least three black mana was spent to cast this spell, create a Food token. (It's an artifact with "{2}, {T}, Sacrifice this artifact: You gain 2 life.")
-SVar:DBLoseLife:DB$ LoseLife | LifeAmount$ 2 | Defined$ Targeted | SubAbility$ PutBounty
-SVar:PutBounty:DB$ PutCounter | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature an opponent controls | CounterType$ BOUNTY | CounterNum$ 1 | SpellDescription$ Put a bounty counter on target creature an opponent controls.
-Oracle:Target player draws two cards and loses 2 life.\nPut a bounty counter on up to one target creature an opponent controls.

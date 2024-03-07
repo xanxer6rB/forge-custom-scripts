@@ -1,8 +1,0 @@
-Name:Hazard Trooper
-ManaCost:4 B
-Types:Creature Human Cyborg Trooper
-PT:1/1
-S:Mode$ Continuous | Affected$ Creature.Trooper+YouCtrl | AddKeyword$ Intimidate | Description$ Trooper creatures you control have intimidate.
-SVar:PlayMain1:TRUE
-SVar:BuffedBy:Trooper
-Oracle:Trooper creatures you control have intimidate.

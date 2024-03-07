@@ -1,4 +1,0 @@
-Name:March of the Droids
-ManaCost:2 W U B
-Types:Sorcery
-Oracle:WIP\nRemove all repair counters from all cards in your graveyard. Return each card with a repair counter removed this way from the graveyard to the battlefield. Create a 1/1 colorless Droid artifact creature token for each Droid you control.

@@ -1,6 +1,0 @@
-Name:Force Telepathy
-ManaCost:U/B
-Types:Instant
-A:SP$ RevealHand | Cost$ U/B | ValidTgts$ Player | SubAbility$ DBScry | SpellDescription$ Target player reveals their hand. Scry 2.
-SVar:DBScry:DB$Scry | ScryNum$ 2
-Oracle:Target player reveals his or her hand.\nScry 2

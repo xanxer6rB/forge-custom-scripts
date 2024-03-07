@@ -1,9 +1,0 @@
-Name:The Warrior
-ManaCost:0
-Types:Artifact Hero
-K:Shroud
-K:Indestructible
-K:Protection from everything
-A:AB$ Pump | Cost$ T | ValidTgts$ Creature | TgtPrompt$ Select target creature | KW$ Haste | SpellDescription$ Target creature gains haste until end of turn.
-Oracle:{T}: Target creature gains haste until end of turn.
-

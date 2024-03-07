@@ -1,6 +1,0 @@
-Name:Thermal Detonator
-ManaCost:1
-Types:Artifact
-A:AB$ DealDamage | Cost$ 2 T Sac<1/CARDNAME> | ValidTgts$ Creature.withoutSpaceflight,Player,Planeswalker | TgtPrompt$ Select any target | NumDmg$ 2 | SpellDescription$ CARDNAME deals 2 damage to any target.
-SVar:
-Oracle:{2}, {T}, Sacrifice Thermal Detonator: It deals 2 damage to target creature without spaceflight or target player.

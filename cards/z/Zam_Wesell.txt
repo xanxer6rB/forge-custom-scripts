@@ -1,5 +1,0 @@
-Name:Zam Wesell
-ManaCost:2 U U
-Types:Legendary Creature Shapeshifter Hunter
-PT:2/2
-Oracle:When you cast Zam Wesell, target opponent reveals his or her hand. You may choose a creature card from it and have Zam Wesell enter the battlefield as a copy of that creature card.

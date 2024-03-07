@@ -1,8 +1,0 @@
-Name:The Battle of Endor
-ManaCost:X X G G G
-Types:Sorcery
-A:SP$ Token | Cost$ X X G G G | TokenAmount$ X | TokenScript$ g_1_1_ewok | TokenOwner$ You | LegacyImage$ g 1 1 ewok stwtg | References$ X | SubAbility$ DBPutCounter | SpellDescription$ Create X 1/1 green Ewok creature tokens.
-SVar:DBPutCounter:DB$ PutCounterAll | ValidCards$ Creature.YouCtrl | CounterType$ P1P1 | CounterNum$ X | SubAbility$ DBPump | SpellDescription$ Put X +1/+1 counter on each creature you control.
-SVar:DBPump:DB$ PumpAll | ValidCards$ Creature.YouCtrl | KW$ Trample & Haste | SpellDescription$ Creatures you control gain trample and haste until end of turn.
-SVar:X:Count$xPaid
-Oracle:Create X 1/1 green Ewok creature tokens. Put X counters on each creature you control. Creatures you control gain trample and haste until end of turn.

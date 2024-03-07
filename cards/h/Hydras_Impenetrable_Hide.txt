@@ -1,6 +1,0 @@
-Name:Hydra's Impenetrable Hide
-ManaCost:0
-Types:Sorcery
-A:SP$ PumpAll | Cost$ 0 | ValidCards$ Creature.Head | KW$ Indestructible | UntilYourNextTurn$ True | SpellDescription$ Each Head the Hydra controls gain indestructible until end of turn. (Damage and effects that say "destroy" don't destroy them.)
-
-Oracle:Each Head the Hydra controls gain indestructible until end of turn. (Damage and effects that say "destroy" don't destroy them.)

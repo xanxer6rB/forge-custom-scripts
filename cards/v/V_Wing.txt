@@ -1,7 +1,0 @@
-Name:V-Wing
-ManaCost:1 R
-Types:Artifact Creature Starship
-PT:1/2
-K:Haste
-K:Shadow
-Oracle:Hast\nSpaceflight (This creature can block or be blocked by creatures with spaceflight.)

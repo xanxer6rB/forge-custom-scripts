@@ -1,5 +1,0 @@
-Name:Vitality Salve
-ManaCost:0
-Types:Sorcery
-
-Oracle:At the beginning of the Horde's precombat main phase, reveal an additional card from the top of the Horde's library. The Horde casts that card.\nHero's Reward - When Vitality Salve is put into a graveyard from anywhere, each player returns a creature card from his or her graveyard to the battlefield.

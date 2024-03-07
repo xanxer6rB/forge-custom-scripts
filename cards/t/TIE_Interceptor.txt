@@ -1,9 +1,0 @@
-Name:TIE Interceptor
-ManaCost:2 B
-Types:Artifact Creature Starship
-PT:1/1
-K:Shadow
-T:Mode$ Attacks | ValidCard$ Card.Self | Execute$ DBLoseLife | TriggerDescription$ Whenever CARDNAME attacks, each opponent loses 2 life.
-SVar:DBLoseLife:DB$ LoseLife | Defined$ Player.Opponent | LifeAmount$ 2
-SVar:HasAttackEffect:TRUE
-Oracle:Spaceflight (This creature can block or be blocked by creatures with spaceflight.)\nWhenever TIE Interceptor attacks, each opponent loses 2 life.

@@ -1,6 +1,0 @@
-Name:Deploy The Troops
-ManaCost:4 W
-Types:Instant
-A:SP$ Token | Cost$ 3 B | TokenAmount$ 3 | TokenScript$ w_1_1_trooper | LegacyImage$ w 1 1 trooper stwtg | SpellDescription$ Create three 1/1 white Trooper creature tokens.
-DeckHas:Ability$Counters & Ability$Token
-Oracle:Create three 1/1 white Trooper creature tokens.

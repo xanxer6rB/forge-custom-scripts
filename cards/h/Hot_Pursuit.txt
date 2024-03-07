@@ -1,7 +1,0 @@
-Name:Hot Pursuit
-ManaCost:B R G
-Types:Enchantment
-S:Mode$ Continuous | Affected$ Creature.OppCtrl+counters_GE1_BOUNTY | AddPower$ -1 | AddToughness$ -1 | Description$ Each creature your opponents' control with a bounty counter on it gets -1/-1.
-T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.counters_GE1_BOUNTY | Execute$ TrigPutCounter | Optional$ True | OptionalDecider$ You | TriggerZones$ Battlefield | TriggerDescription$ Whenever a creature dies, if it had a bounty counter on it, you may put a bounty counter on target creature an opponent controls.
-SVar:TrigPutCounter:DB$ PutCounter | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature opponent controls | CounterType$ BOUNTY | CounterNum$ 1 | IsCurse$ True
-Oracle:Each creature your opponents' control with a bounty counter on it gets -1/-1.\nBounty - Whenever a creature an opponent controls with a bounty counter on it dies, you may put a bounty counter on target creature an opponent controls.

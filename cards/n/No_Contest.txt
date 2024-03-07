@@ -1,7 +1,0 @@
-Name:No Contest
-ManaCost:G
-Types:Instant
-A:SP$ Pump | Cost$ G | ValidTgts$ Creature.YouCtrl | TgtPrompt$ Choose target creature you control | SubAbility$ DBFight | SpellDescription$ Target creature you control fights target creature with power less than its power. (Each deals damage equal to its power to the other.)
-SVar:DBFight:DB$ Fight | Defined$ ParentTarget | ValidTgts$ Creature.YouDontCtrl+powerLEX | TgtPrompt$ Choose target creature with less power
-SVar:X:Count$CardPower
-Oracle:WIP\nTarget creature you control fights target creature with power less than its power. (Each deals damage equal to its power to the other.).

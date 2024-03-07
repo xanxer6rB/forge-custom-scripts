@@ -1,8 +1,0 @@
-Name:Dark Decision
-ManaCost:B R
-Types:Sorcery
-A:SP$ Dig | Cost$ B R PayLife<1> | Defined$ You | DigNum$ 10 | ChangeNum$ 1 | ChangeValid$ Creature.nonLand | DestinationZone$ Exile | RememberChanged$ True | RestRandomOrder$ True | Shuffle$ True | SubAbility$ DBEffect | SpellDescription$ Exile the top three cards of your library. You may play them this turn.
-SVar:DBEffect:DB$ Effect | RememberObjects$ RememberedCard | StaticAbilities$ Play | SubAbility$ DBCleanup | ForgetOnMoved$ Exile
-SVar:Play:Mode$ Continuous | MayPlay$ True | EffectZone$ Command | Affected$ Card.IsRemembered | AffectedZone$ Exile | Description$ You may play the exiled cards this turn.
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
-Oracle:As an additional cost to cast Dark Decision, pay 1 life.\nSearch the top 10 cards of your library for a nonland card, exile it, then shuffle your library. Until end of turn, you may cast that card.

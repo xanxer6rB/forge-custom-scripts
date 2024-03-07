@@ -1,8 +1,0 @@
-Name:Y-Wing
-ManaCost:2 U
-Types:Artifact Creature Rebel Starship
-PT:2/3
-K:Shadow
-K:CARDNAME can't block.
-
-Oracle:Spaceflight (This creature can block or be blocked by creatures with spaceflight.)\nY-Wing can't block\nWhenever Y-Wing deals combat damage to a player, tap target creature defending player controls. It doesn't untap during its controller's next untap step.

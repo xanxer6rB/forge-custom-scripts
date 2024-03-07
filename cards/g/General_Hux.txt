@@ -1,9 +1,0 @@
-Name:General Hux
-ManaCost:3 B
-Types:Legendary Creature Human Advisor
-PT:3/3
-T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ DBShade | TriggerDescription$ Whenever General Hux or another nontoken creature you control enters the battlefield under your control, until the end of turn, target creature gains "{B}: CARDNAME gets +1/+1 until end of turn."
-T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Creature.Other+nonToken+YouCtrl | TriggerZones$ Battlefield | Execute$ DBShade | Secondary$ True | TriggerDescription$ Whenever General Hux or another nontoken creature you control enters the battlefield under your control, until the end of turn, target creature gains "{B}: CARDNAME gets +1/+1 until end of turn."
-SVar:DBShade:DB$ Animate | ValidTgts$ Creature | TgtPrompt$ Choose target creature | Abilities$ ABPump | SpellDescription$ Until end of turn, each creature you control becomes black, its creature type becomes Shade, and it gains "{B}: This creature gets +1/+1 until end of turn."
-SVar:ABPump:AB$ Pump | Cost$ B | NumAtt$ +1 | NumDef$ +1 | SpellDescription$ CARDNAME gets +1/+1 until end of turn.
-Oracle:Whenever General Hux or another nontoken creature you control enters the battlefield under your control, until the end of turn, target creature gains "{B}: CARDNAME gets +1/+1 until end of turn."

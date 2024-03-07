@@ -1,6 +1,0 @@
-Name:Interrogation
-ManaCost:1 B
-Types:Sorcery
-A:SP$ Discard | Cost$ 1 B | ValidTgts$ Player | NumCards$ 1 | SubAbility$ DBDiscard | SpellDescription$ Target player discards a card. Then that player discards another card unless they pay 3 life.
-SVar:DBDiscard:DB$ Discard | Defined$ Targeted | NumCards$ 1 | UnlessCost$ PayLife<3> | UnlessPayer$ Targeted
-Oracle:Target player discards a card. Then that player discards another card unless they pay 3 life.

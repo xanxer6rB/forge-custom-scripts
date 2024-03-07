@@ -1,6 +1,0 @@
-Name:Gerrera's Revolutionary
-ManaCost:R
-Types:Creature Barabel Rebel
-PT:2/1
-K:CARDNAME attacks each combat if able.
-Oracle:Gerrera's Revolution attacks each combat if able.

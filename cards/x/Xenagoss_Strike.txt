@@ -1,6 +1,0 @@
-Name:Xenagos's Strike
-ManaCost:no cost
-Types:Sorcery
-A:SP$ DamageAll | NumDmg$ 4 | ValidPlayers$ Player | ValidDescription$ each player. | SubAbility$ DBCleanup | SpellDescription$ CARDNAME deals 4 damage to each player.
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
-Oracle:Xenagos's Strike deals 4 damage to each player.

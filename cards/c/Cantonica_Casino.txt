@@ -1,5 +1,0 @@
-Name:Cantonica Casino
-ManaCost:2
-Types:Artifact
-
-Oracle:{T}:Roll two six-sided dice. If you roll doubles, gain 10 life. Otherwise, lose 1 life.

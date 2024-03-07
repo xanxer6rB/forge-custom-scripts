@@ -1,8 +1,0 @@
-Name:Escape Pod
-ManaCost:W
-Types:Instant
-A:SP$ ChangeZone | Cost$ W | ValidTgts$ Creature.YouOwn+Other | TgtPrompt$ Select another target creature you own | Origin$ Battlefield | Destination$ Exile | RememberChanged$ True | SubAbility$ DelTrig | SpellDescription$ Exile another target creature you own. Return it to the battlefield under your control at the beginning of the next end step.
-SVar:DelTrig:DB$ DelayedTrigger | Mode$ Phase | Phase$ End of Turn | Execute$ TrigReturn | RememberObjects$ RememberedLKI | TriggerDescription$ Return exiled card to the battlefield. | SubAbility$ DBCleanup
-SVar:TrigReturn:DB$ ChangeZone | Origin$ Exile | Destination$ Battlefield | Defined$ DelayTriggerRememberedLKI
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
-Oracle:Exile target creature you control. Return that card to the battlefield under your control at the beginning of your next end step.

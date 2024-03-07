@@ -1,8 +1,0 @@
-Name:Disorienting Glower
-ManaCost:0
-Types:Sorcery
-
-A:SP$ Effect | Cost$ 0 | Defined$ Opponent | Name$ Disorienting Glower | StaticAbilities$ STCantBeCast | Duration$ UntilTheEndOfYourNextTurn | AILogic$ BeginningOfOppTurn | SpellDescription$ Until end of turn, target player can't cast instant or sorcery spells, and that player can't activate abilities that aren't mana abilities.
-SVar:STCantBeCast:Mode$ CantBeCast | ValidCard$ Instant,Sorcery,Creature,Enchantment,Artifact,Planeswalker | Caster$ Opponent | EffectZone$ Command | UntilYourNextTurn$ True | Description$ Target player can't cast instant or sorcery spells, and that player can't activate abilities that aren't mana abilities.
-
-Oracle:Players can't cast spells until the Hydra's next turn.

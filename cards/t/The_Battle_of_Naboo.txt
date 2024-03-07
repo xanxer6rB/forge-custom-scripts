@@ -1,8 +1,0 @@
-Name:The Battle of Naboo
-ManaCost:X X U U
-Types:Sorcery
-A:SP$ ChangeZone | Cost$ X X U U | ValidTgts$ Creature | TargetMin$ 0 | TargetMax$ X | TgtPrompt$ Select target creature | Origin$ Battlefield | Destination$ Hand | References$ X | SubAbility$ DBDraw | SpellDescription$ Return up to X target creatures to their owners' hands, where X is one plus the number of cards named Aether Burst in all graveyards as you cast CARDNAME.
-SVar:DBDraw:DB$ Draw | Defined$ You | NumCards$ Y | References$ Y
-SVar:X:Count$xPaid
-SVar:Y:Count$xPaid/Twice
-Oracle:Return X target creatures to their owner's hands. Draw twice that many cards.

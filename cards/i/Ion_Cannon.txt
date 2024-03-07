@@ -1,7 +1,0 @@
-Name:Ion Cannon
-ManaCost:3 W
-Types:Artifact Creature Construct
-PT:4/4
-K:Defender
-A:AB$ Debuff | Cost$ T | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target creature | Keywords$ Shadow | SpellDescription$ Target creature an opponent controls loses spaceflight (shadow) until end of turn.
-Oracle:Defender\n{T}: Target creature an opponent controls loses spaceflight (shadow) until end of turn.

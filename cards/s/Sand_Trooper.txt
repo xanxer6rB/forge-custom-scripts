@@ -1,8 +1,0 @@
-Name:Sand Trooper
-ManaCost:1 W
-Types:Creature Human Trooper
-PT:2/2
-S:Mode$ Continuous | Affected$ Creature.Trooper+YouCtrl | AddKeyword$ Vigilance | Description$ Trooper creatures you control have vigilance.
-SVar:PlayMain1:TRUE
-SVar:BuffedBy:Trooper
-Oracle:Trooper creatures you control have vigilance

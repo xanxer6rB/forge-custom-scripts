@@ -1,8 +1,0 @@
-Name:The Explorer
-ManaCost:0
-Types:Artifact Hero
-K:Shroud
-K:Indestructible
-K:Protection from everything
-S:Mode$ Continuous | Affected$ You | AdjustLandPlays$ 1 | Description$ You may play an additional land on each of your turns.
-Oracle:You may play an additional land on each of your turns.

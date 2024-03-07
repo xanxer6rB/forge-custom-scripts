@@ -1,8 +1,0 @@
-Name:The Avenger
-ManaCost:0
-Types:Artifact Hero
-K:Shroud
-K:Indestructible
-K:Protection from everything
-A:AB$ Pump | Cost$ 3 T | ValidTgts$ Creature.YouCtrl | TgtPrompt$ Select target creature you control | KW$ Deathtouch | SpellDescription$ Target creature you control gains deathtouch until end of turn.
-Oracle:{3}{T}: Target creature you control gains deathtouch until end of turn. (Any amount of damage it deals to a creature is enough to destroy it.)

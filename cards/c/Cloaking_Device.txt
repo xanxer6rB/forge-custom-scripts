@@ -1,9 +1,0 @@
-Name:Cloaking Device
-ManaCost:1 U
-Types:Enchantment Aura
-K:Enchant creature
-A:SP$ Attach | Cost$ 1 U | ValidTgts$ Creature | AILogic$ Pump
-S:Mode$ Continuous | Affected$ Creature.EnchantedBy | AddHiddenKeyword$ Unblockable | AddSVar$ AE | Description$ Enchanted creature can't be blocked.
-T:Mode$ Attacks | ValidCard$ Creature.EnchantedBy | Execute$ TrigLoseLife | TriggerDescription$ Whenever CARDNAME or enchanted creature attacks, defending player loses 1 life.
-SVar:TrigLoseLife:DB$ LoseLife | Defined$ TriggeredDefendingPlayer | LifeAmount$ 1
-Oracle:Enchant creture\nEnchanted creature can't be blocked\nWhenever enchanted creature attacks, defending player loses 1 life.

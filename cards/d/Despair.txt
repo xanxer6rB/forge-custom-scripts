@@ -1,5 +1,0 @@
-Name:Despair
-ManaCost:B B
-Types:Instant
-A:SP$ Sacrifice | Cost$ B B | Amount$ 1 | SacValid$ Creature | Defined$ Player.Opponent | SpellDescription$ Each opponent sacrifices a creature.
-Oracle:Each opponent sacrifices a creature.

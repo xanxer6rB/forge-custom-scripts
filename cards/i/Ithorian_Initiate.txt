@@ -1,8 +1,0 @@
-Name:Ithorian Initiate
-ManaCost:2 G
-Types:Creature Ithorian Jedi
-PT:2/1
-T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Creature.Self | Execute$ TrigChange | OptionalDecider$ You | TriggerDescription$ When CARDNAME enters the battlefield, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle.
-SVar:TrigChange:DB$ ChangeZone | Origin$ Library | Destination$ Hand | ChangeType$ Land.Basic | ChangeNum$ 1 | ShuffleNonMandatory$ True
-A:AB$ ChangeZone | Cost$ 1 G | Origin$ Battlefield | Destination$ Hand | SorcerySpeed$ True | SpellDescription$ Meditate (return CARDNAME to its owner's hand. Meditate only as a sorcery.)
-Oracle:When Ithorian Initiate enters the battlefield, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle.\nMeditate {1}{G} (Return this creature to its owner's hand. Meditate only as a sorcery.)

@@ -1,8 +1,0 @@
-Name:Code Slice
-ManaCost:R
-Types:Sorcery
-A:SP$ PutCounter | Cost$ R | ValidTgts$ Card.Creature | TgtPrompt$ Select target creature you control | CounterType$ BOUNTY | CounterNum$ 1 | SubAbility$ DBEffect | SpellDescription$ Put two +1/+1 counters on target creature you control. That creature can't be blocked this turn.
-SVar:DBEffect:DB$ Effect | Name$ Code Slice | StaticAbilities$ KWPump
-SVar:KWPump:Mode$ Continuous | EffectZone$ Command | Affected$ Artifact.Creature+counters_GE1_BOUNTY  | AddHiddenKeyword$ CARDNAME can't block. | Description$ Creatures with Bounty counters on them can't block this turn.
-DeckHas:Ability$Counters
-Oracle:Put a bounty counter on target creature.\nArtifact creatures with bounty counters on them can't block this turn.

@@ -1,8 +1,0 @@
-Name:Han Solo
-ManaCost:3 R
-Types:Legendary Creature Human Rogue
-PT:4/3
-K:First strike
-T:Mode$ Phase | Phase$ BeginCombat | ValidPlayer$ You | TriggerZones$ Battlefield | Execute$ TrigPump | TriggerDescription$ At the beginning of combat on your turn, target artifact creature you control gets +2/+2 and gains indestructible until end of turn.
-SVar:TrigPump:DB$ Pump | ValidTgts$ Creature.Starship+YouCtrl | TgtPrompt$ Select target Starship creature you control | NumAtt$ 2 | NumDef$ 2 | KW$ Haste
-Oracle:First strike\nAt the beginning of combat on your turn, target Starship creature you control gets +2/+2 and gains haste until end of turn. (Damage and effects that say "destroy" don't destroy it.)

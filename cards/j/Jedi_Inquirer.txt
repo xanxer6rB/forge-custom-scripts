@@ -1,9 +1,0 @@
-Name:Jedi Inquirer
-ManaCost:2 W
-Types:Creature Human Jedi
-PT:2/2
-T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Any | ValidCard$ Card.Self | Execute$ TrigExile | TriggerDescription$ When CARDNAME leaves the battlefield, you may exile target enchantment.
-SVar:TrigExile:DB$ ChangeZone | Optional$ True | IsCurse$ True | ValidTgts$ Enchantment | TgtPrompt$ Select target enchantment | Origin$ Battlefield | Destination$ Exile
-A:AB$ ChangeZone | Cost$ 1 W | Origin$ Battlefield | Destination$ Hand | SorcerySpeed$ True | SpellDescription$ Meditate (return CARDNAME to its owner's hand. Meditate only as a sorcery.)
-SVar:PlayMain1:TRUE
-Oracle:When Jedi Inquirer leaves the battlefield, exile target enchantment.\nMeditate {1}{W} (Return CARDNAME to its owner's hand. Meditate only as a sorcery.)

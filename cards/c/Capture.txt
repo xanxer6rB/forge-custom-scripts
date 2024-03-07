@@ -1,8 +1,0 @@
-Name:Capture
-ManaCost:2 R
-Types:Sorcery
-A:SP$ GainControl | Cost$ 2 R | ValidTgts$ Creature | TgtPrompt$ Select target creature | LoseControl$ EOT | Untap$ True | AddKWs$ Haste  | SubAbility$ DBAddMana | SpellDescription$ Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. If it has a bounty counter on it, add {R}{R}{R} to your mana pool.
-SVar:DBAddMana:DB$ Mana | Produced$ R | Amount$ 3 | ConditionCheckSVar$ HasBounty | References$ HasBounty | ConditionSVarCompare$ GE1
-SVar:HasBounty:TargetedLKI$Valid Creature.counters_GE1_BOUNTY
-SVar:PlayMain1:OPPONENTCREATURES
-Oracle:Gain control target creature until end of turn. Untap that creature. It gains haste until end of turn. If it has a bounty counter on it, add {R}{R}{R} to your mana pool.

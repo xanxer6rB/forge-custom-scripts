@@ -1,9 +1,0 @@
-Name:Salvage Trader
-ManaCost:3 U
-Types:Creature Crolute
-PT:2/3
-A:AB$ Pump | Cost$ T | AITgts$ Artifact.YouCtrl+cmcLEZ | ValidTgts$ Artifact.YouCtrl | TgtPrompt$ Choose target artifact | SubAbility$ OkoExchange | SpellDescription$ Exchange control of target artifact you control and target artifact an opponent controls with the same converted mana cost.
-SVar:OkoExchange:DB$ ExchangeControl | Defined$ ParentTarget | ValidTgts$ Artifact.OppCtrl+cmcEQZ | References$ Z | TgtPrompt$ Choose target artifact an opponent controls with the same converted mana cost
-SVar:Z:Targeted$CardManaCost
-DeckHas:Ability$Token & Ability$LifeGain & Ability$Food
-Oracle:{T}:Exchange control of target artifact you control and target artifact an opponent controls with the same converted mana cost.

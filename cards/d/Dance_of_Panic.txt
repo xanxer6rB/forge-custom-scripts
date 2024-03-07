@@ -1,8 +1,0 @@
-Name:Dance of Panic
-ManaCost:no cost
-Types:Enchantment
-S:Mode$ Continuous | Affected$ Reveler.YouCtrl | AddKeyword$ Haste & CARDNAME attacks each combat if able. | RemoveKeyword$ CARDNAME can't attack. | CheckSVar$ X | SVarCompare$ GE5 | Description$ As long as you control five or more Revelers, all Revelers have haste and attack each turn if able.
-SVar:X:Count$Valid Reveler.YouCtrl+inZoneBattlefield 
-SVar:BuffedBy:Enchantment
-DeckHints:Type$Reveler
-Oracle:As long as you control five or more Revelers, all Revelers have haste and attack each turn if able.

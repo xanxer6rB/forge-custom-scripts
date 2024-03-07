@@ -1,9 +1,0 @@
-Name:Exogorth
-ManaCost:5 G G
-Types:Creature Slug
-PT:8/7
-K:Flash
-K:Trample
-K:CARDNAME can block creatures with shadow as though they didn't have shadow.
-K:CARDNAME can block only creatures with shadow.
-Oracle:Flash\nTrample\nExogorth can block creatures with spaceflight.\nExogorth can only block creatures with spaceflight.

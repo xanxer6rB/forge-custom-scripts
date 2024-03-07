@@ -1,5 +1,0 @@
-Name:Sai Tok
-ManaCost:B B
-Types:Instant
-A:SP$ Destroy | Cost$ B B | ValidTgts$ Creature.cmcLE4,Planeswalker.cmcLE4 | TgtPrompt$ Select target creature or planeswalker with converted mana cost 4 or less | SpellDescription$ Destroy target creature or planeswalker with converted mana cost 4 or less.
-Oracle:Destroy target creature or planeswalker if it has converted mana cost 4 or less.

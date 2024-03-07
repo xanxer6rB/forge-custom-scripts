@@ -1,6 +1,0 @@
-Name:Occupation
-ManaCost:W B
-Types:Enchantment
-S:Mode$ ETBTapped | ValidCard$ Creature.OppCtrl | Description$ Creatures your opponents control enter the battlefield tapped.
-A:AB$ Pump | Cost$ W B | ValidTgts$ Creature | TgtPrompt$ Select target creature | IsCurse$ True | KW$ HIDDEN CARDNAME can't attack or block. & CARDNAME's activated abilities can't be activated. | SpellDescription$ Target creature can't attack or block this turn, and activated abilities can't be activated.
-Oracle:Creatures your opponents control enter the battlefield tapped.\n{W}{B}:Target creature can't attack or block. & its activated abilities can't be activated.

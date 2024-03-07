@@ -1,6 +1,0 @@
-Name:Deploy The Troops
-ManaCost:3 B
-Types:Instant
-A:SP$ Token | Cost$ 3 B | TokenAmount$ 3 | TokenScript$ b_1_1_tie_fighter | LegacyImage$ b 1 1 tie fighter stwtg | SpellDescription$ Create three 1/1 black Starship artifact creature tokens with spaceflight named TIE Fighter.
-DeckHas:Ability$Counters & Ability$Token
-Oracle:Create three 1/1 black Starship artifact creature tokens with spaceflight named TIE Fighter.\n(Creatures with spaceflight can only block or be blocked by creatures with spaceflight.)

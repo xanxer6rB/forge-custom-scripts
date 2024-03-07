@@ -1,8 +1,0 @@
-Name:Droid Uprising
-ManaCost:2 W W
-Types:Instant
-A:SP$ TapAll | Cost$ 2 W W | ValidCards$ Creature.nonArtifact | SubAbility$ DBTokens | SpellDescription$ Tap all nonartifact creatures. Create two 1/1 colorless Droid creature tokens.
-SVar:DBTokens:DB$ Token | TokenAmount$ 2 | TokenScript$ c_1_1_droid | TokenOwner$ You | LegacyImage$ c 1 1 droid_stwsolo
-DeckHints:Type$Droid
-DeckHas:Ability$Token
-Oracle:Tap all nonartifact creatures.\nCreate two 1/1 colorless Droid creature tokens.

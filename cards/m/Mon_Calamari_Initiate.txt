@@ -1,9 +1,0 @@
-Name:Mon Calamari Initiate
-ManaCost:2 U U
-Types:Creature Calamari Jedi
-PT:3/2
-T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigDraw | TriggerDescription$ When CARDNAME enters the battlefield, draw a card.
-SVar:TrigDraw:DB$ Draw | Defined$ You | NumCards$ 1
-A:AB$ ChangeZone | Cost$ 1 U | Origin$ Battlefield | Destination$ Hand | SorcerySpeed$ True | SpellDescription$ Meditate (return CARDNAME to its owner's hand. Meditate only as a sorcery.)
-Oracle:When Mon Calamari Initiate enters the battlefield, draw a card.\nMeditate {1}{U} (Return this creature to its owner's hand. Meditate only as a sorcery.)
-

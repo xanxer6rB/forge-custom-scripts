@@ -1,8 +1,0 @@
-Name:Force Drain
-ManaCost:2 B
-Types:Instant
-A:SP$ DealDamage | Cost$ R | ValidTgts$ Creature,Player,Planeswalker | TgtPrompt$ Select target creature or player | NumDmg$ 2 | RememberDamaged$ True | SubAbility$ DBGainLife | StackDescription$ SpellDescription | SpellDescription$ CARDNAME deals 2 damage to target creature or player. If a player is dealt damage this way, scry 1.
-SVar:DBGainLife:DB$ GainLife | Defined$ You | LifeAmount$ 2 | StackDescription$ You gain 2 life. | ConditionDefined$ Remembered | ConditionPresent$ Player | ConditionCompare$ GE1 | SubAbility$ DBScry
-SVar:DBScry:DB$ Scry | Defined$ You | ScryNum$ 1 | SubAbility$ DBCleanup | StackDescription$ None
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
-Oracle:Force Drain deals 2 damage to target creature or player. If a player was dealt damage this way, you gain 2 life.\nScry 1.

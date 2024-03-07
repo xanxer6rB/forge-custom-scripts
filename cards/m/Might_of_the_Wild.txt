@@ -1,9 +1,0 @@
-Name:Might of the Wild
-ManaCost:R G W
-Types:Instant
-A:SP$ Charm | Cost$ R G W | Choices$ Effect,DBDestroyArtEnc,PumpAll | CharmNum$ 1
-SVar:Effect:DB$ Effect | Name$ Temur Charm Effect | StaticAbilities$ KWPump | SpellDescription$ Creatures with power 3 or less can't block this turn.
-SVar:KWPump:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.powerLE3 | AddHiddenKeyword$ CARDNAME can't block. | Description$ Creatures with power 3 or less can't block this turn.
-SVar:DBDestroyArtEnc:DB$ Destroy | ValidTgts$ Artifact,Enchantment | TgtPrompt$ Choose target artifact or enchantment. | SpellDescription$ Destroy target artifact or enchantment.
-SVar:PumpAll:DB$ PumpAll | ValidCards$ Creature.YouCtrl | KW$ Indestructible | SpellDescription$ Permanents you control gain indestructible until end of turn.
-Oracle:Choose one —\n• Creatures with power 3 or less can't block this turn.\n• Destroy target artifact or enchantment.\n• Creatures you control gain indestructible until end or turn.

@@ -1,9 +1,0 @@
-Name:Jedi Battle Sage
-ManaCost:3 G
-Types:Creature Sullustan Jedi
-PT:3/3
-K:Flash
-T:Mode$ ChangesZone | Origin$ Any | Destination$ Battlefield | ValidCard$ Card.Self | Execute$ TrigPump | TriggerDescription$ When CARDNAME enters the battlefield, Target creature gets +2/+2 until end of turn.
-SVar:TrigPump:DB$ Pump | ValidTgts$ Creature | TgtPrompt$ Select target creature | NumAtt$ +2 | NumDef$ +2
-A:AB$ ChangeZone | Cost$ 1 G | Origin$ Battlefield | Destination$ Hand | SorcerySpeed$ True | SpellDescription$ Meditate (return CARDNAME to its owner's hand. Meditate only as a sorcery.)
-Oracle:Flash\nWhen Jedi Battle Sage enters the battlefield, you gain 3 life.\nMeditate {1}{G} (Return this creature to its owner's hand. Meditate only as a sorcery.)

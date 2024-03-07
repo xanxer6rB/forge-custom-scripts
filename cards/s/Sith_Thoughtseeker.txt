@@ -1,7 +1,0 @@
-Name:Sith Thoughtseeker
-ManaCost:1 B
-Types:Creature Human Sith
-PT:2/1
-A:AB$ Draw | Cost$ 2 U | Defined$ You | NumCards$ 1 | CheckSVar$ X | References$ X | Combat$ False | TriggerDescription$ Draw a card. Activate this ability only if an opponent lost life from a source other than combat damage this turn.
-SVar:X:PlayerCountOpponents$NonCombatDamageDealtThisTurn
-Oracle:Hate - {2}{U}: Draw a card. Activate this ability only if an opponent lost life from a source other than combat damage this turn, target creature can't block Darth Maul this turn.

@@ -1,8 +1,0 @@
-Name:Insatiable Rakghoul
-ManaCost:5 B
-Types:Creature Zombie Mutant
-PT:4/6
-# TODO: Figure out another script instead
-K:etbCounter:P1P1:1:CheckSVar$ Morbid:Morbid — CARDNAME enters the battlefield with a +1/+1 counters on it if a creature died this turn.
-SVar:Morbid:Count$Morbid.1.0
-Oracle:If a nonartifact creature died this turn, Insatiable Rakghoul enters the battlefield with a +1/+1 counter on it.
