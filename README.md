@@ -4,9 +4,7 @@ Custom forge scripts to run different types of card formats and custom sets
 Add suggested card script to your library before starting a match. 
  - Each script more or less work but are still wip.
  - Formats you can play include:
-     - Horde
-       - Basic rules:
-       - For a more customized Horde format use: hordeformatlike
+     - A customized Horde like format use: hordeformatlike
      - Face the Hydra Challenge: Challenge 1 - FaceTheHydra_Rev3
      - Battle the Horde Challenge: Challenge 2 - Battle the Horde_Rev2
      - Defeat a God Challenge: Challenge 3 Defeat a God Rev2
@@ -14,14 +12,6 @@ Add suggested card script to your library before starting a match.
        - A Type 4 format style game from this example: 
 https://www.slightlymagic.net/forum/viewtopic.php?f=52&t=30384)
        - Wagic the Homebrew - Blitzkrieg
-
-I have also been trying to script some already existing custom sets like:
-- Star Wars: The Gathering:
-  - Basic set - stwtg
-  - SOLO - stwsolo
-  - The Last Jedi - stwtlj
-  - Rogue One - stwro
-  - The Force Awakens - stwtfa
 
 To use files just add them to your custom folder
 
