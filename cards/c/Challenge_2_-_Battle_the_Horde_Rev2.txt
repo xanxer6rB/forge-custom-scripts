@@ -1,0 +1,40 @@
+Name:Challenge 2 - Battle the Horde_Rev2
+ManaCost:no cost
+Types:Vanguard
+HandLifeModifier:-7/-19
+
+# TODO: Define a SVar:[name]:DB$ variable name for most if not all existing ability/rule scripts, change some existing variable parameter and
+# TODO: convert Vanguard to a "Blinking" - Enchantment that gives any amount of players an emblem with predefined rules
+# TODO: use cuWagic_Blitzkrieg as a reference.
+
+#### WORKING ABILITIES ####
+
+T:Mode$ NewGame | ValidPlayer$ You | Execute$ StartGame | TriggerDescription$ • "Battle the Horde!","When the game starts, if Battle the Horde Avatar wins the flip it will skip its next turn.","Otherwise you start with an extra turn."
+SVar:StartGame:DB$ SkipTurn | NumTurns$ 2 | Defined$ You | SubAbility$ UnMulligan
+
+T:Mode$ Phase | Phase$ Main1 | ValidPlayer$ You | Execute$ TrigDig | TriggerDescription$ • At the beginning of the Horde's precombat main phase each turn, reveal two cards from the top of the Horde's library. Then the Horde casts those cards.
+SVar:TrigDig:AB$ Dig | Cost$ 0 | DigNum$ 2 | RememberRevealed$ True | SubAbility$ TrigPlay
+SVar:TrigPlay:DB$ Play | Defined$ Remembered | Amount$ All | WithoutManaCost$ True | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+# HEROS ATTACK ABILITY #
+S:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | OpponentTurn$ True | AddTrigger$ MinotaurAttack | AddSVar$ HasAttackEffect | • Description$ Other creatures have "Target creature you control fights another target creature."
+SVar:MinotaurAttack:Mode$ Phase | ValidPlayer$ You | Phase$ BeginCombat | OptionalDecider$ You | ValidCard$ Card.Self | Execute$ MinotaurFight | TriggerDescription$ • At the beginning of opponents precombat main phase, ABILITY.
+SVar:MinotaurFight:DB$ Pump | Defined$ TriggeredAttackerLKICopy | ValidTgts$ Creature.YouCtrl| TgtPrompt$ You may Choose target creature you control | SubAbility$ MntrFight | StackDescription$ None | TargetMin$ 1 | TargetMax$ 1 | SpellDescription$ • Target creature you control fights another target creature.
+SVar:MntrFight:DB$ Fight | Defined$ ParentTarget | ValidTgts$ Creature.OppCtrl | TargetUnique$ True | TgtPrompt$ Choose target creature to fight the first target
+ 
+# HORDES STATIC ABILITIES #
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ Your life total can't change. | • Description$ Battle the Horde Avatar has no life total.
+R:Event$ DamageDone | ActiveZones$ Battlefield | ValidTarget$ You | ReplaceWith$ ReplaceMill | PreventionEffect$ True | • Description$ If Battled the Horde Avatar would lose life, put that many cards from the top of its library into its graveyard.
+SVar:X:ReplaceCount$ DamageAmount
+SVar:ReplaceMill:AB$ Mill | Cost$ 0 | Defined$ ReplacedTarget | NumCards$ X | Destination$ Graveyard | References$ X
+
+S:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You can't draw cards. | • Description$ Battle the Horde Avatar can't draw cards.
+
+S:Mode$ CantAttack | ValidCard$ Creature.OppCtrl | Target$ You | Description$ • Creatures you can't attack Battle the Horde Avatar.
+
+# WIN CONDITION SCRIPT #
+T:Mode$ Phase | Phase$ Upkeep | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | IsPresent$ Card.Creature | PresentZone$ Battlefield | PresentPlayer$ You | PresentCompare$ EQ0 | IsPresent2$ Card | PresentZone2$ Library | PresentPlayer2$ You | PresentCompare2$ EQ0 | Execute$ TrigWin | TriggerDescription$ • At the beginning of the Horde's upkeep, if it controls no Creatures and has no cards in its Library, you win the game.
+SVar:TrigWin:DB$WinsGame | Defined$ Opponent
+
+Oracle: • Theros Challenge 2 - Battle the Horde! •

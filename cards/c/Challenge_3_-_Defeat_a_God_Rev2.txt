@@ -1,0 +1,74 @@
+Name:Challenge 3 Defeat a God Rev2
+ManaCost:no cost
+Types:Tribal Instant Challenge
+K:Split second
+K:CARDNAME can't be countered.
+
+# A WAY TO KICKSTART EMBLEM ABILITY/GAME RULE CREATION AND DISTRIBUTION
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DAGC1 | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If you start the game with CARDNAME in your opening hand, exile it and go through the prompts. Hope you enjoy the game.
+SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ DAGC1 | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card
+SVar:DAGC1:DB$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | AllowRepeats$ True | Controller$ You | SubAbility$ TrigExile
+SVar:TrigExile:DB$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self | SubAbility$ Emblem1
+
+# DEFEAT A GOD EMBLEM
+SVar:Emblem1:DB$ Effect | StackDescription$ SpellDescription | Name$ Challenge 3 Defeat a God Rev2 Effect | StaticAbilities$ noCastHero,heroProtection,xenagosNoDraw,xenagosProtection,noLoseGame,lifeNoChange,xenCreatureNoAttck,revelFight | Triggers$ xenagosTurn | SVars$ TrigDig,TrigPlay,DBTurnCleanup,revelFight,FightTheReveler,HasEffect | EffectOwner$ You | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+
+# CONJURE/SUMMON XENAGOS AND THRONG #
+T:Mode$ NewGame | ValidPlayer$ You | Execute$ DBThron | TriggerDescription$ • When Defeat a God starts Xenagos Ascended and two Rollicking Throng are summoned.
+SVar:DBThron:DB$ ChangeZone | ValidPlayer$ You | Origin$ Library | Destination$ Battlefield | ChangeType$ Permanent.namedRollicking Throng | ChangeNum$ 2 | StackDescription$ SpellDescription | SubAbility$ DBXen | SpellDescription$ Search your library for two cards named Rollicking Throng, put them onto the battlefield, then shuffle.
+SVar:DBXen:DB$ ChangeZone | ValidPlayer$ You | Origin$ Library | Destination$ Battlefield | ChangeType$ Permanent.namedXenagoes Ascended | ChangeNum$ 1 | StackDescription$ SpellDescription | SpellDescription$ Search your library for a card named Xenagoes Ascended, put it onto the battlefield, then shuffle.
+
+# MINIMUM LIFE TOTAL SCRIPT - CHECKS IF OPPONENTS LIFE IS AT LEAST 40 #
+T:Mode$ NewGame | CheckSVar$ SurvCurLife | SVarCompare$ LE39 | References$ SurvCurLife | Execute$ SurvivorSetLife | TriggerDescription$ When the game starts your life total becomes 40.
+SVar:SurvCurLife:PlayerCountOpponents$LifeTotal
+SVar:SurvivorSetLife:DB$ SetLife | Defined$ Opponent | LifeAmount$ 40
+
+# SETUP TURNS - CHOOSE A NUMBER OF TURNS XENAGOS SKIPS #
+T:Mode$ NewGame | Execute$ ChooseNumberB | TriggerDescription$ • When the game starts, Choose a number 1-3, you get that many turns to prepare to "Face The Hydra".
+SVar:ChooseNumberB:DB$ ChooseNumber | Min$ 1 | Max$ 3 | Defined$ Opponent | SubAbility$ HydraSkipTurns
+SVar:HydraSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ You | References$ xTnum | SubAbility$ CleanupTnum
+SVar:CleanupTnum:DB$ Cleanup | ClearRemembered$ True
+SVar:xTnum:Count$ChosenNumber
+
+# OPPONENT MAY SEARCH FOR UP TO 2 HERO CARDS FROM SIDEBOARD TO BE PUT ONTO THE BATTLEFIELD #
+T:Mode$ NewGame | ValidPlayer$ Opponent | Execute$ TrigTheHero1A | Optional$ True | OptionalDecider$ Opponent | TriggerDescription$ • When the game starts, Each opponent may choose to search their sideboard for up to two Hero cards.
+SVar:TrigTheHero1A:DB$ ChangeZone | Optional$ True | Origin$ Sideboard | Destination$ Battlefield | DefinedPlayer$ Opponent | ChangeType$ Card.Hero | ChangeNum$ 2 | DefinedPlayer$ Opponent| ShuffleNonMandatory$ True | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+# XENAGOES CANNOT GO FIRST
+T:Mode$ NewGame | Execute$ TrigBranch | TriggerDescription$ Xenagoes Ascended can not go first.
+SVar:TrigBranch:DB$ Branch | BranchConditionSVar$ X | BranchConditionSVarCompare$ EQ0 | TrueSubAbility$ HordeEndTurn | FalseSubAbility$ DBCleanup
+SVar:HordeEndTurn:DB$ EndTurn | PlayerTurn$ True
+SVar:X:Count$StartingPlayer.1.0
+
+# PROTECTION FOR HERO CARDS #
+SVar:heroProtection:Mode$ Continuous | EffectZone$ Command | Affected$ Hero.OppCtrl | AddKeyword$ Shroud & Indestructible & Protection from everything | HiddenDescription$ • Hero cards have Shroud, Indestructible, and Protection from everything.
+
+# OPPONENTS CAN'T CAST HERO CARDS FROM ANYWHERE #
+SVar:noCastHero:Mode$ CantBeCast | EffectZone$ Command | ValidCard$ Card.Hero | Caster$ Opponent | Origin$ Library,Graveyard,Exile,Command,Hand | HiddenDescription$ • Your opponents can't cast Hero spells from anywhere.
+
+# PROTECTION FOR XENAGOS #
+SVar:xenagosProtection:Mode$ Continuous | EffectZone$ Command | Affected$ Card.namedXenagos Ascended+YouCtrl | AddKeyword$ Hexproof & Indestructible | Description$ • Xenagos Ascended has Hexproof, Indestructible, and Protection from everything.
+
+# CAN NOT LOSE IF 0 OR LESS #
+SVar:noLoseGame:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ You don't lose the game for having 0 or less life. | HiddenDescription$ • The Hydra doesn't lose the game for having 0 or less life.
+
+# XENAGOS CAN'T LOSE LIFE #
+SVar:lifeNoChange:Mode$ Continuous | Affected$ You | EffectZone$ Command | AddKeyword$ Your life total can't change. | HiddenDescription$ • Xenagos has no life total.
+
+# CREATURES XENAGOS CONTROL CANNOT ATTACK #
+SVar:xenCreatureNoAttck:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | Target$ Opponent | AddKeyword$ CARDNAME can't attack. | Description$ • Creatures Xenagos control can't attack unless a card specifies.
+
+# XENAGOS TURN #
+SVar:xenagosTurn:Mode$ Phase | Phase$ Main1 | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigDig | TriggerDescription$ • At the beginning of Xenagos's first main phase, it reveals the top two cards of its library and casts those cards.
+SVar:TrigDig:DB$ Dig | DigNum$ 2 | Reveal$ True | RememberRevealed$ True | NoMove$ True | SubAbility$ TrigPlay
+SVar:TrigPlay:DB$ Play | Defined$ Remembered | Amount$ 2 | WithoutManaCost$ True | ConditionDefined$ TopOfLibrary | ConditionPresent$ Reveler,Sorcery,Enchantment | ConditionCompare$ EQ1 | SubAbility$ DBTurnCleanup
+SVar:DBTurnCleanup:DB$ Cleanup | ClearRemembered$ True
+
+# IN ORIGINAL RULES YOU ATTACK REVELERS DIRECTLY - USED FIGHT SCRIPT #
+SVar:revelFight:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddAbility$ FightTheReveler | AddSVar$ HasEffect | Description$ • Creatures opponent control have "This creature fights target creature. (Each deals damage equal to its power to the other.)"
+SVar:FightTheReveler:AB$ Fight | Cost$ T | Defined$ Self | ValidTgts$ Creature | TgtPrompt$ Select target creature | SpellDescription$ CARDNAME fights target creature. (Each deals damage equal to its power to the other.)
+SVar:HasEffect:TRUE
+
+Oracle: • Theros Challenge 3 - Defeat a God! •\nWhen the game starts, conjure Xenagos Ascended and two Rollicking Throng onto the battlefield.\nThen you will choose a number 1-3 for the amount of turns you will get to prepare for the challenge and the choice to search your sideboard for up to 3 Hero cards.

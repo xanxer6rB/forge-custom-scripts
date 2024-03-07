@@ -1,0 +1,33 @@
+# Using Invasion of Zendikar as template
+
+Name:Hordes Anthem
+ManaCost:no cost
+Types:Battle Siege Horde
+Defense:10
+#S:Mode$ Continuous | Affected$ Creature.Horde | AddPower$ 1 | AddToughness$ 1 | Description$ Horde creatures get +1/+1.
+#S:Mode$ AttackRestrict | MaxAttackers$ 1 | ValidDefender$ Card.Self | Description$ No more than one creature can attack CARDNAME each combat.
+S:Mode$ Continuous | Affected$ Creature.Horde | AddKeyword$ First Strike & Vigilance & Trample & Haste | Description$ Horde creatures have vigilance, first strike, trample.
+
+
+AlternateMode:DoubleFaced
+Oracle:(As a Siege enters, choose an opponent to protect it. You and others can attack it. When it's defeated, exile it, then cast it transformed.)\nHorde creatures have vigilance, first strike, trample.
+
+ALTERNATE
+
+Name:Garruk the Slayer
+ManaCost:no cost
+Colors:black,green
+Types:Legendary Planeswalker Garruk
+Loyalty:20
+R:Event$ Moved | ValidCard$ Card.Self | Destination$ Battlefield | ReplaceWith$ DBChooseOpp | Layer$ Control | Description$ CARDNAME enters the battlefield under the control of an opponent of your choice.
+SVar:DBChooseOpp:DB$ ChoosePlayer | Defined$ You | Choices$ Player.Opponent | ChoiceTitle$ Choose an opponent to give control to: | AILogic$ Curse | SubAbility$ MoveToPlay
+SVar:MoveToPlay:DB$ ChangeZone | Hidden$ True | Origin$ All | Destination$ Battlefield | Defined$ ReplacedCard | GainControl$ ChosenPlayer | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearChosenPlayer$ True
+A:AB$ Token | Cost$ AddCounter<0/LOYALTY> | Planeswalker$ True | TokenScript$ g_2_2_wolf | SpellDescription$ Put a 2/2 green Wolf creature token onto the battlefield.
+A:AB$ Pump | Cost$ AddCounter<4/LOYALTY> | Planeswalker$ True | NumAtt$ +1 | NumDef$ +0 | KW$ Deathtouch | TgtPrompt$ Select target Wolf creature | ValidTgts$ Creature.Wolf | SpellDescription$ Target Wolf creature gets +1/+0 and gains deathtouch until end of turn.
+A:AB$ Destroy | Cost$ SubCounter<10/LOYALTY> | Planeswalker$ True | ValidTgts$ Creature | TgtPrompt$ Select target creature | SubAbility$ DBAddLoyalty | SpellDescription$ Destroy target creature. Put loyalty counters on CARDNAME equal to that creature's toughness.
+SVar:DBAddLoyalty:DB$ PutCounter | Defined$ Self | CounterType$ LOYALTY | CounterNum$ X
+SVar:X:TargetedLKI$CardToughness
+A:AB$ DestroyAll | Cost$ SubCounter<25/LOYALTY> | Planeswalker$ True | Ultimate$ True | ValidCards$ Creature.YouDontCtrl | SpellDescription$ Destroy all creatures Garruk the Slayer doesn't control.
+DeckHints:Type$Wolf
+Oracle:[0]: Put a 2/2 green Wolf creature token onto the battlefield.\n[+4]: Target Wolf creature gets +1/+0 and gains deathtouch until end of turn.\n[-10]: Destroy target creature. Put loyalty counters on Garruk the Slayer equal to that creature's toughness.\n[-25]: Destroy all creatures Garruk the Slayer doesn't control.

@@ -1,0 +1,19 @@
+Name:WagicTheHomebrew Blitzkrieg
+ManaCost:no cost
+Types:Tribal Instant Wagic Blitzkrieg
+K:CARDNAME can't be countered.
+A:SP$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self | SubAbility$ WTHB
+SVar:TrigExile:DB$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self | SubAbility$ WTHB
+SVar:WTHB:DB$ Effect | ValidTgts$ Player | TgtPrompt$ Choose any number of target players | TargetMin$ 0 | TargetMax$ MaxPl | StackDescription$ SpellDescription | MayChooseTarget$ True | Chooser$ You | Name$ WagicTheHomebrew Blitzkrieg Effect | StaticAbilities$ SkipDraw,UnlimLand | Triggers$ TrigHand,TrigLandPlay | SVars$ ChkHand,DBDraw,X,Difference,TrigDraw,DBCleanup | EffectOwner$ Targeted | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+SVar:MaxPl:PlayerCountPlayers$Amount
+SVar:SkipDraw:Mode$ Continuous | EffectZone$ Command | Affected$ You | AddKeyword$ Skip your draw step. | HiddenDescription$ Skip your draw step.
+SVar:UnlimLand:Mode$ Continuous | EffectZone$ Command | Affected$ You | AdjustLandPlays$ Unlimited | Description$ You may play any amount of land on each of your turns.
+SVar:TrigHand:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | CheckSVar$ ChkHand | SVarCompare$ LE8 | References$ ChkHand | Execute$ DBDraw | TriggerDescription$ At the beginning of your upkeep, if you have less than eight cards in your hand, draw until you have eight.
+SVar:ChkHand:PlayerCountYour$NumCardsInHand
+SVar:DBDraw:DB$Draw | Defined$ You | NumCards$ Difference | References$ X,Difference | SubAbility$ DBCleanup
+SVar:X:Count$NumCardsInYourHand
+SVar:Difference:Number$8/Minus.X
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+SVar:TrigLandPlay:Mode$ LandPlayed | ValidCard$ Land.YouCtrl | TriggerZones$ Command | Execute$ TrigDraw
+SVar:TrigDraw:DB$Draw | Defined$ You | NumCards$ 1
+Oracle:WagicTheHomebrew - Blitzkrieg\nAt the beginning of your draw phase, if your hand is less than eight, draw until you have eight.\nWhenever a land enters the battlefield under your control, draw a card.

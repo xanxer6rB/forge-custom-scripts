@@ -1,0 +1,103 @@
+Name:HordeFormatLike
+ManaCost:no cost
+Types:Tribal Instant Horde
+K:CARDNAME can't be countered.
+K:Starting Intensity:1
+
+A:SP$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self | SubAbility$ DBChooseHorde
+
+# CHOOSE A PLAYER TO BE THE HORDE
+SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | TargetUnique$ True | Choices$ ThisTargetedPlayer | Defined$ Player.You | SubAbility$ DBCrtDck | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
+
+# ADD HORDE TO CHOSEN PLAYERS LIBRARY
+SVar:DBCrtDck:DB$ Vote | Defined$ Player.You | VoteYes - Add Horde cards?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add Horde cards?,No - To choose life total
+SVar:DBConjureHorde:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SubAbility$ DBAddMoreHorde
+SVar:xHorde:TargetedPlayer$CardsInLibrary
+SVar:DBAddMoreHorde:DB$ Vote | Defined$ Player.You | VoteYes - Choose another Horde creature?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add more Horde?,No - To choose life total
+
+# CHOOSE STARTING LIFE
+SVar:DBsetLife:DB$ GenericChoice | Choices$ SetLife1,SetLife2,SetLife3,SetLife4,SetLife5,SetLife6,DBCleanup3 | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SubAbility$ DBChooseNumber | SpellDescription$ Survivors set own life total from a choice of 25,35,40,55,65 or 75.
+SVar:SetLife1:DB$ SetLife | Defined$ Player.You | LifeAmount$ 25 | SpellDescription$ set life 25
+SVar:SetLife2:DB$ SetLife | Defined$ Player.You | LifeAmount$ 35 | SpellDescription$ set life 35
+SVar:SetLife3:DB$ SetLife | Defined$ Player.You | LifeAmount$ 40 | SpellDescription$ set life 40
+SVar:SetLife4:DB$ SetLife | Defined$ Player.You | LifeAmount$ 55 | SpellDescription$ set life 55
+SVar:SetLife5:DB$ SetLife | Defined$ Player.You | LifeAmount$ 65 | SpellDescription$ set life 65
+SVar:SetLife6:DB$ SetLife | Defined$ Player.You | LifeAmount$ 75 | SpellDescription$ set life 75
+SVar:DBCleanup3:DB$ Cleanup | ClearRemembered$ True | ClearChosenPlayer$ True | ForgetDefinedPlayer$ True | ForgetDefined$ True | SpellDescription$ To continue
+SVar:SurvCurLife:PlayerCountYour$LifeTotal
+
+# CHOOSE NUMBER OF TURNS HORDE SKIPS
+SVar:DBChooseNumber:DB$ ChooseNumber | Min$ 1 | Max$ 3 | AILogic$ Max | Defined$ Player.You | SubAbility$ DBHordeSkipTurns
+SVar:DBHordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ Player.Opponent | References$ xTnum | SubAbility$ TrigHordeAnthem
+SVar:xTnum:Count$ChosenNumber
+
+# A CUSTOM BATTLE 
+SVar:TrigHordeAnthem:DB$ Vote | Defined$ Player.You | VoteYes - Conjure Hordes Anthem?$ TrigConjure1 | VoteNo - To create Horde emblem$ DBHordeEmblem | VoteType$ Yes - Conjure Hordes Anthem?,No - To create Horde emblem
+SVar:TrigConjure1:DB$ MakeCard | Conjure$ True | Defined$ Player.You | Spellbook$ Hordes Anthem | Zone$ Battlefield | SubAbility$ DBHordeEmblem
+
+# HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
+SVar:DBHordeEmblem:DB$ Effect | Defined$ Player.Chosen | StackDescription$ SpellDescription | Name$ Horde Magic Basic N Other Rules Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,fightTheHorde,noDraw,freeCmdr,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigPlague,TrigHordeCascade,HordeCast,HordeCascadeCleanup,AffectedX,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | EffectOwner$ Targeted | Duration$ Permanent
+
+# THE HORDE'S UPKEEP
+SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigPlague | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
+SVar:TrigPlague:DB$ Intensify | Defined$ Self | SubAbility$ TrigHordeCascade
+SVar:TrigHordeCascade:DB$ DigUntil | Defined$ Player.You | Reveal$ True | Amount$ Q | References$ Q | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | DestinationZone2$ Exile | ImprintRevealed$ True | RememberRevealed$ True | RememberFound$ True | SubAbility$ HordeCast
+SVar:HordeCast:DB$ Play | Valid$ Card.IsRemembered | NeedsToPlay$ True | WithoutManaCost$ True | Amount$ Q | References$ Q | StackDescription$ None | ValidZone$ Exile | ValidSA$ Spell | SubAbility$ HordeCreateToken
+SVar:HordeCreateToken:DB$ CopyPermanent | AILogic$ MomirAvatar, MostProminentInComputerDeck | NumCopies$ 1 | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | AddTypes$ Horde | RandomNum$ H | SorcerySpeed$ True | StackDescription$ SpellDescription | SubAbility$ DBCleanup
+SVar:H:Remembered$Valid Card.Horde
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
+SVar:Q:Count$Intensity
+DeckHas:Ability$Token & Type$Horde
+DeckHints:Ability$Token & Type$Horde
+
+# HORDE CREATURES ARE EXILED INSTEAD OF GOING ANYWHERE ELSE
+SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Creature.Horde | Origin$ Battlefield,Library | Destination$ Graveyard | ReplaceWith$ Exile | Description$ If a Horde creature would be put into the graveyard from anywhere, exile it instead.
+SVar:Exile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library | Destination$ Exile
+
+# HORDE MILLS WHEN LOSES LIFE OR TAKES DAMAGE IF IT HAS NO CREATURES
+SVar:lifeLossHordeMills:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | CheckSVar$ Z | SVarCompare$ EQ0 | TriggerDescription$ When the Horde controls no creatures it gains "Whenever the Horde loses life, it mills that many cards. (Damage causes loss of life.)"
+SVar:TrigMill:DB$ Mill | Defined$ Player.You | NumCards$ X | References$ X
+SVar:X:TriggerCount$LifeAmount
+DeckHas:Ability$Mill & Type$Horde
+DeckHints:Ability$Mill & Type$Horde
+
+# THE HORDE CAN PLAY LANDS FROM EXILE AND GRAVEYARD
+SVar:HordeLand:Mode$ Continuous | Affected$ Land.YouOwn | MayPlay$ True | AffectedZone$ Exile,Graveyard | EffectZone$ Command | Description$ The Horde may play lands from exile and graveyard.
+SVar:NonStackingEffect:True
+
+# SURVIVORS CREATURES CAN FIGHT CREATURES THE HORDE CONTROLS
+SVar:fightTheHorde:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddAbility$ fightAHorde | AddSVar$ HasEffect | Description$ • Creatures opponent control have "This creature fights target creature the Horde controls. (Each deals damage equal to its power to the other.)"
+SVar:fightAHorde:AB$ Fight | Cost$ T | Defined$ Self | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target Horde | SpellDescription$ CARDNAME fights target creature the Horde controls. (Each deals damage equal to its power to the other.)
+SVar:HasEffect:TRUE
+SVar:NonStackingEffect:True
+
+# THE HORDE CAN'T DRAW
+SVar:noDraw:Mode$ CantDraw | ValidPlayer$ You | Description$ The Horde can't draw cards.
+
+# CREATURES THE HORDE CONTROLS HAVE HASTE, CANNOT BLOCK
+SVar:hordeHaste:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | Condition$ PlayerTurn | AddKeyword$ Haste & CARDNAME can't block. | Description$ Creatures the Horde controls have haste and can't block.
+SVar:NonStackingEffect:True
+
+# CREATURES THE HORDE CONTROLS ATTACK EACH TURN IF ABLE
+SVar:hordeMustAttk:Mode$ MustAttack | EffectZone$ Command | ValidCreature$ Creature.nonBattle+YouCtrl | Description$ Creatures the Horde controls must attack each combat if able.
+SVar:HasAttackEffect:TRUE
+
+# HORDE CREATURES CAN'T ATTACK IF ATTACKED PREVIOUS TURN
+SVar:HordeTap:Mode$ Continuous | EffectZone$ Command |  Affected$ Card.Horde+attackedLastTurn | AddHiddenKeyword$ CARDNAME can't attack. | Description$ CARDNAME can't attack if it attacked during your last turn.
+SVar:NonStackingEffect:True
+
+# THE HORDE CAN PLAY CARDS FROM HAND AND COMMANDER FOR FREE
+SVar:freeCmdr:Mode$ Continuous | Affected$ Card.nonLand+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand without paying their mana costs.
+SVar:reduceCmdrCost:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | Description$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
+SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
+
+# WIN CONDITION - SURVIVORS WIN IF HORDE HAS NO CARDS IN LIBRARY, GRAVEYARD AND NO CREATURES ON BATTLEFIELD
+SVar:cantWin:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ Survivors can't win the game as long as the Horde controls at least one creature and has at least one card in its library.
+SVar:cantLose:Mode$ Continuous | EffectZone$ Command | Affected$ You | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't lose the game. & You don't lose the game for having 0 or less life. | Description$ The Horde can't lose the game as long as it controls at least one creature and has at least one card in its library.
+SVar:winCon:Mode$ Always | EffectZone$ Command | CheckSVar$ W | SVarCompare$ LE0 | TriggerZones$ Command | Execute$ TrigYouHaveSurvived | TriggerDescription$ When the Horde has no cards in its library and controls no creatures, you have survived the game.
+SVar:TrigYouHaveSurvived:DB$ WinsGame | Defined$ Opponent
+SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
+SVar:Z:Count$ValidBattlefield Creature.YouCtrl+inZoneBattlefield
+SVar:W:SVar$Y/Plus.Z
+
+Oracle:++ HordeFormatLike ++\nA custom card to play a form of Horde format.\nTo play, have this card in your library.\nAcknowledgements: Peter Knudson - For original Horde format rules, rikimbo - for help with Forge scripts, Loco-Motive and welknair for their rules and versions.
