@@ -7,13 +7,17 @@ K:Starting Intensity:1
 A:SP$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self | SubAbility$ DBChooseHorde
 
 # CHOOSE A PLAYER TO BE THE HORDE
-SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | TargetUnique$ True | Choices$ ThisTargetedPlayer | Defined$ Player.You | SubAbility$ DBCrtDck | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
+SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | TargetUnique$ True | Choices$ ThisTargetedPlayer | Defined$ Player.You | SubAbility$ DiscardPact | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
+
+# HORDE DISCARDS HAND AND SHUFFLES GY INTO LIBRARY
+SVar:DiscardPact:DB$ Discard | Defined$ Targeted | Mode$ Hand | SubAbility$ DBReturn
+SVar:DBReturn:DB$ ChangeZoneAll | Defined$ Targeted | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | SpellDescription$ Amount of Horde added is equal to chosen players deck size | SubAbility$ DBConjureHorde
 
 # ADD HORDE TO CHOSEN PLAYERS LIBRARY
-SVar:DBCrtDck:DB$ Vote | Defined$ Player.You | VoteYes - Add Horde cards?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add Horde cards?,No - To choose life total
+#SVar:DBCrtDck:DB$ Vote | Defined$ Player.You | VoteYes - Add Horde cards?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add Horde cards?,No - To choose life total
 SVar:DBConjureHorde:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SubAbility$ DBAddMoreHorde
 SVar:xHorde:TargetedPlayer$CardsInLibrary
-SVar:DBAddMoreHorde:DB$ Vote | Defined$ Player.You | VoteYes - Choose another Horde creature?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add more Horde?,No - To choose life total
+SVar:DBAddMoreHorde:DB$ Vote | Defined$ Player.You | VoteYes - Add more Horde?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add more Horde?,No - To choose life total
 
 # CHOOSE STARTING LIFE
 SVar:DBsetLife:DB$ GenericChoice | Choices$ SetLife1,SetLife2,SetLife3,SetLife4,SetLife5,SetLife6,DBCleanup3 | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SubAbility$ DBChooseNumber | SpellDescription$ Survivors set own life total from a choice of 25,35,40,55,65 or 75.
@@ -31,7 +35,7 @@ SVar:DBChooseNumber:DB$ ChooseNumber | Min$ 1 | Max$ 3 | AILogic$ Max | Defined$
 SVar:DBHordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ Player.Opponent | References$ xTnum | SubAbility$ TrigHordeAnthem
 SVar:xTnum:Count$ChosenNumber
 
-# A CUSTOM BATTLE 
+# A CUSTOM BATTLE THAT TRANSFORMS INTO A PLANESWALKER
 SVar:TrigHordeAnthem:DB$ Vote | Defined$ Player.You | VoteYes - Conjure Hordes Anthem?$ TrigConjure1 | VoteNo - To create Horde emblem$ DBHordeEmblem | VoteType$ Yes - Conjure Hordes Anthem?,No - To create Horde emblem
 SVar:TrigConjure1:DB$ MakeCard | Conjure$ True | Defined$ Player.You | Spellbook$ Hordes Anthem | Zone$ Battlefield | SubAbility$ DBHordeEmblem
 
@@ -41,10 +45,10 @@ SVar:DBHordeEmblem:DB$ Effect | Defined$ Player.Chosen | StackDescription$ Spell
 # THE HORDE'S UPKEEP
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigPlague | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
 SVar:TrigPlague:DB$ Intensify | Defined$ Self | SubAbility$ TrigHordeCascade
-SVar:TrigHordeCascade:DB$ DigUntil | Defined$ Player.You | Reveal$ True | Amount$ Q | References$ Q | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | DestinationZone2$ Exile | ImprintRevealed$ True | RememberRevealed$ True | RememberFound$ True | SubAbility$ HordeCast
-SVar:HordeCast:DB$ Play | Valid$ Card.IsRemembered | NeedsToPlay$ True | WithoutManaCost$ True | Amount$ Q | References$ Q | StackDescription$ None | ValidZone$ Exile | ValidSA$ Spell | SubAbility$ HordeCreateToken
+SVar:TrigHordeCascade:DB$ DigUntil | Defined$ Player.You | Reveal$ True | Amount$ Q | References$ Q | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Library | DestinationZone2$ Exile | ImprintRevealed$ True | RememberRevealed$ True | RememberFound$ True | RememberChanged$ True | SubAbility$ HordeCast
+SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | NeedsToPlay$ True | WithoutManaCost$ True | Amount$ Q | References$ Q | StackDescription$ None | ValidZone$ Exile | SubAbility$ HordeCreateToken
 SVar:HordeCreateToken:DB$ CopyPermanent | AILogic$ MomirAvatar, MostProminentInComputerDeck | NumCopies$ 1 | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | AddTypes$ Horde | RandomNum$ H | SorcerySpeed$ True | StackDescription$ SpellDescription | SubAbility$ DBCleanup
-SVar:H:Remembered$Valid Card.Horde
+SVar:H:Remembered$Valid Card.Creature+Horde
 SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
 SVar:Q:Count$Intensity
 DeckHas:Ability$Token & Type$Horde
