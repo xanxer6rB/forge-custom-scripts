@@ -14,7 +14,6 @@ SVar:DiscardPact:DB$ Discard | Defined$ Targeted | Mode$ Hand | SubAbility$ DBRe
 SVar:DBReturn:DB$ ChangeZoneAll | Defined$ Targeted | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | SpellDescription$ Amount of Horde added is equal to chosen players deck size | SubAbility$ DBConjureHorde
 
 # ADD HORDE TO CHOSEN PLAYERS LIBRARY
-#SVar:DBCrtDck:DB$ Vote | Defined$ Player.You | VoteYes - Add Horde cards?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add Horde cards?,No - To choose life total
 SVar:DBConjureHorde:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SubAbility$ DBAddMoreHorde
 SVar:xHorde:TargetedPlayer$CardsInLibrary
 SVar:DBAddMoreHorde:DB$ Vote | Defined$ Player.You | VoteYes - Add more Horde?$ DBConjureHorde | VoteNo - To choose life total$ DBsetLife | VoteType$ Yes - Add more Horde?,No - To choose life total
@@ -40,19 +39,17 @@ SVar:TrigHordeAnthem:DB$ Vote | Defined$ Player.You | VoteYes - Conjure Hordes A
 SVar:TrigConjure1:DB$ MakeCard | Conjure$ True | Defined$ Player.You | Spellbook$ Hordes Anthem | Zone$ Battlefield | SubAbility$ DBHordeEmblem
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | Defined$ Player.Chosen | StackDescription$ SpellDescription | Name$ Horde Magic Basic N Other Rules Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,fightTheHorde,noDraw,freeCmdr,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigPlague,TrigHordeCascade,HordeCast,HordeCascadeCleanup,AffectedX,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | EffectOwner$ Targeted | Duration$ Permanent
+SVar:DBHordeEmblem:DB$ Effect | Defined$ Player.Chosen | StackDescription$ SpellDescription | Name$ Horde Magic Basic N Other Rules Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,fightTheHorde,noDraw,freeCmdr,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,AffectedX,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | EffectOwner$ Targeted | Duration$ Permanent
 
 # THE HORDE'S UPKEEP
-SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigPlague | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
-SVar:TrigPlague:DB$ Intensify | Defined$ Self | SubAbility$ TrigHordeCascade
-SVar:TrigHordeCascade:DB$ DigUntil | Defined$ Player.You | Reveal$ True | Amount$ Q | References$ Q | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Library | DestinationZone2$ Exile | ImprintRevealed$ True | RememberRevealed$ True | RememberFound$ True | RememberChanged$ True | SubAbility$ HordeCast
-SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | NeedsToPlay$ True | WithoutManaCost$ True | Amount$ Q | References$ Q | StackDescription$ None | ValidZone$ Exile | SubAbility$ HordeCreateToken
+SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigIntensify | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
+SVar:TrigIntensify:DB$ Intensify | Defined$ Self | SubAbility$ TrigHordeCascade
+SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Reveal$ True | Amount$ Q | References$ Q | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberRevealed$ True | RememberFound$ True | RememberChanged$ True | SubAbility$ HordeCast
+SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | WithoutManaCost$ True | AILogic$ ReplaySpell | Amount$ Q | References$ Q | StackDescription$ None | ValidZone$ Exile | SubAbility$ HordeCreateToken
 SVar:HordeCreateToken:DB$ CopyPermanent | AILogic$ MomirAvatar, MostProminentInComputerDeck | NumCopies$ 1 | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | AddTypes$ Horde | RandomNum$ H | SorcerySpeed$ True | StackDescription$ SpellDescription | SubAbility$ DBCleanup
-SVar:H:Remembered$Valid Card.Creature+Horde
 SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
 SVar:Q:Count$Intensity
-DeckHas:Ability$Token & Type$Horde
-DeckHints:Ability$Token & Type$Horde
+SVar:H:Remembered$Valid Card.Creature
 
 # HORDE CREATURES ARE EXILED INSTEAD OF GOING ANYWHERE ELSE
 SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Creature.Horde | Origin$ Battlefield,Library | Destination$ Graveyard | ReplaceWith$ Exile | Description$ If a Horde creature would be put into the graveyard from anywhere, exile it instead.
@@ -62,8 +59,8 @@ SVar:Exile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library 
 SVar:lifeLossHordeMills:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | CheckSVar$ Z | SVarCompare$ EQ0 | TriggerDescription$ When the Horde controls no creatures it gains "Whenever the Horde loses life, it mills that many cards. (Damage causes loss of life.)"
 SVar:TrigMill:DB$ Mill | Defined$ Player.You | NumCards$ X | References$ X
 SVar:X:TriggerCount$LifeAmount
-DeckHas:Ability$Mill & Type$Horde
-DeckHints:Ability$Mill & Type$Horde
+#DeckHas:Ability$Mill & Type$Horde
+#DeckHints:Ability$Mill & Type$Horde
 
 # THE HORDE CAN PLAY LANDS FROM EXILE AND GRAVEYARD
 SVar:HordeLand:Mode$ Continuous | Affected$ Land.YouOwn | MayPlay$ True | AffectedZone$ Exile,Graveyard | EffectZone$ Command | Description$ The Horde may play lands from exile and graveyard.
