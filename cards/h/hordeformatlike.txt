@@ -4,7 +4,10 @@ Types:Tribal Instant Horde
 K:CARDNAME can't be countered.
 K:Starting Intensity:1
 
-A:SP$ ChangeZone | Origin$ Library,Hand | Destination$ Exile | Defined$ Self | SubAbility$ DBChooseHorde
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DBChooseHorde | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with this card in your library or hand, exile it and choose a custom format to conjure.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If this card is in your opening hand, exile it and choose a custom format to conjure.
+SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ DBChooseHorde | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card.
+
 
 # CHOOSE A PLAYER TO BE THE HORDE
 SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | TargetUnique$ True | Choices$ ThisTargetedPlayer | Defined$ Player.You | SubAbility$ DiscardPact | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
@@ -39,17 +42,17 @@ SVar:TrigHordeAnthem:DB$ Vote | Defined$ Player.You | VoteYes - Conjure Hordes A
 SVar:TrigConjure1:DB$ MakeCard | Conjure$ True | Defined$ Player.You | Spellbook$ Hordes Anthem | Zone$ Battlefield | SubAbility$ DBHordeEmblem
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | Defined$ Player.Chosen | StackDescription$ SpellDescription | Name$ Horde Magic Basic N Other Rules Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,fightTheHorde,noDraw,freeCmdr,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,AffectedX,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | EffectOwner$ Targeted | Duration$ Permanent
+SVar:DBHordeEmblem:DB$ Effect | Defined$ Player.Chosen | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBnonHordeCast,fightTheHorde,noDraw,freeCmdr,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | EffectOwner$ Targeted | Duration$ Permanent
 
-# THE HORDE'S UPKEEP
+# THE HORDE'S UPKEEP WITH INTENSIFY
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigIntensify | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
-SVar:TrigIntensify:DB$ Intensify | Defined$ Self | SubAbility$ TrigHordeCascade
+SVar:TrigIntensify:DB$ Intensify | SubAbility$ TrigHordeCascade
 SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Reveal$ True | Amount$ Q | References$ Q | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberRevealed$ True | RememberFound$ True | RememberChanged$ True | SubAbility$ HordeCast
-SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | WithoutManaCost$ True | AILogic$ ReplaySpell | Amount$ Q | References$ Q | StackDescription$ None | ValidZone$ Exile | SubAbility$ HordeCreateToken
-SVar:HordeCreateToken:DB$ CopyPermanent | AILogic$ MomirAvatar, MostProminentInComputerDeck | NumCopies$ 1 | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | AddTypes$ Horde | RandomNum$ H | SorcerySpeed$ True | StackDescription$ SpellDescription | SubAbility$ DBCleanup
+SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | ValidZone$ Exile | WithoutManaCost$ True | Amount$ Q | References$ Q | AILogic$ ReplaySpell | StackDescription$ None | SubAbility$ HordeCreateToken
+SVar:HordeCreateToken:DB$ CopyPermanent | AILogic$ MomirAvatar, MostProminentInComputerDeck | NumCopies$ 1 | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | AddTypes$ Horde | RandomNum$ H | References$ H | StackDescription$ SpellDescription | SubAbility$ DBCleanup
 SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
 SVar:Q:Count$Intensity
-SVar:H:Remembered$Valid Card.Creature
+SVar:H:Remembered$Valid Creature.Horde
 
 # HORDE CREATURES ARE EXILED INSTEAD OF GOING ANYWHERE ELSE
 SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Creature.Horde | Origin$ Battlefield,Library | Destination$ Graveyard | ReplaceWith$ Exile | Description$ If a Horde creature would be put into the graveyard from anywhere, exile it instead.
@@ -59,12 +62,13 @@ SVar:Exile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library 
 SVar:lifeLossHordeMills:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | CheckSVar$ Z | SVarCompare$ EQ0 | TriggerDescription$ When the Horde controls no creatures it gains "Whenever the Horde loses life, it mills that many cards. (Damage causes loss of life.)"
 SVar:TrigMill:DB$ Mill | Defined$ Player.You | NumCards$ X | References$ X
 SVar:X:TriggerCount$LifeAmount
-#DeckHas:Ability$Mill & Type$Horde
-#DeckHints:Ability$Mill & Type$Horde
 
 # THE HORDE CAN PLAY LANDS FROM EXILE AND GRAVEYARD
 SVar:HordeLand:Mode$ Continuous | Affected$ Land.YouOwn | MayPlay$ True | AffectedZone$ Exile,Graveyard | EffectZone$ Command | Description$ The Horde may play lands from exile and graveyard.
 SVar:NonStackingEffect:True
+
+# THE HORDE CAN PLAY nonHORDE CREATURES FROM EXILE
+SVar:DBnonHordeCast:Mode$ Continuous | Affected$ Card.nonHorde+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Exile | EffectZone$ Command | Description$ The Horde may cast nonHorde creatures from exile without paying their mana costs.
 
 # SURVIVORS CREATURES CAN FIGHT CREATURES THE HORDE CONTROLS
 SVar:fightTheHorde:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddAbility$ fightAHorde | AddSVar$ HasEffect | Description$ • Creatures opponent control have "This creature fights target creature the Horde controls. (Each deals damage equal to its power to the other.)"
