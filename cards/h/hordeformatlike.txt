@@ -34,12 +34,12 @@ SVar:SurvCurLife:PlayerCountYour$LifeTotal
 
 # CHOOSE NUMBER OF TURNS HORDE SKIPS
 SVar:DBChooseNumber:DB$ ChooseNumber | Min$ 1 | Max$ 3 | AILogic$ Max | Defined$ Player.You | SubAbility$ DBHordeSkipTurns
-SVar:DBHordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ Player.Opponent | References$ xTnum | SubAbility$ TrigHordeAnthem
+SVar:DBHordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ Player.Opponent | References$ xTnum | SubAbility$ DBHordeEmblem
 SVar:xTnum:Count$ChosenNumber
 
 # A CUSTOM BATTLE THAT TRANSFORMS INTO A PLANESWALKER
-SVar:TrigHordeAnthem:DB$ Vote | Defined$ Player.You | VoteYes - Conjure Hordes Anthem?$ TrigConjure1 | VoteNo - To create Horde emblem$ DBHordeEmblem | VoteType$ Yes - Conjure Hordes Anthem?,No - To create Horde emblem
-SVar:TrigConjure1:DB$ MakeCard | Conjure$ True | Defined$ Player.You | Spellbook$ Hordes Anthem | Zone$ Battlefield | SubAbility$ DBHordeEmblem
+#SVar:TrigHordeAnthem:DB$ Vote | Defined$ Player.You | VoteYes - Conjure Hordes Anthem?$ TrigConjure1 | VoteNo - To create Horde emblem$ DBHordeEmblem | VoteType$ Yes - Conjure Hordes Anthem?,No - To create Horde emblem
+#SVar:TrigConjure1:DB$ MakeCard | Conjure$ True | Defined$ Player.You | Spellbook$ Hordes Anthem | Zone$ Battlefield | SubAbility$ DBHordeEmblem
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
 SVar:DBHordeEmblem:DB$ Effect | Defined$ Player.Chosen | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBnonHordeCast,fightTheHorde,noDraw,freeCmdr,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | EffectOwner$ Targeted | Duration$ Permanent
