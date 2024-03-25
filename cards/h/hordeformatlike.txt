@@ -40,7 +40,7 @@ SVar:DBHordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ Targeted | Refer
 SVar:xTnum:Count$ChosenNumber
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBnonHordeCast,fightTheHorde,noDraw,freeCmdr,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | Duration$ Permanent
+SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBExile,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | Duration$ Permanent
 
 # THE HORDE'S UPKEEP WITH INTENSIFY
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigIntensify | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
@@ -52,14 +52,13 @@ SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Reveal$ True | Amount$ Q | R
 SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | ValidZone$ Exile | WithoutManaCost$ True | Amount$ Q | References$ Q | AILogic$ ReplaySpell | StackDescription$ None | SubAbility$ HordeCreateToken
 
 SVar:HordeCreateToken:DB$ CopyPermanent | AILogic$ MomirAvatar, MostProminentInComputerDeck | NumCopies$ 1 | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | AddTypes$ Horde | RandomNum$ H | References$ H | StackDescription$ SpellDescription | SubAbility$ DBCleanup
-
 SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
 SVar:Q:Count$Intensity
-SVar:H:Remembered$Valid Creature.Horde
+SVar:H:Remembered$Valid Card.Horde
 
 # HORDE CREATURES ARE EXILED INSTEAD OF GOING ANYWHERE ELSE
-SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Creature.Horde | Origin$ Battlefield,Library | Destination$ Graveyard | ReplaceWith$ Exile | Description$ If a Horde creature would be put into the graveyard from anywhere, exile it instead.
-SVar:Exile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library | Destination$ Exile
+SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Creature.Horde | Origin$ Battlefield,Library | Destination$ Graveyard | ReplaceWith$ DBExile | Description$ If a Horde creature would be put into the graveyard from anywhere, exile it instead.
+SVar:DBExile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library | Destination$ Exile
 
 # HORDE MILLS WHEN LOSES LIFE OR TAKES DAMAGE IF IT HAS NO CREATURES
 SVar:lifeLossHordeMills:Mode$ LifeLost | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it mills that many cards. (Damage dealt by sources without infect causes loss of life.)
@@ -68,38 +67,30 @@ SVar:X:TriggerCount$LifeAmount
 DeckHas:Ability$Mill & Type$Horde
 DeckHints:Ability$Mill & Type$Horde
 
+# THE HORDE CAN PLAY CARDS FROM HAND, EXILE AND COMMANDER FOR FREE
+SVar:DBFreePlay:Mode$ Continuous | Affected$ Card.nonLand+YouOwn,Card.nonHorde+YouOwn,Card.IsCommander | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Exile,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand, exile and commander without paying their mana costs.
+SVar:reduceCmdrCost:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | Description$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
+SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
+
 # THE HORDE CAN PLAY LANDS FROM EXILE AND GRAVEYARD
 SVar:HordeLand:Mode$ Continuous | Affected$ Land.YouOwn | MayPlay$ True | AffectedZone$ Exile,Graveyard | EffectZone$ Command | Description$ The Horde may play lands from exile and graveyard.
-SVar:NonStackingEffect:True
-
-# THE HORDE CAN PLAY nonHORDE CREATURES FROM EXILE
-SVar:DBnonHordeCast:Mode$ Continuous | Affected$ Card.nonHorde+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Exile | EffectZone$ Command | Description$ The Horde may cast nonHorde creatures from exile without paying their mana costs.
 
 # SURVIVORS CREATURES CAN FIGHT CREATURES THE HORDE CONTROLS
-SVar:fightTheHorde:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddAbility$ fightAHorde | AddSVar$ HasEffect | Description$ • Creatures opponent control have "This creature fights target creature the Horde controls. (Each deals damage equal to its power to the other.)"
+SVar:fightTheHorde:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.OppCtrl | AddAbility$ fightAHorde | AddSVar$ HasEffect | Description$ Creatures opponent control have "This creature fights target creature the Horde controls. (Each deals damage equal to its power to the other.)"
 SVar:fightAHorde:AB$ Fight | Cost$ T | Defined$ Self | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target Horde | SpellDescription$ CARDNAME fights target creature the Horde controls. (Each deals damage equal to its power to the other.)
 SVar:HasEffect:TRUE
-SVar:NonStackingEffect:True
 
 # THE HORDE CAN'T DRAW
 SVar:noDraw:Mode$ CantDraw | ValidPlayer$ You | Description$ The Horde can't draw cards.
 
 # CREATURES THE HORDE CONTROLS HAVE HASTE, CANNOT BLOCK
-SVar:hordeHaste:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | Condition$ PlayerTurn | AddKeyword$ Haste & CARDNAME can't block. | Description$ Creatures the Horde controls have haste and can't block.
-SVar:NonStackingEffect:True
+SVar:hordeHaste:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddKeyword$ Haste & CARDNAME can't block. | Description$ Creatures the Horde controls have haste and can't block.
 
 # CREATURES THE HORDE CONTROLS ATTACK EACH TURN IF ABLE
-SVar:hordeMustAttk:Mode$ MustAttack | EffectZone$ Command | ValidCreature$ Creature.nonBattle+YouCtrl | Description$ Creatures the Horde controls must attack each combat if able.
-SVar:HasAttackEffect:TRUE
+SVar:hordeMustAttk:Mode$ MustAttack | EffectZone$ Command | ValidCreature$ Creature.YouCtrl | Description$ Creatures the Horde controls must attack each combat if able.
 
 # HORDE CREATURES CAN'T ATTACK IF ATTACKED PREVIOUS TURN
 SVar:HordeTap:Mode$ Continuous | EffectZone$ Command |  Affected$ Card.Horde+attackedLastTurn | AddHiddenKeyword$ CARDNAME can't attack. | Description$ CARDNAME can't attack if it attacked during your last turn.
-SVar:NonStackingEffect:True
-
-# THE HORDE CAN PLAY CARDS FROM HAND AND COMMANDER FOR FREE
-SVar:freeCmdr:Mode$ Continuous | Affected$ Card.nonLand+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand without paying their mana costs.
-SVar:reduceCmdrCost:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | Description$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
-SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
 
 # WIN CONDITION - SURVIVORS WIN IF HORDE HAS NO CARDS IN LIBRARY, GRAVEYARD AND NO CREATURES ON BATTLEFIELD
 SVar:cantWin:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ Survivors can't win the game as long as the Horde controls at least one creature and has at least one card in its library.
