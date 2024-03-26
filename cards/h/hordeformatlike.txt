@@ -2,26 +2,25 @@ Name:HordeFormatLike
 ManaCost:no cost
 Types:Tribal Instant Horde
 K:CARDNAME can't be countered.
+K:MayEffectFromOpeningHand:FromHand
+K:MayEffectFromOpeningDeck:DBsetup
 K:Starting Intensity:1
 
-T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DBsetup | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ To play HordeFormatLike, choose a player to be the Horde, amount of horde added is equal to targeted players library, set your life total and choose how many turns the horde skips to give you a head start.
+SVar:DBsetup:DB$ ChangeZone | Origin$ Stack | Destination$ Sideboard | SubAbility$ DBChooseHorde | Description$ To play HordeFormatLike, choose a player to be the Horde, amount of horde added is equal to targeted players library, set your life total and choose how many turns the horde skips to give you a head start.
 
-T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ To play HordeFormatLike, choose a player to be the Horde, amount of horde added is equal to targeted players library, set your life total and choose how many turns the horde skips to give you a head start.
-
-SVar:DBsetup:DB$ ChangeZone | Origin$ Library,Hand | Destination$ Sideboard | Defined$ Self | SubAbility$ DBChooseHorde
-
-SVar:DBDraw1:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBsetup | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card.
+SVar:FromHand:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBsetup | SpellDescription$ To play HordeFormatLike, choose a player to be the Horde, amount of horde added is equal to targeted players library, set your life total and choose how many turns the horde skips to give you a head start. If CARDNAME was exiled from your hand, Draw a card.
 
 # CHOOSE A PLAYER TO BE THE HORDE
-SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | SubAbility$ DiscardPact | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
-
-# HORDE DISCARDS HAND AND SHUFFLES GY INTO LIBRARY
-SVar:DiscardPact:DB$ Discard | Defined$ Targeted | Mode$ Hand | SubAbility$ DBReturn
-SVar:DBReturn:DB$ ChangeZoneAll | Defined$ Targeted | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | SpellDescription$ Amount of Horde added is equal to chosen players deck size | SubAbility$ DBConjureHorde
+SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | SubAbility$ DBConjureHorde | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
 
 # ADD HORDE TO CHOSEN PLAYERS LIBRARY
 SVar:DBConjureHorde:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SubAbility$ DBsetLife
 SVar:xHorde:TargetedPlayer$CardsInLibrary
+
+# HORDE DISCARDS HAND AND SHUFFLES GY INTO LIBRARY
+# NOT WORKING CURRENTLY
+#SVar:DiscardPact:DB$ Discard | Defined$ Targeted | Mode$ Hand | SubAbility$ DBReturn
+#SVar:DBReturn:DB$ ChangeZoneAll | Defined$ Targeted | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | SpellDescription$ Amount of Horde added is equal to chosen players deck size | SubAbility$ DBsetLife
 
 # CHOOSE STARTING LIFE
 SVar:DBsetLife:DB$ GenericChoice | Choices$ SetLife1,SetLife2,SetLife3,SetLife4,SetLife5,SetLife6,DBCleanup3 | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SubAbility$ DBChooseNumber | SpellDescription$ Survivors set own life total from a choice of 25,35,40,55,65 or 75.
