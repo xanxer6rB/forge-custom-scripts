@@ -8,4 +8,5 @@ Type=Other
 [cards]
 1 S Horde
 2 S HordeFormatLike
+2 S HordeFormatLikeWrkshp
 3 S Hordes Anthem
