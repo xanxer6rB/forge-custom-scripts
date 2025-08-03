@@ -1,26 +1,36 @@
-Name:HordeFormatLike
+Name:HordeFormat
 ManaCost:no cost
 Types:Tribal Instant Horde
 K:CARDNAME can't be countered.
-K:MayEffectFromOpeningHand:FromHand
-K:MayEffectFromOpeningDeck:DBsetup
+K:MayEffectFromOpeningDeck:DelTrigHorde
 K:Starting Intensity:1
 
-SVar:DBsetup:DB$ ChangeZone | Origin$ Stack | Destination$ Sideboard | SubAbility$ DBChooseHorde | Description$ To play HordeFormatLike, choose a player to be the Horde, amount of horde added is equal to targeted players library, set your life total and choose how many turns the horde skips to give you a head start.
-
-SVar:FromHand:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBsetup | SpellDescription$ To play HordeFormatLike, choose a player to be the Horde, amount of horde added is equal to targeted players library, set your life total and choose how many turns the horde skips to give you a head start. If CARDNAME was exiled from your hand, Draw a card.
+SVar:DelTrigHorde:DB$ DelayedTrigger | NextTurn$ True | Mode$ Phase | Phase$ Upkeep | ValidPlayer$ Player | Execute$ DBsetup | TriggerDescription$ Horde setup trigger.
+SVar:DBsetup:DB$ ChangeZone | Defined$ Self | Origin$ Library | Destination$ Sideboard | SubAbility$ DBChooseHorde
 
 # CHOOSE A PLAYER TO BE THE HORDE
-SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | SubAbility$ DBConjureHorde | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
+SVar:DBChooseHorde:DB$ ChoosePlayer | ValidTgts$ Player | Optional$ True | OptionalDecider$ You | SubAbility$ TrigChangeAll | StackDescription$ SpellDescription | SpellDescription$ Choose target player to be the Horde.
+
+# HORDE SHUFFLES HAND AND GY INTO LIBRARY
+SVar:TrigChangeAll:DB$ ChangeZoneAll | Origin$ Graveyard,Hand | Destination$ Library | Defined$ Targeted | ChangeType$ Card | Shuffle$ True | SpellDescription$ Horde shuffles its hand and graveyard into its library | SubAbility$ DBConjureHorde
 
 # ADD HORDE TO CHOSEN PLAYERS LIBRARY
-SVar:DBConjureHorde:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SubAbility$ DBsetLife
-SVar:xHorde:TargetedPlayer$CardsInLibrary
+#SVar:DBConjureHorde:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SubAbility$ DBsetLife
+#SVar:xHorde:TargetedPlayer$CardsInLibrary
 
-# HORDE DISCARDS HAND AND SHUFFLES GY INTO LIBRARY
-# NOT WORKING CURRENTLY
-#SVar:DiscardPact:DB$ Discard | Defined$ Targeted | Mode$ Hand | SubAbility$ DBReturn
-#SVar:DBReturn:DB$ ChangeZoneAll | Defined$ Targeted | ChangeType$ Card | Origin$ Graveyard | Destination$ Library | Shuffle$ True | SpellDescription$ Amount of Horde added is equal to chosen players deck size | SubAbility$ DBsetLife
+######
+# CHOOSE AMOUNT OF HORDE THAT WILL BE ADDED TO AI LIBRARY
+SVar:DBConjureHorde:DB$ GenericChoice | Choices$ HordeDeckSize,Horde50,Horde100,Horde150,Horde200,ChooseHordeNumber | Defined$ Opponent | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SubAbility$ DBChooseNumber | SpellDescription$ How many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.
+SVar:HordeDeckSize:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SpellDescription$ Equal to library Size
+SVar:Horde50:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ 50 | Shuffle$ True | Random$ True | SpellDescription$ 50 Horde
+SVar:Horde100:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ 100 | Shuffle$ True | Random$ True | SpellDescription$ 100 Horde
+SVar:Horde150:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ 150 | Shuffle$ True | Random$ True | SpellDescription$ 150 Horde
+SVar:Horde200:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ 200 | Shuffle$ True | Random$ True | SpellDescription$ 200 Horde
+SVar:ChooseHordeNumber:DB$ ChooseNumber | ChooseAnyNumber$ True | Defined$ You | SubAbility$ HordeSetAmount | SpellDescription$ Enter in a number of Horde
+SVar:HordeSetAmount:DB$ MakeCard | Name$ Horde | Defined$ Targeted | Zone$ Library | Amount$ HordeDS | References$ HordeDS | Shuffle$ True | Random$ True
+SVar:xHorde:TriggeredPlayer$CardsInLibrary
+SVar:HordeDS:Count$ChosenNumber
+######
 
 # CHOOSE STARTING LIFE
 SVar:DBsetLife:DB$ GenericChoice | Choices$ SetLife1,SetLife2,SetLife3,SetLife4,SetLife5,SetLife6,DBCleanup3 | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SubAbility$ DBChooseNumber | SpellDescription$ Survivors set own life total from a choice of 25,35,40,55,65 or 75.
@@ -39,25 +49,23 @@ SVar:DBHordeSkipTurns:DB$ SkipTurn | NumTurns$ xTnum | Defined$ Targeted | Refer
 SVar:xTnum:Count$ChosenNumber
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost,cantWin,cantLose | Triggers$ hordesTurn,lifeLossHordeMills,winCon | Replacements$ DeathRep | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBExile,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | Duration$ Permanent
+SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ hordesTurn,lifeLossHordeMills,winCon | ReplacementEffects$ DeathRep,cantLose,cantWin | SVars$ HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | Duration$ Permanent
 
 # THE HORDE'S UPKEEP WITH INTENSIFY
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigIntensify | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
-
 SVar:TrigIntensify:DB$ Intensify | SubAbility$ TrigHordeCascade
-
-SVar:TrigHordeCascade:DB$ DigUntil | Defined$ You | Reveal$ True | Amount$ Q | References$ Q | Valid$ Card.nonHorde | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberRevealed$ True | RememberFound$ True | RememberChanged$ True | SubAbility$ HordeCast
-
-SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidSA$ Spell | ValidZone$ Exile | WithoutManaCost$ True | Amount$ Q | References$ Q | AILogic$ ReplaySpell | StackDescription$ None | SubAbility$ HordeCreateToken
-
-SVar:HordeCreateToken:DB$ CopyPermanent | AILogic$ MomirAvatar, MostProminentInComputerDeck | NumCopies$ 1 | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | AddTypes$ Horde | RandomNum$ H | References$ H | StackDescription$ SpellDescription | SubAbility$ DBCleanup
-SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True
+SVar:TrigHordeCascade:DB$ DigUntil | ValidPlayer$ You | Valid$ Card.notnamedHorde | Reveal$ True | Amount$ Q | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | RememberRevealed$ True | RememberChanged$ True | References$ Q | SubAbility$ DBOmenLand
+## OG SCRIPT ##SVar:TrigHordeCascade:DB$ DigUntil | ValidPlayer$ You | Valid$ Card.nonHorde | Reveal$ True | Amount$ Q | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | RememberRevealed$ True | RememberChanged$ True | References$ Q | SubAbility$ DBOmenLand
+SVar:DBOmenLand:DB$ ChangeZone | Origin$ Exile | Destination$ Battlefield | ChangeType$ Land.IsRemembered+ActivePlayerCtrl | ChangeNum$ 1 | DefinedPlayer$ TriggeredPlayer | Chooser$ TriggeredPlayer | Hidden$ True | Mandatory$ True | SubAbility$ HordeCast
+SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidZone$ Exile | Valid$ Creature.IsRemembered,Instant.IsRemembered,Sorcery.IsRemembered,Enchantment.IsRemembered,Artifact.IsRemembered,Battle Siege.IsRemembered,Planeswalker.IsRemembered | Amount$ Q | ValidSA$ Spell | WithoutManaCost$ True | AILogic$ ReplaySpell | References$ Q | SubAbility$ HordeCreateToken
+SVar:HordeCreateToken:DB$ CopyPermanent | NumCopies$ 1 | AILogic$ MomirAvatar | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | RandomNum$ H | AddTypes$ Horde | StackDescription$ SpellDescription | References$ H | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True | ForgetDefined$ True
 SVar:Q:Count$Intensity
-SVar:H:Remembered$Valid Card.Horde
+SVar:H:Remembered$Valid Card.namedHorde
 
-# HORDE CREATURES ARE EXILED INSTEAD OF GOING ANYWHERE ELSE
-SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Creature.Horde | Origin$ Battlefield,Library | Destination$ Graveyard | ReplaceWith$ DBExile | Description$ If a Horde creature would be put into the graveyard from anywhere, exile it instead.
-SVar:DBExile:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library | Destination$ Exile
+# HORDE CARDS WHEN CAST ARE PUT INTO THE SIDEBOARD INSTEAD OF GOING ANYWHERE ELSE
+SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Instant.namedHorde | Origin$ Battlefield,Library | Destination$ Exile | ReplaceWith$ DBSideboard | HiddenDescription$ When a Horde card is cast it is put into the Ai's sideboard instead of going anywhere else.
+SVar:DBSideboard:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library | Destination$ Sideboard
 
 # HORDE MILLS WHEN LOSES LIFE OR TAKES DAMAGE IF IT HAS NO CREATURES
 SVar:lifeLossHordeMills:Mode$ LifeLost | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it mills that many cards. (Damage dealt by sources without infect causes loss of life.)
@@ -92,8 +100,8 @@ SVar:hordeMustAttk:Mode$ MustAttack | EffectZone$ Command | ValidCreature$ Creat
 SVar:HordeTap:Mode$ Continuous | EffectZone$ Command |  Affected$ Card.Horde+attackedLastTurn | AddHiddenKeyword$ CARDNAME can't attack. | Description$ CARDNAME can't attack if it attacked during your last turn.
 
 # WIN CONDITION - SURVIVORS WIN IF HORDE HAS NO CARDS IN LIBRARY, GRAVEYARD AND NO CREATURES ON BATTLEFIELD
-SVar:cantWin:Mode$ Continuous | EffectZone$ Command | Affected$ Opponent | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't win the game. | Description$ Survivors can't win the game as long as the Horde controls at least one creature and has at least one card in its library.
-SVar:cantLose:Mode$ Continuous | EffectZone$ Command | Affected$ You | CheckSVar$ W | SVarCompare$ GE1 | AddKeyword$ You can't lose the game. & You don't lose the game for having 0 or less life. | Description$ The Horde can't lose the game as long as it controls at least one creature and has at least one card in its library.
+SVar:cantLose:Event$ GameLoss | EffectZone$ Command | ActiveZones$ Command | ValidPlayer$ You | ValidLoseReason$ LifeReachedZero | Layer$ CantHappen | CheckSVar$ W | SVarCompare$ GE1 | Description$ The Horde doesn't lose the game for having 0 or less life.
+SVar:cantWin:Event$ GameWin | EffectZone$ Command | ActiveZones$ Command | ValidPlayer$ Opponent | Layer$ CantHappen | CheckSVar$ W | SVarCompare$ GE1 | Description$ Survivors can't win the game unless the Horde has no cards in its library and no creatures on the battlefield.
 SVar:winCon:Mode$ Always | EffectZone$ Command | CheckSVar$ W | SVarCompare$ LE0 | TriggerZones$ Command | Execute$ TrigYouHaveSurvived | TriggerDescription$ When the Horde has no cards in its library and controls no creatures, you have survived the game.
 SVar:TrigYouHaveSurvived:DB$ WinsGame | Defined$ Opponent
 SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
