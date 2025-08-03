@@ -5,7 +5,7 @@ Add suggested card script to your library before starting a match.
  - Each script more or less work but are still wip.
  - Formats you can play include:
  - A custom format chooser script that allows you to choose:
-     - A customized Horde like format use: hordeformatlike
+     - A customized Horde like format use: hordeforma
      - Type 4 format style game: Type4Format
      - Wagic the Homebrew - Blitzkrieg
 
