@@ -9,5 +9,3 @@ Type=Other
 1 S Horde
 2 S HordeFormatLike
 3 S HordeFormat - Ai
-4 S HordeFormatLikeWrkshp
-5 S Hordes Anthem
