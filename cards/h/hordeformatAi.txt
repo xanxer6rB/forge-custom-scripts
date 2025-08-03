@@ -9,7 +9,7 @@ SVar:DelTrigHorde:DB$ DelayedTrigger | NextTurn$ True | Mode$ Phase | Phase$ Upk
 SVar:DBsetup:DB$ ChangeZone | Defined$ Self | Origin$ Library | Destination$ Sideboard | SubAbility$ TrigChangeAll
 
 # HORDE SHUFFLES HAND AND GY INTO LIBRARY
-SVar:TrigChangeAll:DB$ ChangeZoneAll | Origin$ Graveyard,Hand | Destination$ Library | ChangeType$ Card.YouOwn | Shuffle$ True | SpellDescription$ Horde discards and and shuffles its graveyard into its library | SubAbility$ DBConjureHorde
+SVar:TrigChangeAll:DB$ ChangeZoneAll | Origin$ Graveyard,Hand | Destination$ Library | ChangeType$ Card.YouOwn | Shuffle$ True | SpellDescription$ Horde shuffles its hand and graveyard into its library | SubAbility$ DBConjureHorde
 
 # ADDS HORDE TO AI LIBRARY EQUAL TO AI LIBRARY SIZE
 #SVar:DBConjureHorde:DB$ MakeCard | Name$ Horde | Defined$ You | Zone$ Library | Amount$ xHorde | Shuffle$ True | Random$ True | SubAbility$ DBsetLife
