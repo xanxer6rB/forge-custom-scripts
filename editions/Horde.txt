@@ -6,6 +6,10 @@ Name=Horde Magic
 Type=Other
 
 [cards]
-1 S Horde
-2 S HordeFormatLike
-3 S HordeFormat - Ai
+1 C Horde
+2 S HordeFormat - Intensify
+3 S HordeFormatAi - Intensify
+4 S HordeFormat - Radiation
+5 S HordeFormat - Basic Rules
+6 S HordeFormat - ModeSelector
+7 S HordeFormat - Endless Nights
