@@ -1,0 +1,13 @@
+Name:HordeFormat - ModeSelector
+ManaCost:no cost
+Types:Tribal Instant
+K:Split second
+K:CARDNAME can't be countered.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DBcstmFrmt | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with this card in your library or hand choose a HordeFormat to play: HordeFormat - Basic Rules, HordeFormat - Intensify, HordeFormat - Radiation, HordeFormat - Endless Nights.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If this card is in your opening hand choose a HordeFormat to play: HordeFormat - Basic Rules, HordeFormat - Intensify, HordeFormat - Radiation, HordeFormat - Endless Nights.
+SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ DBcstmFrmt | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card.
+SVar:DBcstmFrmt:DB$ NameCard | Defined$ You | ChooseFromList$ HordeFormat - Basic Rules,HordeFormat - Intensify,HordeFormat - Radiation,HordeFormat - Endless Nights | ExcludeChosen$ True | SubAbility$ DBCast | StackDescription$ SpellDescription | SpellDescription$ Conjure a card from CARDNAME spellbook into your hand. Create a copy of the card with the chosen name. You may cast the copy without paying its mana cost.
+SVar:DBCast:DB$ Play | CopyFromChosenName$ True | Optional$ True | WithoutManaCost$ True | ValidSA$ Spell | SubAbility$ TrigSideboard | StackDescription$ None
+SVar:TrigSideboard:DB$ ChangeZone | Origin$ Library,Hand | Destination$ Sideboard | Defined$ Self
+#SVar:DBCleanup:DB$ Cleanup | ClearNamedCard$ True
+Oracle:If you have HordeFormat - ModeSelector in your library, at the start of the game it will trigger and you choose a HordeFormat to play: HordeFormat - Basic Rules\nHordeFormat - Intensify\nHordeFormat - Radiation\nHordeFormat - Endless Nights

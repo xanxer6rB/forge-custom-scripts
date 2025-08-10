@@ -1,0 +1,8 @@
+Name:Hordes Battle Plans
+ManaCost:no cost
+Types:Enchantment Horde
+T:Mode$ Phase | Phase$ End of Turn | Execute$ TrigConjure | ValidPlayer$ You | TriggerZones$ Battlefield | TriggerDescription$ At the beginning of your end step, conjure a random battle from CARDNAME's spellbook and put it onto the battlefield.
+SVar:TrigConjure:DB$ MakeCard | Conjure$ True | Defined$ Player.Opponent | AtRandom$ True | Spellbook$ Invasion of the Horde,Invasion of Alara,Invasion of Amonkhet,Invasion of Dominaria,Invasion of Fiora,Invasion of Innistrad,Invasion of Ixalan,Invasion of Kaldheim,Invasion of Kamigawa,Invasion of Karsus,Invasion of Kylem,Invasion of Lorwyn,Invasion of Mercadia,Invasion of Moag,Invasion of New Capenna,Invasion of New Phyrexia,Invasion of Pyrulea,Invasion of Regotha,Invasion of Segovia,Invasion of Vryn,Invasion of Zendikar | Zone$ Battlefield
+DeckHints:Type$Battle
+DeckHas:Type$Siege
+Oracle:At the beginning of your end step, conjure a random battle from the Horde's spellbook onto the battlefield.
