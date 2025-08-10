@@ -3,10 +3,11 @@ Custom forge scripts to run different types of card formats and custom sets
 
 In order for Forge to recognize the Horde type you need to add 'Horde:Horde' to the TypeLists.txt located in '/res/lists' directory and need add it each time if you update via the Snapshots.
 
-To play the Horde have the HordeFormat - ModeSelector in your library. When you start a game it will trigger and you choose a Horde format to play:
+To play the Horde have the HordeFormat - ModeSelector in your library. When a game starts it will trigger and you choose a Horde format to play:
  - HordeFormat - Basic Rules: Rules of the original format as close as possible.
 	- - The Horde shuffles its hand and graveyard into its library.
-	- - Choose how many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.\n- Survivors set own life total from a choice of 25,35,40,55,65 or 75.
+	- - Choose how many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.
+	- - Survivors set own life total from a choice of 25,35,40,55,65 or 75.
 	- - Choose a number of turns the Horde skips for you to prepare.
 	- - The Horde reveals the top card of its library until it reveals a card not named Horde and casts all cards revealed this way.
 	- - Horde cards when cast are put into the sideboard instead of going anywhere else.
