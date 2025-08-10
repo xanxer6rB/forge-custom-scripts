@@ -28,7 +28,7 @@ To play a Wagic the Homebrew game mode put one of the cards in your library:
 To play Type 4 format put the card in your library:
  - Type4Format
 
-Theros Challenges:
+Theros Challenges (WIP):
 - Face the Hydra Challenge: Challenge 1 - FaceTheHydra_Rev3
 - Battle the Horde Challenge: Challenge 2 - Battle the Horde_Rev2
 - Defeat a God Challenge: Challenge 3 Defeat a God Rev2
