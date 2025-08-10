@@ -22,7 +22,7 @@ To play the Horde have the HordeFormat - ModeSelector in your library. When you 
 
  - HordeFormat - Inensify: Basic Rules with added intensify - Beginning of the Horde's upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals "X" cards not named "Horde" where "X" is the Horde's intensity.
  - HordeFormat - Radiation: Same as intensify but with when it is Nigh, Horde type creatures have "When this creature deals combat damage to a player that player gets a Radiation counter.
- - HordeFormat - Endless Nights: Same as Radiation with when Day turns to Night or Night turns to Day the Horde gets an HOUR counter, when the twelfth HOUR counter is added the counters are removed and the Horde shuffles its Graveyard, Exile and all cards named "Horde" from its Sideboard back into its library.
+ - HordeFormat - Endless Nights: Same as Radiation with, during its turn if Day turns to Night or Night turns to Day the Horde gets an HOUR counter, when the twelfth HOUR counter is added the counters are removed and the Horde shuffles its Graveyard, Exile and all cards named "Horde" from its Sideboard back into its library.
 
 To play a Wagic the Homebrew game mode put one of the cards in your library:
  - Wagic the Homebrew - Blitzkrieg
