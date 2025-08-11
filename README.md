@@ -1,9 +1,11 @@
 # forge-custom-scripts
 Custom forge scripts to run different types of card formats and custom sets
 
-In order for Forge to recognize the Horde type you need to add 'Horde:Horde' to the TypeLists.txt located in '/res/lists' directory and need add it each time if you update via the Snapshots.
-
-To play the Horde have the HordeFormat - ModeSelector in your library. When a game starts it will trigger and you choose a Horde format to play:
+A guide to get started:
+- Add "Horde:Horde" to the TypeLists.txt file in /res/lists (you will need to add this each time you update since the update will overwrite it)
+- HORDE folder goes in /custom/cards
+- Horde.txt from editions goes in /custom/editions
+- Go to the deck editor in Forge and add the "HordeFormat - ModeSelector" card to any of your decks. When a game starts it will trigger and you choose a Horde format to play:
  - HordeFormat - Basic Rules: Rules of the original format as close as possible.
 	- - The Horde shuffles its hand and graveyard into its library.
 	- - Choose how many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.
