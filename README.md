@@ -1,7 +1,7 @@
 # forge-custom-scripts
 Custom forge scripts to run different types of card formats and custom sets
 
-A guide to get started:
+A guide to get started playing the HordeFormat:
 - Add "Horde:Horde" to the TypeLists.txt file in /res/lists (you will need to add this each time you update since the update will overwrite it)
 - HORDE folder goes in /custom/cards
 - Horde.txt from editions goes in /custom/editions
