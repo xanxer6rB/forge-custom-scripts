@@ -11,7 +11,7 @@ A guide to get started playing the HordeFormat:
 	- - Choose how many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.
 	- - Survivors set own life total from a choice of 25,35,40,55,65 or 75.
 	- - Choose a number of turns the Horde skips for you to prepare.
-	- - The Horde reveals the top card of its library until it reveals a card not named Horde and casts all cards revealed this way.
+	- - The Horde reveals the top card of its library until it reveals a card not named Horde and casts all cards revealed this way. When a card named Horde is cast, a random creature of the most prominent creature type in the Horde's library gets created using the MomirAvatar ability. The created creatures are token and Horde in addition to their creature types.
 	- - Horde cards when cast are put into the sideboard instead of going anywhere else.
 	- - Whenever the Horde loses life, it mills that many cards. (Damage dealt by sources without infect causes loss of life.)
 	- - The Horde may cast spells from its hand, exile and commander without paying their mana costs with no commander penalty.
