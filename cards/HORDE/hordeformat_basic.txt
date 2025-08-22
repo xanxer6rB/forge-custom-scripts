@@ -46,7 +46,7 @@ SVar:xTnum:Count$ChosenNumber
 SVar:TrigSetLife:DB$ SetLife | Defined$ Targeted | LifeAmount$ 0 | SubAbility$ DBHordeEmblem
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ noLifeChange,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ hordesTurn,lifeLossHordeMills,winCon | ReplacementEffects$ damageMill,DeathRep,cantLose,cantWin | SVars$ HasAttackEffect,fightAHorde,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,W,X,Y,Z | Duration$ Permanent | SubAbility$ SetLife0
+SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ noLifeChange,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ hordesTurn,lifeLossHordeMills,winCon | ReplacementEffects$ damageMill,DeathRep,cantLose,cantWin | SVars$ HasAttackEffect,fightAHorde,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,W,X,Y,Z | Duration$ Permanent
 
 # THE HORDE'S UPKEEP
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigHordeCascade | TriggerDescription$ The Horde reveals the top card of its library until it reveals a card not named Horde, casts the card(s) and puts all Horde creatures onto the battlefield.
