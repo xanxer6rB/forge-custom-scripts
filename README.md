@@ -1,7 +1,7 @@
 # forge-custom-scripts
 Custom forge scripts to run different types of card formats and custom sets
 
-A guide to get started playing the HordeFormat:
+A guide to get started playing the HordeFormat (The Horde's life total can not change, avoid using cards that would make the Horde pay life as a cost):
 - Add "Horde:Horde" to the TypeLists.txt file in /res/lists (you will need to add this each time you update since the update will overwrite it)
 - HORDE folder goes in /custom/cards
 - Horde.txt from editions goes in /custom/editions
@@ -11,6 +11,7 @@ A guide to get started playing the HordeFormat:
 	- - Choose how many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.
 	- - Survivors set own life total from a choice of 25,35,40,55,65 or 75.
 	- - Choose a number of turns the Horde skips for you to prepare.
+ - - The Horde's life total is set to 0 and can not change and can not pay life as a cost.
 	- - The Horde reveals the top card of its library until it reveals a card not named Horde and casts all cards revealed this way. When a card named Horde is cast, a random creature of the most prominent creature type in the Horde's library gets created using the MomirAvatar ability. The created creatures are token and Horde in addition to their creature types.
 	- - Horde cards when cast are put into the sideboard instead of going anywhere else.
 	- - Whenever the Horde loses life, it mills that many cards. (Damage dealt by sources without infect causes loss of life.)
