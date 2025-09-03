@@ -9,7 +9,21 @@ Type=Other
 1 C Horde
 2 S HordeFormat - Intensify
 3 S HordeFormatAi - Intensify
-4 S HordeFormat - Radiation
+5 S HordeFormat - Radiation
 5 S HordeFormat - Basic Rules
 6 S HordeFormat - ModeSelector
 7 S HordeFormat - Endless Nights
+
+[other]
+[BasicTypes]
+[LandTypes]
+[CreatureTypes]
+Horde
+[SpellTypes]
+HordeMode
+[EnchantmentTypes]
+[ArtifactTypes]
+[WalkerTypes]
+[DungeonTypes]
+[BattleTypes]
+[PlanarTypes]
