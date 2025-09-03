@@ -1,8 +1,10 @@
 Name:HordeFormat - Basic Rules
 ManaCost:no cost
-Types:Instant
+Types:Instant HordeMode
 K:CARDNAME can't be countered.
 K:MayEffectFromOpeningDeck:DelTrigHorde
+
+#Text: The Horde's life total can not change, avoid using cards that would make the Horde pay life as a cost.
 
 # NEEDED FOR CHOOSING GAMEMODE CARD SCRIPT
 A:SP$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBChooseHorde
@@ -46,7 +48,7 @@ SVar:xTnum:Count$ChosenNumber
 SVar:TrigSetLife:DB$ SetLife | Defined$ Targeted | LifeAmount$ 0 | SubAbility$ DBHordeEmblem
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ noLifeChange,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ hordesTurn,lifeLossHordeMills,winCon | ReplacementEffects$ damageMill,DeathRep,cantLose,cantWin | SVars$ HasAttackEffect,fightAHorde,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,W,X,Y,Z | Duration$ Permanent
+SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ noLifeChange,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ hordesTurn,lifeLossHordeMills,winCon | ReplacementEffects$ damageMill,DeathRep,cantLose,cantWin | SVars$ HasAttackEffect,fightAHorde,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,W,X,Y,Z | Duration$ Permanent | SubAbility$ SetLife0
 
 # THE HORDE'S UPKEEP
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigHordeCascade | TriggerDescription$ The Horde reveals the top card of its library until it reveals a card not named Horde, casts the card(s) and puts all Horde creatures onto the battlefield.
@@ -58,8 +60,8 @@ SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True | Forg
 SVar:H:Remembered$Valid Card.namedHorde
 
 # HORDE CARDS WHEN CAST ARE PUT INTO THE SIDEBOARD INSTEAD OF GOING ANYWHERE ELSE
-SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Instant.namedHorde | Origin$ Battlefield,Library | Destination$ Exile | ReplaceWith$ DBSideboard | HiddenDescription$ When a Horde card is cast it is put into the Ai's sideboard instead of going anywhere else.
-SVar:DBSideboard:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library | Destination$ Sideboard
+SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Instant.namedHorde | Origin$ Battlefield,Library | Destination$ Exile,Graveyard | ReplaceWith$ DBSideboard | HiddenDescription$ When a Horde card is cast it is put into the Ai's sideboard instead of going anywhere else.
+SVar:DBSideboard:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library,Graveyard | Destination$ Sideboard
 
 # HORDE MILLS WHEN LOSES LIFE OR TAKES DAMAGE
 SVar:lifeLossHordeMills:Mode$ LifeLost | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it mills that many cards. (Damage dealt by sources without infect causes loss of life.)
@@ -107,4 +109,4 @@ SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
 SVar:Z:Count$ValidBattlefield Creature.YouCtrl+inZoneBattlefield
 SVar:W:SVar$Y/Plus.Z
 
-Oracle:++ HordeFormat - Basic Rules ++\nA custom card to play a form of Horde format.\nTo play, have this card in your library.\nBasic rules of the Horde format as close as possible.\nThe Hordes life total can't change and it can't pay life. Avoid using cards that would make the Horde have to pay life.\n++++++++++++++++++++++++++++++++++
+Oracle:++ HordeFormat - Basic Rules ++\nA custom card to play a form of Horde format.\nTo play, have this card in your library.\nBasic rules of the Horde format as close as possible.\nThe Hordes life total can't change and it can't pay life. Avoid using cards that would make the Horde have to pay life as a cost.\n++++++++++++++++++++++++++++++++++
