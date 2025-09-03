@@ -1,6 +1,6 @@
 Name:HordeFormatAi - Intensify
 ManaCost:no cost
-Types:Tribal Instant Horde
+Types:Instant HordeMode
 K:CARDNAME can't be countered.
 K:MayEffectFromOpeningDeck:DelTrigHorde
 K:Starting Intensity:1
@@ -59,8 +59,8 @@ SVar:Q:Count$Intensity
 SVar:H:Remembered$Valid Card.namedHorde
 
 # HORDE CARDS WHEN CAST ARE PUT INTO THE SIDEBOARD INSTEAD OF GOING ANYWHERE ELSE
-SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Instant.namedHorde | Origin$ Battlefield,Library | Destination$ Exile | ReplaceWith$ DBSideboard | HiddenDescription$ When a Horde card is cast it is put into the Ai's sideboard instead of going anywhere else.
-SVar:DBSideboard:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library | Destination$ Sideboard
+SVar:DeathRep:Event$ Moved | EffectZone$ Command | ValidLKI$ Instant.namedHorde | Origin$ Battlefield,Library | Destination$ Exile,Graveyard | ReplaceWith$ DBSideboard | HiddenDescription$ When a Horde card is cast it is put into the Ai's sideboard instead of going anywhere else.
+SVar:DBSideboard:DB$ ChangeZone | Defined$ ReplacedCard | Origin$ Battlefield,Library,Graveyard | Destination$ Sideboard
 
 # HORDE MILLS WHEN LOSES LIFE OR TAKES DAMAGE IF IT HAS NO CREATURES
 SVar:lifeLossHordeMills:Mode$ LifeLost | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigMill | TriggerDescription$ Whenever the Horde loses life, it mills that many cards. (Damage dealt by sources without infect causes loss of life.)
