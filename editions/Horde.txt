@@ -7,12 +7,18 @@ Type=Other
 
 [cards]
 1 C Horde
-2 S HordeFormat - Intensify
-3 S HordeFormatAi - Intensify
-5 S HordeFormat - Radiation
-5 S HordeFormat - Basic Rules
-6 S HordeFormat - ModeSelector
-7 S HordeFormat - Endless Nights
+2 S Hordes Battle Plans
+3 S Invasion of the Horde
+4 S HordeFormat - Intensify
+5 S HordeFormatAi - Intensify
+6 S HordeFormat - Radiation
+7 S HordeFormat - Basic Rules
+8 S HordeFormat - ModeSelector
+9 S HordeFormat - Endless Nights
+10 M Legion of the Horde
+
+[battles]
+3 Invasion of the Horde|HORDE
 
 [other]
 [BasicTypes]
@@ -24,6 +30,7 @@ HordeMode
 [EnchantmentTypes]
 [ArtifactTypes]
 [WalkerTypes]
+Horde
 [DungeonTypes]
 [BattleTypes]
 [PlanarTypes]
