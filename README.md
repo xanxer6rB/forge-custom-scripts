@@ -2,7 +2,6 @@
 Custom forge scripts to run different types of card formats and custom sets
 
 A guide to get started playing the HordeFormat (The Horde's life total can not change, avoid using cards that would make the Horde pay life as a cost):
-- Add "Horde:Horde" to the TypeLists.txt file in /res/lists (you will need to add this each time you update since the update will overwrite it)
 - HORDE folder goes in /custom/cards
 - Horde.txt from editions goes in /custom/editions
 - Go to the deck editor in Forge and add the "HordeFormat - ModeSelector" card to any of your decks. When a game starts it will trigger and you choose a Horde format to play:
