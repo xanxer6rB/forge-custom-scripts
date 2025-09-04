@@ -47,7 +47,7 @@ SVar:xTnum:Count$ChosenNumber
 SVar:DoDay:DB$ DayTime | Value$ Day | SubAbility$ DBHordeEmblem
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeAddRad,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ hordesTurn,lifeLossHordeMills,winCon,DayChange,HordeHour | ReplacementEffects$ DeathRep,cantLose,cantWin | SVars$ HordeShuffle,TrigRadiation,HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,Q,W,X,Y,Z | Duration$ Permanent
+SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeAddRad,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ HordeLifeGain,hordesTurn,lifeLossHordeMills,winCon,DayChange,HordeHour | ReplacementEffects$ damageGainLife,DeathRep,cantLose,cantWin | SVars$ TrigHordeLifeGain,HordeShuffle,TrigRadiation,HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,LFG,Q,W,X,Y,Z | Duration$ Permanent
 
 # THE HORDE'S UPKEEP WITH INTENSIFY
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigIntensify | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
@@ -78,12 +78,11 @@ SVar:X:TriggerCount$LifeAmount
 DeckHas:Ability$Mill & Type$Horde
 DeckHints:Ability$Mill & Type$Horde
 
-
-
 ##### ADD THIS TO THE OTHER MODES #####
-#SVar:HordeLifeGain:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigHordeLifeGain | TriggerDescription$ Whenever you lose life, you gain 2 life for each 1 life you lost. (Damage dealt to you causes you to lose life.)
-#SVar:TrigHordeLifeGain:DB$ GainLife | LifeAmount$ LFG
-#SVar:LFG:TriggerCount$LifeAmount/Times.1
+SVar:HordeLifeGain:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigHordeLifeGain | TriggerDescription$ Whenever the Horde loses life, it gain 1 life for each 1 life it lost. (Damage dealt to the Horde causes it to lose life.)
+SVar:damageGainLife:Event$ DamageDone | EffectZone$ Command | ValidPlayer$ Opponent | ActiveZones$ Command | ValidSource$ Card | ValidTarget$ You | ReplaceWith$ TrigHordeLifeGain  | ExecuteMode$ PerTarget | Description$ If the Horde takes damage it gains 1 life for each damage taken.
+SVar:TrigHordeLifeGain:DB$ GainLife | LifeAmount$ LFG
+SVar:LFG:TriggerCount$LifeAmount/Times.1
 
 
 
