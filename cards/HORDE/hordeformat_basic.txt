@@ -6,7 +6,7 @@ K:MayEffectFromOpeningDeck:DelTrigHorde
 
 #Text: The Horde's life total can not change, avoid using cards that would make the Horde pay life as a cost.
 
-# NEEDED FOR CHOOSING GAMEMODE CARD SCRIPT
+# NEEDED FOR CHOOSING FROM GAMEMODE CARD SCRIPT
 A:SP$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBChooseHorde
 
 SVar:DelTrigHorde:DB$ DelayedTrigger | NextTurn$ True | Mode$ Phase | Phase$ Upkeep | ValidPlayer$ Player | Execute$ DBsetup | TriggerDescription$ Horde setup trigger.
