@@ -52,7 +52,7 @@ SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellD
 # THE HORDE'S UPKEEP WITH INTENSIFY
 SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigIntensify | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
 SVar:TrigIntensify:DB$ Intensify | SubAbility$ TrigHordeCascade
-SVar:TrigHordeCascade:DB$ DigUntil | ValidPlayer$ You | Valid$ Card.nonHorde | Reveal$ True | Amount$ Q | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | RememberRevealed$ True | RememberChanged$ True | References$ Q | SubAbility$ DBOmenLand
+SVar:TrigHordeCascade:DB$ DigUntil | ValidPlayer$ You | Valid$ Card.!namedHorde | Reveal$ True | Amount$ Q | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | RememberRevealed$ True | RememberChanged$ True | References$ Q | SubAbility$ DBOmenLand
 SVar:DBOmenLand:DB$ ChangeZone | Origin$ Exile | Destination$ Battlefield | ChangeType$ Land.IsRemembered+ActivePlayerCtrl | ChangeNum$ 1 | DefinedPlayer$ TriggeredPlayer | Chooser$ TriggeredPlayer | Hidden$ True | Mandatory$ True | SubAbility$ HordeCast
 SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidZone$ Exile | Valid$ Creature.IsRemembered,Instant.IsRemembered,Sorcery.IsRemembered,Enchantment.IsRemembered,Artifact.IsRemembered,Battle Siege.IsRemembered,Planeswalker.IsRemembered | Amount$ Q | ValidSA$ Spell | WithoutManaCost$ True | AILogic$ ReplaySpell | References$ Q | SubAbility$ HordeCreateToken
 SVar:HordeCreateToken:DB$ CopyPermanent | NumCopies$ 1 | AILogic$ MomirAvatar | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | RandomNum$ H | AddTypes$ Horde | StackDescription$ SpellDescription | References$ H | SubAbility$ DBCleanup
@@ -77,6 +77,8 @@ SVar:TrigMill:DB$ Mill | Defined$ TriggeredPlayer | NumCards$ X
 SVar:X:TriggerCount$LifeAmount
 DeckHas:Ability$Mill & Type$Horde
 DeckHints:Ability$Mill & Type$Horde
+
+
 
 ##### ADD THIS TO THE OTHER MODES #####
 SVar:HordeLifeGain:Mode$ LifeLost | EffectZone$ Command | ValidPlayer$ You | TriggerZones$ Command | Execute$ TrigHordeLifeGain | TriggerDescription$ Whenever the Horde loses life, it gain 1 life for each 1 life it lost. (Damage dealt to the Horde causes it to lose life.)
