@@ -1,0 +1,71 @@
+Name:YGHO Mode
+ManaCost:no cost
+Types:Instant 
+K:CARDNAME can't be countered.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Library | Execute$ DBsetup | IsPresent$ Card.Self | PresentZone$ Library | SubAbility$ DBsetup | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game mode.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | SubAbility$ DBDraw1 | TriggerDescription$ If you start the game with CARDNAME in your opening hand, exile it and go through the prompts. Hope you enjoy the game mode.
+SVar:DBDraw1:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBsetup | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card
+SVar:DBsetup:DB$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBRmv
+SVar:DBRmv:DB$ ChangeZone | Defined$ Self | Origin$ Library,Hand | Destination$ Sideboard | SubAbility$ YGHO
+SVar:YGHO:DB$ Effect | ValidTgts$ Player | TgtPrompt$ Choose any number of target players | TargetMin$ 0 | TargetMax$ MaxPl | StackDescription$ SpellDescription | MayChooseTarget$ True | Chooser$ You | Name$ YGHO Mode Effect | StaticAbilities$ CastLimit1,CastLimit2,Limit1,Limit2,Limit3,MaxHandSize,STCantAttack,fightTheHorde,AddSac1,AddSac2,AddSac3 | SVars$ fightAHorde, NumCreatures | EffectOwner$ Targeted | Duration$ Permanent | SubAbility$ DBsetLife | SpellDescription$ When the game starts, choose any number of players to get a CARDNAME emblem.
+SVar:MaxPl:PlayerCountPlayers$Amount
+
+# SetLife:  XXXX (8000)
+#SVar:SetLife1:DB$ SetLife | Defined$ Targeted | LifeAmount$ 8000 | SpellDescription$ set life 8000
+
+# CHOOSE STARTING LIFE
+SVar:DBsetLife:DB$ GenericChoice | Choices$ SetLife1,SetLife2,SetLife3,SetLife4,SetLife5,SetLife6,DBCleanup3 | Defined$ You | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SpellDescription$ Set own life total from a choice of 25,35,40,55,65 or 75.
+SVar:SetLife1:DB$ SetLife | Defined$ Targeted | LifeAmount$ 25 | SpellDescription$ set life 25
+SVar:SetLife2:DB$ SetLife | Defined$ Targeted | LifeAmount$ 35 | SpellDescription$ set life 35
+SVar:SetLife3:DB$ SetLife | Defined$ Targeted | LifeAmount$ 40 | SpellDescription$ set life 40
+SVar:SetLife4:DB$ SetLife | Defined$ Targeted | LifeAmount$ 55 | SpellDescription$ set life 55
+SVar:SetLife5:DB$ SetLife | Defined$ Targeted | LifeAmount$ 65 | SpellDescription$ set life 65
+SVar:SetLife6:DB$ SetLife | Defined$ Targeted | LifeAmount$ 75 | SpellDescription$ set life 75
+SVar:DBCleanup3:DB$ Cleanup | ClearRemembered$ True | ClearChosenPlayer$ True | ForgetDefinedPlayer$ True | ForgetDefined$ True | SpellDescription$ To continue
+SVar:SurvCurLife:PlayerCountYour$LifeTotal
+
+# Limiting the Battlefield
+SVar:CastLimit1:Mode$ CantBeCast | EffectZone$ Command | ValidCard$ Creature.YouCtrl | NumLimitEachTurn$ 1 | Caster$ You | Secondary$ True | Description$ You can cast no more than one creature each turn.
+SVar:CastLimit2:Mode$ CantBeCast | EffectZone$ Command | ValidCard$ Instant,Sorcery,Enchantment,Artifact | NumLimitEachTurn$ 2 | Caster$ You | Secondary$ True | Description$ You can cast no more than two Instant, Sorcery, Enchantment, or Artifact each turn.
+
+SVar:Limit1:Mode$ CantBeCast | EffectZone$ Command | ValidCard$ Creature | ValidPlayer$ You | IsPresent$ Creature.YouCtrl | PresentCompare$ EQ5 | Description$ If you control 5 creatures, you can't cast creature spells. The same is true for equipment and enchantments.
+SVar:Limit2:Mode$ CantBeCast | EffectZone$ Command | ValidCard$ Artifact.Equipment | ValidPlayer$ You | IsPresent$ Artifact.Equipment+YouCtrl | PresentCompare$ EQ5
+SVar:Limit3:Mode$ CantBeCast | EffectZone$ Command | ValidCard$ Enchantment | ValidPlayer$ You | IsPresent$ Enchantment.YouCtrl | PresentCompare$ EQ5
+SVar:NonStackingEffect:True
+
+# Starting/Maximum hand size is equal to 5
+SVar:MaxHandSize:Mode$ Continuous | EffectZone$ Command | Affected$ You | RaiseMaxHandSize$ -2 | Description$ Each players maximum hand size is reduced by two.
+
+# If you control a creature, creatures your opponents control can't attack you or planeswalkers you control.
+SVar:STCantAttack:Mode$ CantAttack | EffectZone$ Command | Target$ You,Planeswalker.YouCtrl | CheckSVar$ NumCreatures | SVarCompare$ GE1 | Description$ If you control at least one creature, creatures your opponent controls can't attack you or planeswalkers you control.
+SVar:NumCreatures:Count$ValidBattlefield Creature.YouCtrl+inZoneBattlefield
+
+# Creatures have the ability {T}: "Fight target creature an opponent controls" 
+SVar:fightTheHorde:Mode$ Continuous | EffectZone$ Command | Affected$ Creature.YouCtrl | AddAbility$ fightAHorde | AddSVar$ HasEffect | Description$ Creatures you control have "This creature fights target creature an opponent controls. (Each deals damage equal to its power to the other.)"
+SVar:fightAHorde:AB$ Fight | Cost$ T | Defined$ Self | ValidTgts$ Creature.OppCtrl | TgtPrompt$ Select target Horde | SpellDescription$ CARDNAME fights target creature an opponent controls. (Each deals damage equal to its power to the other.)
+SVar:HasEffect:TRUE
+
+#######
+#SVar:TribSac:AB$ PutCounter | EffectZone$ Command | Cost$ Sac<1/Creature> | Defined$ You | CounterType$ TRIBCOUNTER | CounterNum$ 1 | SpellDescription$ Sacrifice a creature, you get A TribCounter.
+#######
+
+# If a creature costs 5 or 6 to play sacrifice one creature in addition to its cost
+SVar:AddSac1:Mode$ RaiseCost | EffectZone$ All | ValidCard$ Creature.cmcEQ5,Creature.EQ6  | ValidSA$ Spell | Cost$ Sac<1/Creature> | Description$ If a creature costs 5 or 6 to play sacrifice one creature in addition to its cost.
+
+#Cost$ SubCounter<1/TRIBCOUNTER
+
+# If a creature costs 7, 8 or 9 to play sacrifice two creatures in addition to its cost
+SVar:AddSac2:Mode$ RaiseCost | EffectZone$ All | ValidCard$ Creature.cmcEQ7,Creature.EQ8,Creature.EQ9  | ValidSA$ Spell | Cost$ Sac<2/Creature> | Description$ If a creature costs 7, 8 or 9 to play sacrifice two creatures in addition to its cost.
+
+#Cost$ SubCounter<2/TRIBCOUNTER
+
+# If a creature costs 10, or more to play sacrifice 3 creatures in addition to its cost
+SVar:AddSac3:Mode$ RaiseCost | EffectZone$ All | ValidCard$ Creature.cmcGE10  | ValidSA$ Spell | Cost$ Sac<3/Creature> | Description$ If a creature costs 10, or more to play sacrifice 3 creatures in addition to its cost.
+
+#Cost$ SubCounter<3/TRIBCOUNTER
+
+#T:Mode$ Phase | Phase$ End of Turn | ValidPlayer$ You | IsPresent$ Card.Self+counters_TRIBCOUNTER | Execute$ DBRemoveCounter | TriggerZones$ Command | TriggerDescription$ At the beginning of your upkeep, if CARDNAME has five or more charge counters on it, remove all of them from it and create that many 3/1 red Elemental creature tokens with haste. Exile them at the beginning of the next end step.
+
+#SVar:DBRemoveCounter:DB$ RemoveCounter | Defined$ You | CounterType$ TRIBCOUNTER | CounterNum$ All | RememberRemoved$ True
+
+Oracle:+++ Game Rules +++\nEach players maximum hand size is reduced by two.\nYou can cast no more than one creature each turn.\nYou can cast no more than two Instant, Sorcery, Enchantment, or Artifact each turn.\nIf you control 5 creatures, you can't cast creature spells. The same is true for equipment and enchantments.\nIf a creature costs 5 or 6 to play sacrifice one creature in addition to its cost.\nIf a creature costs 7, 8 or 9 to play sacrifice two creatures in addition to its cost.\nIf a creature costs 10, or more to play sacrifice 3 creatures in addition to its cost.\nIf you control at least one creature, creatures your opponent controls can't attack you or planeswalkers you control.\nCreatures you control have "This creature fights target creature an opponent controls. (Each deals damage equal to its power to the other.)"
