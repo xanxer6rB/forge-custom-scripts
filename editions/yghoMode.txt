@@ -1,0 +1,12 @@
+[metadata]
+Code=YGHO
+Alias=YGHO
+Date=2020-01-14
+Name=YGHO - Mode
+MciCode=
+Type=Custom
+
+[cards]
+1 S YGHO Mode
+
+[tokens]
