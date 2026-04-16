@@ -1,4 +1,0 @@
-Name:Horde
-ManaCost:no cost
-Types:Instant
-Oracle: When Horde is cast, randomly generate a creature of the most prominent creature type in the Horde's library that is a token and Horde in addition to its other types. 
