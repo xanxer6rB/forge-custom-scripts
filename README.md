@@ -1,39 +1,52 @@
 # forge-custom-scripts
 Custom forge scripts to run different types of card formats and custom sets
 
-A guide to get started playing the HordeFormat (The Horde's life total can not change, avoid using cards that would make the Horde pay life as a cost):
-- HORDE folder goes in /custom/cards
-- Horde.txt from editions goes in /custom/editions
-- Go to the deck editor in Forge and add the "HordeFormat - ModeSelector" card to any of your decks. When a game starts it will trigger and you choose a Horde format to play:
- - HordeFormat - Basic Rules: Rules of the original format as close as possible.
-	- - The Horde shuffles its hand and graveyard into its library.
-	- - Choose how many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.
-	- - Survivors set own life total from a choice of 25,35,40,55,65 or 75.
-	- - Choose a number of turns the Horde skips for you to prepare.
- - - The Horde's life total is set to 0 and can not change and can not pay life as a cost.
-	- - The Horde reveals the top card of its library until it reveals a card not named Horde and casts all cards revealed this way. When a card named Horde is cast, a random creature of the most prominent creature type in the Horde's library gets created using the MomirAvatar ability. The created creatures are token and Horde in addition to their creature types.
-	- - Horde cards when cast are put into the sideboard instead of going anywhere else.
-	- - Whenever the Horde loses life, it mills that many cards. (Damage dealt by sources without infect causes loss of life.)
-	- - The Horde may cast spells from its hand, exile and commander without paying their mana costs with no commander penalty.
-	- - The Horde may play lands from exile and graveyard.
-	- - Survivor creatures can "Fight" creatures the Horde controls.
-	- - The Horde can't draw cards.
-	- - Creatures the Horde controls have haste and can't block and must attack each turn if able.
-	- - Horde type creature can't attack if attacked previous turn.
-	- - Win condition: Survivors win if the Horde has no cards in its library and no creatures on the battlefield.
-
-
- - HordeFormat - Inensify: Basic Rules with added intensify - Beginning of the Horde's upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals "X" cards not named "Horde" where "X" is the Horde's intensity.
- - HordeFormat - Radiation: Same as intensify but with when it is Nigh, Horde type creatures have "When this creature deals combat damage to a player that player gets a Radiation counter.
- - HordeFormat - Endless Nights: Same as Radiation with, during its turn if Day turns to Night or Night turns to Day the Horde gets an HOUR counter, when the twelfth HOUR counter is added the counters are removed and the Horde shuffles its Graveyard, Exile and all cards named "Horde" from its Sideboard back into its library.
-
-To play a Wagic the Homebrew game mode put one of the cards in your library:
- - Wagic the Homebrew - Blitzkrieg
-
-To play Type 4 format put the card in your library:
- - Type4Format
-
-Theros Challenges (WIP):
-- Face the Hydra Challenge: Challenge 1 - FaceTheHydra_Rev3
-- Battle the Horde Challenge: Challenge 2 - Battle the Horde_Rev2
-- Defeat a God Challenge: Challenge 3 Defeat a God Rev2
+This is a list of card scripts for the rules engine Forge. If you use one these in you library it adds
+additional rules ("an additional layer") to the format you are already playing:
+- Wagic The Homebrew - Blitzkrieg:
+	- Beginning of upkeep if you have less than 8 draw until you have 8.
+	- Whenever a land enters the battlefield under your control, draw a card.
+- Wagic The Homebrew - Blitzkrieg Patient Zero Fight:
+	- Same Rules as Wagic The Homebrew - Blitzkrieg
+	- Damage doesn't reset during clean up.
+	- If you control a creature, creatures can't attack you or planeswalkers you control.
+	- Creatures you control can "Fight" opponents creatures during your turn.
+- YGHO - Mode:
+	- Each players maximum hand size is reduced by two.
+	- You can cast no more than one creature each turn.
+	- You can cast no more than two Instant, Sorcery, Enchantment, or Artifact each turn.
+	- If you control 5 creatures, you can't cast creature spells. The same is true for equipment and enchantments.
+	- If a creature costs 5 or 6 to play sacrifice one creature in addition to its cost.
+	- If a creature costs 7, 8 or 9 to play sacrifice two creatures in addition to its cost.
+	- If a creature costs 10, or more to play sacrifice 3 creatures in addition to its cost.
+	- If you control at least one creature, creatures your opponent controls can't attack you or planeswalkers you control.
+	- Creatures you control have "This creature fights target creature an opponent controls. (Each deals damage equal to its power to the other.)"
+- The Horde:
+	- Basic Rules:
+		- Choose who you want the Horde to be.
+		- The chosen player becomes the Horde. It shuffles it graveyard, battlefield and hand into it library.
+		- You choose how many card named "Horde" get added to the library (50, 100, 150, 200, Equal to the chosen players library size, or choose a number of Horde to add.)
+		- Set your life total to 25,35,45,55,65,75
+		- How many turns the Horde will skip to have prepare.
+		- The Horde reveals the top card of its library until it reveals a card non named "Horde", casts the card(s) without paying their mana cost and puts all creatures onto the battlefield
+		- For each card named Horde revealed this way a random creature token will be generated using Momir Basic Avatar ability of a creature of the most prominent creature type in the Hordes library and adding Horde in addition to its other types.
+		- Cards named Horde go to the sideboard instead of anywhere else.
+		- The Hordes life total is set to 0 and can not change.
+		- Whenever the Horde is dealt damage or has loss of life it mills that many cards instead.
+		- The Horde can play cards from Hand, Exile and Graveyard
+		- The Horde can play lands from Exile and Graveyard
+		- Survivors creatures can "Fight" the creatures the Horde controls
+		- Creatures the Horde control have Haste, attack each turn if able and can not block
+		- The Horde can not draw.
+		- Horde creatures can't attack if they attacked previous turn.
+		- You survive if the Horde has no library and controls not creatures
+	- Intensify:
+		- Horde Basic rules with Intensify: Beginning of Hordes upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals X cards not named "Horde" where X is equal to the Hordes intensity and casts all cards revealed this way.
+	- Radiation:
+		- Horde Basic rules with Intensify: Beginning of Hordes upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals X cards not named "Horde" where X is equal to the Hordes intensity and casts all cards revealed this way.
+		- When it is Night Horde type creatures gain "When this creature deals combat damage to a player that player gets a Radiation counter.
+	- Endless Nights:
+		- Horde Basic rules with Intensify: Beginning of Hordes upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals X cards not named "Horde" where X is equal to the Hordes intensity and casts all cards revealed this way.
+		- When it is Night Horde type creatures gain "When this creature deals combat damage to a player that player gets a Radiation counter.
+		- Whenever the Horde loses life, it gains 1 life for each 1 life lost.
+		- Whenever Day turns to Night or Night turns to Day during the Hordes turn it gets an Hour counter. When the twelfth counter is placed the counters are removed and Horde shuffles its graveyard, exile and all cards named "Horde" from its sideboard back into its library.
