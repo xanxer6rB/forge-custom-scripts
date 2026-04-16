@@ -1,0 +1,4 @@
+Name:Horde
+ManaCost:no cost
+Types:Instant
+Oracle:When revealed randomly generate a creature token most prominent in library.
