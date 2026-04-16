@@ -1,0 +1,181 @@
+[metadata]
+Code=AoL
+Date=2020-01-01
+Name=Zelda the Gathering - Adventures of Link
+Type=Custom
+
+[cards]
+Maze Island Palace
+Boon
+Daira
+Big Heart
+Magic Jar
+Faerie Magic
+Leever Sidewinder
+Carock
+Myu
+Deeler
+Mido Town
+Wise Man
+Palace on the Sea
+Handy Glove
+Monitor Octorok
+Ra
+Pet Bot
+Girobokku
+Shield Magic
+Aruroda
+King's Tomb
+Thunderbird
+Rope Assailer
+Thunder Magic
+Darunia Town
+Letter Consignment
+Heart Piece
+Acheman
+Magical Raft
+Winged Boots
+Barba, Lava Dragon
+Trophy
+Jeweled Totem
+Fire Magic
+Moa
+Doomknocker
+Ricochet Bubble
+Magic Container
+King Bot
+Link Doll
+Jump Magic
+Guma
+King Bubble
+Three Eye Rock Palace
+Recorder
+Helmethead
+Rebonakku
+Hammer
+Midoro Palace
+Gooma
+Reflect Magic
+Zora
+Ruto Town
+Desert of Hyrule
+River Devil
+Parutamu
+Iron Knuckle
+Cross
+Tinsuit
+Spell Magic
+Moby
+Candle
+Keeper of the Golden Power
+Return of Ganon
+Swordsman of Darunia
+Rauru Town
+Ache
+Bot
+Great Palace
+P-Bag
+Down Thrust
+Northern Palace
+Demon Labyrinth
+Life Saving Medicine
+Palace Keys
+Swordsman of Mido
+Bridge Guard of Saria
+Nabooru Town
+Fokkeru
+Megmat
+Up Thrust
+Zol
+Life Magic
+Geldarm
+Bit
+Error of Ruto
+Tektite
+Horsehead
+Mago
+Island Palace
+Saria Town
+Healing Faerie
+Rupee Cache
+Lowder
+Link, Hero of Hyrule
+Wizzar
+Bagu of Saria
+Parapa Palace
+Fokka
+Sleeping Princess
+Bago-Bago
+Kasuto Town
+Through the Darkness
+Shadow Link
+Enchanted Key
+Grassland Moblin
+Palace Stalfos
+Lizalfos
+Abandoned Town of Kasuto
+Mau
+Armored Tektite
+Cavern Goriya
+
+[gain lands]
+
+[alternate art]
+
+[special guests]
+
+[precon product]
+
+[jumpstart]
+
+[showcase]
+
+[etched]
+
+[borderless]
+
+[extended art]
+
+[buy a box]
+
+[bundle]
+
+[promo]
+
+[dungeons]
+
+[foils]
+
+[backgrounds]
+
+[legends]
+
+[rebalanced]
+
+[conjured]
+
+[tokens]
+
+[other]
+
+# Put Custom Card Types
+[BasicTypes]
+
+[LandTypes]
+
+[CreatureTypes]
+
+[SpellTypes]
+
+[EnchantmentTypes]
+
+[ArtifactTypes]
+
+[WalkerTypes]
+
+[DungeonTypes]
+
+[BattleTypes]
+
+[PlanarTypes]
+    
