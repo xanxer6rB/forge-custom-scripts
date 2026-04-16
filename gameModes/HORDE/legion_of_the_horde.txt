@@ -1,0 +1,13 @@
+Name:Legion of the Horde
+ManaCost:0
+#Colors:black,green
+Types:Legendary Planeswalker Horde
+Loyalty:20
+A:AB$ DealDamage | Cost$ AddCounter<0/LOYALTY> | ValidTgts$ Creature | TgtPrompt$ Select target creature | NumDmg$ 3 | SubAbility$ DamageThis | Planeswalker$ True | SpellDescription$ CARDNAME deals 3 damage to target creature. That creature deals damage equal to its power to him.
+A:AB$ Pump | Cost$ AddCounter<4/LOYALTY> | Planeswalker$ True | NumAtt$ +1 | NumDef$ +0 | KW$ Deathtouch | TgtPrompt$ Select up to three target Horde creatures | ValidTgts$ Creature.Horde+YouCtrl | TargetMin$ 0 | TargetMax$ 3 | SpellDescription$ Up to three target Horde creatures get +1/+0 and gain deathtouch until end of turn.
+A:AB$ Destroy | Cost$ SubCounter<10/LOYALTY> | Planeswalker$ True | ValidTgts$ Permanent | TgtPrompt$ Select target creature | SubAbility$ DBAddLoyalty | SpellDescription$ Destroy target permanent. Put loyalty counters on CARDNAME equal to that permanents mana cost.
+SVar:DBAddLoyalty:DB$ PutCounter | Defined$ Self | CounterType$ LOYALTY | CounterNum$ X
+SVar:X:TargetedLKI$CardManaCost
+A:AB$ DestroyAll | Cost$ SubCounter<25/LOYALTY> | Planeswalker$ True | Ultimate$ True | ValidCards$ Creature.YouDontCtrl | SpellDescription$ Destroy all creatures the Horde doesn't control.
+DeckHints:Type$Horde
+Oracle:[0]:Legion of the Horde deals 3 damage to target creature. That creature deals damage equal to its power to Legion of the Horde.\n[+4]: Up to three target Horde creatures get +1/+0 and gain deathtouch until end of turn.\n[-10]: Destroy target permanent. Put loyalty counters on Legion of the Horde equal to that permanents mana cost.\n[-25]: Destroy all creatures Legion of the Horde doesn't control.

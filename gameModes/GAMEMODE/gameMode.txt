@@ -1,0 +1,14 @@
+Name:gameMode
+ManaCost:no cost
+Types:Instant
+K:CARDNAME can't be countered.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DBcstmFrmt | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with this card in your library or hand, exile it and choose a custom format to conjure.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If this card is in your opening hand, exile it and choose a custom format to conjure.
+
+SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ DBcstmFrmt | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card.
+SVar:DBcstmFrmt:DB$ NameCard | Defined$ You | ChooseFromList$ HordeFormat - Basic Rules,HordeFormat - Intensify,HordeFormat - Radiation,HordeFormat - Endless Nights,WagicTheHomebrew Blitzkrieg,Patient Zero Fight,YGHO Mode | ExcludeChosen$ True | SubAbility$ DBCast | StackDescription$ SpellDescription | SpellDescription$ Conjure a card from CARDNAME spellbook into your hand. Create a copy of the card with the chosen name. You may cast the copy without paying its mana cost.
+SVar:DBCast:DB$ Play | CopyFromChosenName$ True | WithoutManaCost$ True | ValidSA$ Spell | SubAbility$ DBRmv | StackDescription$ None
+SVar:DBRmv:DB$ ChangeZone | Defined$ Self | Origin$ Library,Hand | Destination$ Sideboard | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearNamedCard$ True
+
+Oracle:Conjure a custom format from this spellbook and cast it without paying its mana value.
