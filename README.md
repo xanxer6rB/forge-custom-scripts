@@ -46,7 +46,6 @@ additional rules ("an additional layer") to the format you are already playing:
 		- Horde Basic rules with Intensify: Beginning of Hordes upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals X cards not named "Horde" where X is equal to the Hordes intensity and casts all cards revealed this way.
 		- When it is Night Horde type creatures gain "When this creature deals combat damage to a player that player gets a Radiation counter.
 	- Endless Nights:
-		- Horde Basic rules with Intensify: Beginning of Hordes upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals X cards not named "Horde" where X is equal to the Hordes intensity and casts all cards revealed this way.
-		- When it is Night Horde type creatures gain "When this creature deals combat damage to a player that player gets a Radiation counter.
+		- Horde Basic rules with when it is Night Horde type creatures gain "When this creature deals combat damage to a player that player gets a Radiation counter.
 		- Whenever the Horde loses life, it gains 1 life for each 1 life lost.
 		- Whenever Day turns to Night or Night turns to Day during the Hordes turn it gets an Hour counter. When the twelfth counter is placed the counters are removed and Horde shuffles its graveyard, exile and all cards named "Horde" from its sideboard back into its library.
