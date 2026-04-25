@@ -1,6 +1,6 @@
 Name:HordeFormat - Intensify
 ManaCost:no cost
-Types:Instant HordeMode
+Types:Instant
 K:CARDNAME can't be countered.
 K:MayEffectFromOpeningDeck:DelTrigHorde
 K:Starting Intensity:1
