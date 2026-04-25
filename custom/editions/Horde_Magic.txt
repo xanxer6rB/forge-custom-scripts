@@ -24,7 +24,6 @@ Type=Custom
 [CreatureTypes]
 Horde
 [SpellTypes]
-HordeMode
 [EnchantmentTypes]
 Horde
 [ArtifactTypes]
