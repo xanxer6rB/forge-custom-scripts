@@ -9,10 +9,11 @@ Type=Custom
 2 S Hordes Battle Plans
 3 S Invasion of the Horde
 4 S HordeFormat - Intensify
-5 S HordeFormat - Radiation
-6 S HordeFormat - Basic Rules
-7 S HordeFormat - ModeSelector
-8 S HordeFormat - Endless Nights
+5 S HordeFormatAi - Intensify
+6 S HordeFormat - Radiation
+7 S HordeFormat - Basic Rules
+8 S HordeFormat - ModeSelector
+9 S HordeFormat - Endless Nights
 10 M Legion of the Horde
 
 [battles]

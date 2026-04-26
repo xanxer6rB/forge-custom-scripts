@@ -1,0 +1,25 @@
+[metadata]
+Code=EMBLEMS
+Date=2020-01-01
+Name=Custom Emblem
+Type=Custom
+
+[cards]
+1 S Grimoire's
+
+[battles]
+
+[other]
+[BasicTypes]
+[LandTypes]
+[CreatureTypes]
+
+[SpellTypes]
+[EnchantmentTypes]
+
+[ArtifactTypes]
+[WalkerTypes]
+
+[DungeonTypes]
+[BattleTypes]
+[PlanarTypes]
