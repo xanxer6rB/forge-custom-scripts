@@ -1,0 +1,63 @@
+Name:Grimoire - Spellbook
+ManaCost:no cost
+Types:Instant
+K:CARDNAME can't be countered.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DBsetup | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If you start the game with CARDNAME in your opening hand, exile it and go through the prompts. Hope you enjoy the game.
+
+A:SP$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBsetup
+
+SVar:DBDraw1:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBsetup | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card
+SVar:DBsetup:DB$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBRmv
+SVar:DBRmv:DB$ ChangeZone | Defined$ Self | Origin$ Library,Hand | Destination$ Sideboard | SubAbility$ "DraftSpellbook"
+
+#### PUT STATIC, TRIGGER, EFFECT, REPLACEMENT, SVar 
+#### SCRIPTS BELOW
+
+
+
+SVar:DBDraftSpellbook:AB$ Draft | DraftNum$ 2 | AtRandom$ True | Defined$ You |  ActivationLimit$ 1 | Spellbook$ Demonic Bargain,Ever After,Demonic Pact | RememberDrafted$ True | SubAbility$ DBPlay
+SVar:DBPlay:DB$ Play | Controller$ Targeted | Defined$ Remembered | WithoutManaCost$ True | Optional$ True | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+
+
+####
+SVar:"DraftSpellbook":DB$ Effect | ValidTgts$ Player | TgtPrompt$ Choose any number of target players | TargetMin$ 0 | TargetMax$ MaxPl | StackDescription$ SpellDescription | MayChooseTarget$ True | Chooser$ You | Name$ Grimoire - Spellbook Effect | StaticAbilities$ DBDraftSpellBook | SVars$ DBPlay, DBCleanup | EffectOwner$ Targeted | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+SVar:MaxPl:PlayerCountPlayers$Amount
+
+
+Oracle:
+
+
+
+
+
+
+A:AB$ Effect | Cost$ SubCounter<6/LOYALTY> | Planeswalker$ True | Ultimate$ True | AILogic$ Always | Stackable$ False | Name$ Emblem — Karn, Living Legacy | Image$ emblem_karn_living_legacy | Duration$ Permanent | Abilities$ KarnPing | SpellDescription$ You get an emblem with "Tap an untapped artifact you control: This emblem deals 1 damage to any target."
+SVar:KarnPing:AB$ DealDamage | Cost$ tapXType<1/Artifact> | ActivationZone$ Command | ValidTgts$ Any | NumDmg$ 1
+SVar:PlayMain1:TRUE
+
+
+
+A:AB$ Draft | Cost$ SubCounter<1/LOYALTY> | Planeswalker$ True | Spellbook$ Mosscoat Goriak,Sylvan Brushstrider,Murasa Rootgrazer,Dire Wolf Prowler,Ferocious Pup,Pestilent Wolf,Garruk's Uprising,Dawntreader Elk,Nessian Hornbeetle,Territorial Scythecat,Trufflesnout,Wary Okapi,Scurrid Colony,Barkhide Troll,Underdark Basilisk | RememberDrafted$ True | SubAbility$ DBPut | StackDescription$ REP Draft_{p:You} drafts & and put_and they put | SpellDescription$ Draft a card from CARDNAME's spellbook and put it onto the battlefield.
+SVar:DBPut:DB$ ChangeZone | Origin$ Hand | Destination$ Battlefield | Defined$ Remembered | SubAbility$ DBCleanup2 | StackDescription$ None
+SVar:DBCleanup2:DB$ Cleanup | ClearRemembered$ True
+
+SVar:DBDraft:DB$ Draft | Defined$ You | Spellbook$ Angel of Suffering,Aphemia; the Cacophony,Balemurk Leech,Chitinous Crawler,Defiler of Flesh,Gravebreaker Lamia,Mindwrack Harpy,Puppet Raiser,Starving Revenant | RememberDrafted$ True | SubAbility$ DBAnimate
+SVar:DBAnimate:DB$ Animate | Defined$ Remembered | Types$ Enchantment | Duration$ Perpetual | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+
+
+A:SP$ Draft | DraftNum$ 2 | Spellbook$ Azorius Signet,Boros Signet,Dimir Signet,Golgari Signet,Gruul Signet,Izzet Signet,Orzhov Signet,Rakdos Signet | RememberDrafted$ True | SubAbility$ DBChangeZone | StackDescription$ SpellDescription | SpellDescription$ Draft a card from CARDNAME's spellbook twice, then put one of those cards onto the battlefield tapped.
+SVar:DBChangeZone:DB$ ChangeZone | Origin$ Hand | Destination$ Battlefield | ChangeType$ Card.IsRemembered+YouOwn | SelectPrompt$ Select a card to put onto the battlefield tapped | Mandatory$ True | Tapped$ True | StackDescription$ None
+
+
+T:Mode$ ChangesZone | Origin$ Battlefield | Destination$ Graveyard | ValidCard$ Creature.YouCtrl | TriggerZones$ Battlefield | Execute$ TrigDraft | ActivationLimit$ 1 | TriggerDescription$ Whenever one or more creatures you control die, draft a card from CARDNAME's spellbook. This ability triggers only once each turn.
+SVar:TrigDraft:DB$ Draft | Spellbook$ Acquisitions Expert,Asylum Visitor,Blade Juggler,Bloodthirsty Aerialist,Boneclad Necromancer,Hoard Robber,Malakir Blood-Priest,Malakir Cullblade,Morbid Opportunist,Slaughter Specialist,Tavern Swindler,Thieves' Guild Enforcer,Tithebearer Giant,Vengeful Warchief,Yuan-Ti Fang-Blade
+DeckHas:Type$Human|Rogue|Vampire|Wizard|Tiefling|Cleric|Warrior|Giant|Orc|Snake|Zombie|Treasure & Ability$Token|Sacrifice|LifeGain|Counters
+DeckHints:Ability$Party|LifeGain|Discard|Sacrifice & Type$Cleric|Rogue|Warrior|Wizard
+
+S:Mode$ CantPlayLand | ValidCard$ Card.setARN | Description$ Players can't cast spells or play lands with a name originally printed in the Arabian Nights expansion.
+S:Mode$ CantBeCast | ValidCard$ Card.setARN

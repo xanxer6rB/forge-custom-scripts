@@ -1,0 +1,23 @@
+Name:Grimoire's
+ManaCost:no cost
+Types:Instant
+K:CARDNAME can't be countered.
+
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DBsetup | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with CARDNAME in your library, exile it and go through the prompts. Hope you enjoy the game.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If you start the game with CARDNAME in your opening hand, exile it and go through the prompts. Hope you enjoy the game.
+
+#A:SP$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBsetup
+
+SVar:DBDraw1:DB$ Draw | Defined$ You | NumCards$ 1 | SubAbility$ DBsetup | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card
+SVar:DBsetup:DB$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBRmv
+SVar:DBRmv:DB$ ChangeZone | Defined$ Self | Origin$ Library,Hand | Destination$ Sideboard | SubAbility$ DraftSpellbook
+
+SVar:DraftSpellbook:DB$ Effect | ValidTgts$ Player | TgtPrompt$ Choose any number of target players | TargetMin$ 0 | TargetMax$ MaxPl | StackDescription$ SpellDescription | MayChooseTarget$ True | Chooser$ You | Name$ Grimoire - Spellbook Effect | Abilities$ DBDraftSpellBook | EffectOwner$ Targeted | Duration$ Permanent | SpellDescription$ When the game starts, choose any number of players to get an emblem.
+SVar:MaxPl:PlayerCountPlayers$Amount
+
+SVar:DBDraftSpellBook:AB$ Draft | DraftNum$ 2 | Cost$ 0 | ActivationZone$ Command | AtRandom$ True | Defined$ You |  ActivationLimit$ 1 | Spellbook$ Demonic Bargain,Ever After,Demonic Pact | RememberDrafted$ True | SubAbility$ DBPlay | SpellDescription$ Draft two cards from CARDNAME Spellbook.
+SVar:DBPlay:DB$ Play | Controller$ You | Defined$ Remembered | WithoutManaCost$ True | Optional$ True | SubAbility$ DBCleanup
+SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True
+
+
+Oracle: Draft two spells from Grimoire's spellbook. Activate only once each turn.\n- Demonic Bargain\n- Ever After\n- Demonic Pact
