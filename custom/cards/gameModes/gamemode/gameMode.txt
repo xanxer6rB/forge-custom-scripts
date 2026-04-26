@@ -2,21 +2,23 @@ Name:gameMode
 ManaCost:no cost
 Types:Instant
 K:CARDNAME can't be countered.
-T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ DBcstmFrmt | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with this card in your library or hand, exile it and choose a custom format to conjure.
-T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If this card is in your opening hand, exile it and choose a custom format to conjure.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Library | Execute$ ChooseHordeNumber | IsPresent$ Card.Self | PresentZone$ Library | TriggerDescription$ If you start the game with this card in your library or hand, exile it, choose a number and Conjure a custom format from this spellbook and cast it without paying its mana value.\n- HordeFormat - Basic Rules,\n- HordeFormat - Intensify,\n- HordeFormat - Radiation,\n- HordeFormat - Endless Nights,\n- WagicTheHomebrew Blitzkrieg,\n- Patient Zero Fight,\n- YGHO Mode.
+T:Mode$ NewGame | ValidCard$ Self | TriggerZones$ Command,Hand | Execute$ DBDraw1 | IsPresent$ Card.Self | PresentZone$ Hand | TriggerDescription$ If this card is in your opening hand, exile it and choose a custom format to conjure, choose a number and Conjure a custom format from this spellbook and cast it without paying its mana value.\n- HordeFormat - Basic Rules,\n- HordeFormat - Intensify,\n- HordeFormat - Radiation,\n- HordeFormat - Endless Nights,\n- WagicTheHomebrew Blitzkrieg,\n- Patient Zero Fight,\n- YGHO Mode.
 
-SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ DBcstmFrmt | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card.
-SVar:DBcstmFrmt:DB$ NameCard | Defined$ You | ChooseFromList$ HordeFormat - Basic Rules,HordeFormat - Intensify,HordeFormat - Radiation,HordeFormat - Endless Nights,WagicTheHomebrew Blitzkrieg,Patient Zero Fight,YGHO Mode | ExcludeChosen$ True | SubAbility$ DBCast | StackDescription$ SpellDescription | SpellDescription$ Conjure a card from CARDNAME spellbook into your hand. Create a copy of the card with the chosen name. You may cast the copy without paying its mana cost.
+SVar:DBDraw1:DB$ Draw | Defined$ Player.You | NumCards$ 1 | SubAbility$ ChooseHordeNumber | SpellDescription$ If CARDNAME was exiled from your hand, Draw a card.
+
+SVar:ChooseHordeNumber:DB$ ChooseNumber | ChooseAnyNumber$ True | Defined$ You | SubAbility$ DBRepeat | SpellDescription$ Enter in a number 0 or bigger for the number of formats.
+
+SVar:DBRepeat:DB$ Repeat | RepeatSubAbility$ DBcstmFrmt | MaxRepeat$ numFormat | Optional$ True | StackDescription$ SpellDescription | SpellDescription$ Repeat this process the chosen number of times.
+
+SVar:DBcstmFrmt:DB$ NameCard | Defined$ You | ChooseFromList$ HordeFormat - Basic Rules,HordeFormat - Intensify,HordeFormat - Radiation,HordeFormat - Endless Nights,WagicTheHomebrew Blitzkrieg,Patient Zero Fight,YGHO Mode | ExcludeChosen$ True | Optional$ True | SubAbility$ DBCast | StackDescription$ SpellDescription | SpellDescription$ Conjure a card from CARDNAME spellbook into your hand. Create a copy of the card with the chosen name. You may cast the copy without paying its mana cost.
 SVar:DBCast:DB$ Play | CopyFromChosenName$ True | WithoutManaCost$ True | ValidSA$ Spell | SubAbility$ DBRmv | StackDescription$ None
 SVar:DBRmv:DB$ ChangeZone | Defined$ Self | Origin$ Library,Hand | Destination$ Sideboard | SubAbility$ DBCleanup
 SVar:DBCleanup:DB$ Cleanup | ClearNamedCard$ True
 
-# CHOOSE ANOTHER FORMAT OR CONTINUE
-#SVar:DBConjureHorde:DB$ GenericChoice | Choices$ DBChooseAnother,DBContinue | Defined$ You | ChoiceRestriction$ Remembered | RememberChoice$ False | GenericChoiceNum$ 1 | StackDescription$ SpellDescription | SubAbility$ DBsetLife | SpellDescription$ How many Horde will be added to the library?: Hordes library size, 50 Horde, 100 Horde, 150 Horde, 200 Horde or Choose any number.
-#SVar:DBChooseAnother: Execute$ DBcstmFrmt | SpellDescription$ Choose another format
-#SVar:DBContinue:DB$ Cleanup | ClearNamedCard$ True | SpellDescription$ Continue.
+SVar:numFormat:Count$ChosenNumber
 
-
+#SVar:DBBooster:DB$ MakeCard | Booster$ True | Reveal$ True | Zone$ Hand | StackDescription$ SpellDescription | SpellDescription$ Open a sealed Magic booster pack, reveal the cards, and put one of them into your hand. (Remove that card from your deck before beginning a new game.)
 
 
 Oracle:Conjure a custom format from this spellbook and cast it without paying its mana value.\n- HordeFormat - Basic Rules,\n- HordeFormat - Intensify,\n- HordeFormat - Radiation,\n- HordeFormat - Endless Nights,\n- WagicTheHomebrew Blitzkrieg,\n- Patient Zero Fight,\n- YGHO Mode
