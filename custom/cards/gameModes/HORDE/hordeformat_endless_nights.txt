@@ -3,6 +3,7 @@ ManaCost:no cost
 Types:Instant
 K:CARDNAME can't be countered.
 K:MayEffectFromOpeningDeck:DelTrigHorde
+K:Starting Intensity:1
 
 # NEEDED FOR CHOOSING GAMEMODE CARD SCRIPT
 A:SP$ Play | Defined$ Self | ValidSA$ Spell | WithoutManaCost$ True | Controller$ You | SubAbility$ DBChooseHorde
@@ -46,15 +47,17 @@ SVar:xTnum:Count$ChosenNumber
 SVar:DoDay:DB$ DayTime | Value$ Day | SubAbility$ DBHordeEmblem
 
 # HORDE EMBLEM ABILITIES/RULES ADDED TO EMBLEM(S)
-SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeAddRad,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ HordeLifeGain,hordesTurn,lifeLossHordeMills,winCon,DayChange,HordeHour | ReplacementEffects$ damageGainLife,DeathRep,cantLose,cantWin | SVars$ TrigHordeLifeGain,HordeShuffle,TrigRadiation,HasAttackEffect,fightAHorde,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,LFG,W,X,Y,Z | Duration$ Permanent
+SVar:DBHordeEmblem:DB$ Effect | EffectOwner$ Targeted | StackDescription$ SpellDescription | Name$ HordeFormarLike Effect | StaticAbilities$ HordeAddRad,HordeTap,hordeHaste,hordeMustAttk,HordeLand,DBFreePlay,fightTheHorde,noDraw,reduceCmdrCost | Triggers$ HordeLifeGain,hordesTurn,lifeLossHordeMills,winCon,DayChange,HordeHour | ReplacementEffects$ damageGainLife,DeathRep,cantLose,cantWin | SVars$ TrigHordeLifeGain,HordeShuffle,TrigRadiation,HasAttackEffect,fightAHorde,TrigIntensify,TrigHordeCascade,HordeCast,HordeCreateToken,AffectedX,DBSideboard,TrigMill,DBCleanup,TrigYouHaveSurvived,H,LFG,Q,W,X,Y,Z | Duration$ Permanent
 
-# THE HORDE'S UPKEEP
-SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigHordeCascade | TriggerDescription$ The Horde reveals the top card of its library until it reveals a nonHorde card(s), casts the card(s) and puts all Horde creatures onto the battlefield.
+# THE HORDE'S UPKEEP WITH INTENSIFY
+SVar:hordesTurn:Mode$ Phase | Phase$ Upkeep | ValidPlayer$ You | EffectZone$ Command | TriggerZones$ Command | Execute$ TrigIntensify | TriggerDescription$ The Horde reveals the top card of its library until it reveals nonHorde card(s) equal to its intensity, casts the card(s) and puts all Horde creatures onto the battlefield. Intensity is increased by 1.
+SVar:TrigIntensify:DB$ Intensify | SubAbility$ TrigHordeCascade
 SVar:TrigHordeCascade:DB$ DigUntil | ValidPlayer$ You | Valid$ Card.nonHorde | Reveal$ True | Amount$ Q | FoundDestination$ Exile | RevealedDestination$ Exile | ImprintRevealed$ True | RememberFound$ True | RememberRevealed$ True | RememberChanged$ True | References$ Q | SubAbility$ DBOmenLand
 SVar:DBOmenLand:DB$ ChangeZone | Origin$ Exile | Destination$ Battlefield | ChangeType$ Land.IsRemembered+ActivePlayerCtrl | ChangeNum$ 1 | DefinedPlayer$ TriggeredPlayer | Chooser$ TriggeredPlayer | Hidden$ True | Mandatory$ True | SubAbility$ HordeCast
-SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidZone$ Exile | Valid$ Creature.IsRemembered,Instant.IsRemembered,Sorcery.IsRemembered,Enchantment.IsRemembered,Artifact.IsRemembered,Battle Siege.IsRemembered,Planeswalker.IsRemembered | Amount$ All | ValidSA$ Spell | WithoutManaCost$ True | AILogic$ ReplaySpell | SubAbility$ HordeCreateToken
+SVar:HordeCast:DB$ Play | Defined$ Remembered | ValidZone$ Exile | Valid$ Creature.IsRemembered,Instant.IsRemembered,Sorcery.IsRemembered,Enchantment.IsRemembered,Artifact.IsRemembered,Battle Siege.IsRemembered,Planeswalker.IsRemembered | Amount$ Q | ValidSA$ Spell | WithoutManaCost$ True | AILogic$ ReplaySpell | References$ Q | SubAbility$ HordeCreateToken
 SVar:HordeCreateToken:DB$ CopyPermanent | NumCopies$ 1 | AILogic$ MomirAvatar | ValidSupportedCopy$ Creature.MostProminentCreatureTypeInLibrary | RandomCopied$ True | RandomNum$ H | AddTypes$ Horde | StackDescription$ SpellDescription | References$ H | SubAbility$ DBCleanup
 SVar:DBCleanup:DB$ Cleanup | ClearRemembered$ True | ClearImprinted$ True | ForgetDefined$ True
+SVar:Q:Count$Intensity
 SVar:H:Remembered$Valid Card.namedHorde
 
 # HORDE HAS DAY/NIGHT MECHANISM, DAYTIMECHANGES HORDE GETS HOUR COUNTER
@@ -86,7 +89,7 @@ SVar:LFG:TriggerCount$LifeAmount/Times.1
 
 
 # THE HORDE CAN PLAY CARDS FROM HAND, EXILE AND COMMANDER FOR FREE
-SVar:DBFreePlay:Mode$ Continuous | Affected$ Card.nonLand+YouOwn,Card.nonHorde+YouOwn,Card.IsCommander+YouOwn | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Exile,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand, exile and commander without paying their mana costs.
+SVar:DBFreePlay:Mode$ Continuous | Affected$ Card.nonLand+YouOwn,Card.nonHorde+YouOwn,Card.IsCommander | MayPlay$ True | MayPlayWithoutManaCost$ True | AffectedZone$ Hand,Exile,Command | EffectZone$ Command | Description$ The Horde may cast spells from its hand, exile and commander without paying their mana costs.
 SVar:reduceCmdrCost:Mode$ ReduceCost | ValidCard$ Card.IsCommander+YouOwn | Type$ Spell | Amount$ AffectedX | EffectZone$ Command | Description$ The Horde's commander costs {2} less to cast for each time it's been cast from the command zone this game.
 SVar:AffectedX:Count$CommanderCastFromCommandZone/Twice
 
@@ -131,4 +134,4 @@ SVar:Y:Count$ValidLibrary Card.YouOwn+inZoneLibrary
 SVar:Z:Count$ValidBattlefield Permanent.YouCtrl+inZoneBattlefield
 SVar:W:SVar$Y/Plus.Z
 
-Oracle:++ HordeFormat - Endless Nights ++\nA custom card to play a form of Horde format.\nTo play, have this card in your library.\nBasic rules of the Horde format with when it is Night Horde type creatures gain "When this creature deals combat damage to a player that player gets a Radiation counter.\nWhenever Day turns to Night or Night turns to Day during the Hordes turn it gets an Hour counter. When the twelth counter is placed the Horde shuffles its graveyard, exile and all cards named "Horde" from its sideboard into its library.\n++++++++++++++++++++++++++++++++++
+Oracle:++ HordeFormat - Endless Nights ++\nA custom card to play a form of Horde format.\nTo play, have this card in your library.\nBasic rules of the Horde format with Intensify: Beginning of Hordes upkeep it gets an intensity counter then reveals cards from the top of its library until it reveals X cards not named "Horde" where X is equal to the Hordes intensity and casts all cards revealed this way.\nWhen it is Night Horde type creatures gain "When this creature deals combat damage to a player that player gets a Radiation counter.\nWhenever Day turns to Night or Night turns to Day during the Hordes turn it gets an Hour counter. When the twelth counter is placed the Horde shuffles its graveyard, exile and all cards named "Horde" from its sideboard into its library.\n++++++++++++++++++++++++++++++++++
