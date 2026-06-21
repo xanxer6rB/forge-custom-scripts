@@ -54,12 +54,12 @@ SVar:HasEffect:TRUE
 #######
 
 # If a creature costs 5 or 6 to play sacrifice one creature in addition to its cost
-SVar:AddSac1:Mode$ RaiseCost | EffectZone$ All | ValidCard$ Creature.cmcEQ5,Creature.EQ6  | ValidSA$ Spell | Cost$ Sac<1/Creature> | Description$ If a creature costs 5 or 6 to play sacrifice one creature in addition to its cost.
+SVar:AddSac1:Mode$ RaiseCost | EffectZone$ All | ValidCard$ Creature.cmcEQ5,Creature.cmcEQ6  | ValidSA$ Spell | Cost$ Sac<1/Creature> | Description$ If a creature costs 5 or 6 to play sacrifice one creature in addition to its cost.
 
 #Cost$ SubCounter<1/TRIBCOUNTER
 
 # If a creature costs 7, 8 or 9 to play sacrifice two creatures in addition to its cost
-SVar:AddSac2:Mode$ RaiseCost | EffectZone$ All | ValidCard$ Creature.cmcEQ7,Creature.EQ8,Creature.EQ9  | ValidSA$ Spell | Cost$ Sac<2/Creature> | Description$ If a creature costs 7, 8 or 9 to play sacrifice two creatures in addition to its cost.
+SVar:AddSac2:Mode$ RaiseCost | EffectZone$ All | ValidCard$ Creature.cmcEQ7,Creature.cmcEQ8,Creature.cmcEQ9  | ValidSA$ Spell | Cost$ Sac<2/Creature> | Description$ If a creature costs 7, 8 or 9 to play sacrifice two creatures in addition to its cost.
 
 #Cost$ SubCounter<2/TRIBCOUNTER
 
